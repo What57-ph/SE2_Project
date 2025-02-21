@@ -1,24 +1,16 @@
 package com.example.SE2_Project.model;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class User extends BaseEntity {
+
     private String username;
     private String email;
     private String password;
@@ -63,10 +55,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Reaction> reactions;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
-
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+    )
+    Set<Role> roles = new HashSet<>();
     public List<Post> getPosts() {
         return posts;
     }
@@ -107,20 +102,13 @@ public class User {
         this.reactions = reactions;
     }
 
-    public Role getRole() {
-        return role;
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public String getUsername() {
@@ -181,7 +169,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
+        return "User [username=" + username + ", email=" + email + ", password=" + password
                 + ", fullName=" + fullName + ", profilePicture=" + profilePicture + ", createdTime=" + createdTime
                 + ", updatedTime=" + updatedTime + "]";
     }

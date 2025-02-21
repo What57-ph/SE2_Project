@@ -15,10 +15,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "posts")
-public class Post {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Post extends BaseEntity {
+
     private String content;
     private String image;
     private Date createdTime;
@@ -45,14 +43,6 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getContent() {

@@ -15,10 +15,8 @@ import com.example.SE2_Project.utils.React_Status;
 
 @Entity
 @Table(name = "reactions")
-public class Reaction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Reaction extends BaseEntity {
+
     @Enumerated(EnumType.STRING)
     private React_Status reactStatus;
     @ManyToOne
@@ -66,13 +64,6 @@ public class Reaction {
         this.user = user;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public React_Status getReactStatus() {
         return reactStatus;
