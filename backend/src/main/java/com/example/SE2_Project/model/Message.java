@@ -12,10 +12,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "messages")
-public class Message {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Message extends BaseEntity {
+
     private String text;
     private String fileName;
     private Date sentTime;
@@ -42,14 +40,6 @@ public class Message {
 
     public void setReceiver(User receiver) {
         this.receiver = receiver;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getText() {

@@ -2,27 +2,19 @@ package com.example.SE2_Project.model;
 
 import java.sql.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.example.SE2_Project.Enums.FriendshipStatus;
+import jakarta.persistence.*;
 
 import com.example.SE2_Project.utils.Status;
 
 @Entity
 @Table(name = "friends")
-public class Friend {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Friend extends BaseEntity {
+
     private Date createdTime;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column(nullable = false)
+    private FriendshipStatus status;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -31,6 +23,8 @@ public class Friend {
     @ManyToOne
     @JoinColumn(name = "friend_id", nullable = false)
     private User friend;
+
+
 
     public User getUser() {
         return user;
@@ -48,13 +42,6 @@ public class Friend {
         this.friend = friend;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public Date getCreatedTime() {
         return createdTime;
@@ -64,12 +51,11 @@ public class Friend {
         this.createdTime = createdTime;
     }
 
-    public Status getStatus() {
+    public FriendshipStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(FriendshipStatus status) {
         this.status = status;
     }
-
 }

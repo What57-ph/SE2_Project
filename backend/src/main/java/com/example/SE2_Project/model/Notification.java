@@ -12,10 +12,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "notifications")
-public class Notification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Notification extends BaseEntity {
+
     private String message;
     private boolean readStatus;
     private Date createdTime;
@@ -32,13 +30,6 @@ public class Notification {
         this.user = user;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getMessage() {
         return message;

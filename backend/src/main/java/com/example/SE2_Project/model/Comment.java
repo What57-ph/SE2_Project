@@ -14,10 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "comments")
-public class Comment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Comment extends BaseEntity {
     private String content;
     private Date createdTime;
     private String image;
@@ -33,8 +30,16 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public long getId() {
-        return id;
+    @ManyToOne
+    @JoinColumn(name = "parentId")
+    private Comment parent;
+
+    public Comment getParent() {
+        return parent;
+    }
+
+    public void setParent(Comment parent) {
+        this.parent = parent;
     }
 
     public User getUser() {
@@ -61,9 +66,6 @@ public class Comment {
         this.post = post;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getContent() {
         return content;
