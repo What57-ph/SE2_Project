@@ -1,36 +1,29 @@
 package com.example.SE2_Project.Dto;
 
-import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
-@Data
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class IncomeTransactionDto {
-    private Long userId;
-    private Long categoryId;
+
+public class ExpenseTransactionDto {
     private BigDecimal amount;
-    private LocalDate transactionDate;
+    private String description;
     private String notes;
-    private String type;
+    private LocalDate transactionDate;
+    private Long categoryId;
 
-    public String getType() {
-        return type;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getNotes() {
@@ -47,14 +40,6 @@ public class IncomeTransactionDto {
 
     public void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
     }
 
     public Long getCategoryId() {

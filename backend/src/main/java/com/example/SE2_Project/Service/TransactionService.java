@@ -87,4 +87,5 @@ public class TransactionService {
     public List<TransactionEntity> getAllIncomeTransaction() {
         return transactionRepository.findAll();  // Hoặc có thể lọc theo loại "INCOME" nếu cần
     }
+
 }
