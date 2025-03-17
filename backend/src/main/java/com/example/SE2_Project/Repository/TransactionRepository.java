@@ -25,29 +25,34 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
 
     @Query("SELECT EXTRACT(MONTH FROM t.transactionDate) AS month, " +
             "EXTRACT(YEAR FROM t.transactionDate) AS year, " +
-            "t.category.name AS category, " +
+            "COALESCE(t.category.name, 'UNKNOWN') AS category, " +
             "SUM(t.amount) AS totalAmount, " +
-            "(SUM(t.amount) / (SELECT SUM(t2.amount) FROM TransactionEntity t2 WHERE " +
-            "EXTRACT(MONTH FROM t2.transactionDate) = EXTRACT(MONTH FROM t.transactionDate) AND " +
-            "EXTRACT(YEAR FROM t2.transactionDate) = EXTRACT(YEAR FROM t.transactionDate) AND t2.type = 'INCOME')) * 100 AS categoryPercentage " +
+            "(SUM(t.amount) / COALESCE((SELECT SUM(t2.amount) FROM TransactionEntity t2 WHERE " +
+            "EXTRACT(MONTH FROM t2.transactionDate) = :month AND " +
+            "EXTRACT(YEAR FROM t2.transactionDate) = :year AND t2.type = 'INCOME'), 1)) * 100 AS categoryPercentage " +
             "FROM TransactionEntity t " +
             "WHERE t.type = 'INCOME' AND EXTRACT(MONTH FROM t.transactionDate) = :month AND EXTRACT(YEAR FROM t.transactionDate) = :year " +
             "GROUP BY EXTRACT(MONTH FROM t.transactionDate), EXTRACT(YEAR FROM t.transactionDate), t.category.name " +
             "ORDER BY category")
     List<Object[]> findCategoryIncomeReport(int month, int year);
 
-    @Query("SELECT EXTRACT(MONTH FROM t.transactionDate) AS month, " +
-            "EXTRACT(YEAR FROM t.transactionDate) AS year, " +
-            "t.category.name AS category, " +
+
+    @Query("SELECT MONTH(t.transactionDate) AS month, " +
+            "YEAR(t.transactionDate) AS year, " +
+            "COALESCE(t.category.name, 'UNKNOWN') AS category, " +
             "SUM(t.amount) AS totalAmount, " +
-            "(SUM(t.amount) / (SELECT SUM(t2.amount) FROM TransactionEntity t2 WHERE " +
-            "EXTRACT(MONTH FROM t2.transactionDate) = EXTRACT(MONTH FROM t.transactionDate) AND " +
-            "EXTRACT(YEAR FROM t2.transactionDate) = EXTRACT(YEAR FROM t.transactionDate) AND t2.type = 'EXPENSE')) * 100 AS categoryPercentage " +
+            "(SUM(t.amount) / COALESCE((SELECT SUM(t2.amount) FROM TransactionEntity t2 WHERE " +
+            "MONTH(t2.transactionDate) = :month AND " +
+            "YEAR(t2.transactionDate) = :year AND t2.type = 'EXPENSE'), 1)) * 100 AS categoryPercentage " +
             "FROM TransactionEntity t " +
-            "WHERE t.type = 'EXPENSE' AND EXTRACT(MONTH FROM t.transactionDate) = :month AND EXTRACT(YEAR FROM t.transactionDate) = :year " +
-            "GROUP BY EXTRACT(MONTH FROM t.transactionDate), EXTRACT(YEAR FROM t.transactionDate), t.category.name " +
+            "WHERE t.type = 'EXPENSE' AND t.transactionDate IS NOT NULL " +
+            "AND MONTH(t.transactionDate) = :month AND YEAR(t.transactionDate) = :year " +
+            "GROUP BY MONTH(t.transactionDate), YEAR(t.transactionDate), t.category.name " +
             "ORDER BY category")
     List<Object[]> findCategoryExpenseReport(int month, int year);
+
+
+
 
     @Query("SELECT EXTRACT(MONTH FROM t.transactionDate) AS month, " +
             "EXTRACT(YEAR FROM t.transactionDate) AS year, " +
@@ -57,5 +62,17 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             "WHERE EXTRACT(MONTH FROM t.transactionDate) = :month AND EXTRACT(YEAR FROM t.transactionDate) = :year " +
             "GROUP BY EXTRACT(MONTH FROM t.transactionDate), EXTRACT(YEAR FROM t.transactionDate)")
     List<Object[]> findIncomeAndExpenseReport(int month, int year);
+
+    @Query("SELECT " +
+            "COALESCE(SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END), 0) AS totalIncome, " +
+            "COALESCE(SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END), 0) AS totalExpense, " +
+            "CASE WHEN COALESCE(SUM(t.amount), 0) > 0 " +
+            "THEN (COALESCE(SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END), 0) / COALESCE(SUM(t.amount), 1)) * 100 " +
+            "ELSE 0 END AS incomePercentage, " +
+            "CASE WHEN COALESCE(SUM(t.amount), 0) > 0 " +
+            "THEN (COALESCE(SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END), 0) / COALESCE(SUM(t.amount), 1)) * 100 " +
+            "ELSE 0 END AS expensePercentage " +
+            "FROM TransactionEntity t")
+    List<Object[]> findIncomeAndExpensePercentage();
 
 }

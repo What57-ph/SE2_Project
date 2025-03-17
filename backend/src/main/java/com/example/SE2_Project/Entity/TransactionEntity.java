@@ -1,5 +1,6 @@
 package com.example.SE2_Project.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,11 +28,12 @@ public class TransactionEntity {
     private boolean status;
     private String notes;
 
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;

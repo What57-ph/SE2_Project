@@ -12,7 +12,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     public UserEntity getUserById(Long userId) {
-        // Kiểm tra xem người dùng có tồn tại không
         Optional<UserEntity> userOptional = userRepository.findById(userId);
         return userOptional.orElseThrow(() -> new IllegalArgumentException("Người dùng không tồn tại"));
     }

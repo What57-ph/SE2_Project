@@ -9,6 +9,7 @@
 
     import java.math.BigDecimal;
     import java.util.List;
+    import java.util.Map;
 
     @RestController
     @RequestMapping("/transactions")
@@ -22,16 +23,18 @@
                public TransactionEntity addIncomeTransaction(@RequestBody IncomeTransactionDto transaction) {
                 TransactionEntity transactionEntity = transactionService.addIncome(transaction);
                 return transactionEntity;
-
             }
         @GetMapping("/get/all")
                public List<TransactionEntity> getAllTransactions() {
                return transactionService.getAllIncomeTransaction();
             }
-
-        @PostMapping("/addExpense/{userId}")
-        public TransactionEntity addExpenseTransaction(@RequestBody ExpenseTransactionDto transactionDto, @PathVariable Long userId) {
-            return transactionService.addExpenseTransaction(transactionDto, userId);
+        @PostMapping("/delete/{id}")
+        public void deleteTransaction(@PathVariable long id) {
+            transactionService.deleteIncomeTransaction(id);
+        }
+        @PostMapping("/addExpense")
+        public TransactionEntity addExpenseTransaction(@RequestBody ExpenseTransactionDto transactionDto) {
+            return transactionService.addExpenseTransaction(transactionDto);
         }
 
         @PutMapping("/updateExpense/{id}")
@@ -72,23 +75,27 @@
             return transactionService.getTransactionsByAmountAndType(minAmount, maxAmount, type);
         }
         @GetMapping("/categoryIncomeReport")
-        public List<Object[]> getCategoryIncomeReport(
+        public List<Map<String, Object>> getCategoryIncomeReport(
                 @RequestParam("month") int month,
                 @RequestParam("year") int year) {
             return transactionService.getCategoryIncomeReport(month, year);
         }
 
         @GetMapping("/categoryExpenseReport")
-        public List<Object[]> getCategoryExpenseReport(
+        public List<Map<String, Object>> getCategoryExpenseReport(
                 @RequestParam("month") int month,
                 @RequestParam("year") int year) {
             return transactionService.getCategoryExpenseReport(month, year);
         }
 
         @GetMapping("/incomeExpenseReport")
-        public Object[] getIncomeExpenseReport(
+        public Map<String, BigDecimal> getIncomeExpenseReport(
                 @RequestParam("month") int month,
                 @RequestParam("year") int year) {
             return transactionService.getIncomeAndExpenseReport(month, year);
+        }
+        @GetMapping("/incomeExpensePercentage")
+        public Map<String, BigDecimal> getIncomeAndExpensePercentage() {
+            return transactionService.getIncomeAndExpensePercentage();
         }
     }

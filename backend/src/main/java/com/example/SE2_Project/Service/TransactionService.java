@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TransactionService {
@@ -39,6 +38,7 @@ public class TransactionService {
         transaction.setStatus(true);  // Giá trị mặc định cho status
         transaction.setCreatedDate(LocalDate.now());
         transaction.setType("INCOME");
+
 
         // Lấy thông tin người dùng
         Optional<UserEntity> userOptional = userRepository.findById(transactionEntity.getUserId());
@@ -85,8 +85,11 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public TransactionEntity addExpenseTransaction(ExpenseTransactionDto transactionDto, Long userId) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    public TransactionEntity addExpenseTransaction(ExpenseTransactionDto transactionDto) {
+
+        Optional<UserEntity> userOptional = userRepository.findById(transactionDto.getUserId());
+        UserEntity user = userOptional.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy người dùng"));
+
         CategoryEntity category = categoryRepository.findById(transactionDto.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
 
@@ -94,10 +97,11 @@ public class TransactionService {
         transaction.setAmount(transactionDto.getAmount());
         transaction.setTransactionDate(transactionDto.getTransactionDate());
         transaction.setNotes(transactionDto.getNotes());
+        transaction.setCreatedDate(LocalDate.now());
         transaction.setCategory(category);
         transaction.setUser(user);
         transaction.setStatus(true);
-        transaction.setType("EXPENSE");  // Set type to expense
+        transaction.setType("EXPENSE");
 
         return transactionRepository.save(transaction);
     }
@@ -138,32 +142,93 @@ public class TransactionService {
     public List<TransactionEntity> getTransactionsByAmountAndType(BigDecimal minAmount, BigDecimal maxAmount, String type) {
         return transactionRepository.findByAmountAndType(minAmount, maxAmount, type);
     }
+    public List<Map<String, Object>> getCategoryIncomeReport(int month, int year) {
+        List<Object[]> result = transactionRepository.findCategoryIncomeReport(month, year);
 
-    public List<Object[]> getCategoryIncomeReport(int month, int year) {
-        return transactionRepository.findCategoryIncomeReport(month, year);
+        List<Map<String, Object>> responseList = new ArrayList<>();
+
+        for (Object[] row : result) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("month", row[0]);
+            map.put("year", row[1]);
+            map.put("category", row[2]);
+            map.put("totalIncome", row[3]);
+            map.put("incomePercentage", row[4]);
+
+            responseList.add(map);
+        }
+        return responseList;
     }
 
-    public List<Object[]> getCategoryExpenseReport(int month, int year) {
-        return transactionRepository.findCategoryExpenseReport(month, year);
+    public List<Map<String, Object>> getCategoryExpenseReport(int month, int year) {
+        List<Object[]> result = transactionRepository.findCategoryExpenseReport(month, year);
+
+        List<Map<String, Object>> responseList = new ArrayList<>();
+
+        for (Object[] row : result) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("month", row[0]);
+            map.put("year", row[1]);
+            map.put("category", row[2]);
+            map.put("totalExpense", row[3]);
+            map.put("expensePercentage", row[4]);
+
+            responseList.add(map);
+        }
+        return responseList;
     }
 
-    public Object[] getIncomeAndExpenseReport(int month, int year) {
+
+    public Map<String, BigDecimal> getIncomeAndExpenseReport(int month, int year) {
         List<Object[]> result = transactionRepository.findIncomeAndExpenseReport(month, year);
 
         if (result.isEmpty()) {
-            return new Object[]{"No data found"};
+            return Map.of("message", BigDecimal.ZERO);
         }
 
         Object[] data = result.get(0);
 
-        BigDecimal totalIncome = (BigDecimal) data[2]; // Tổng thu nhập
-        BigDecimal totalExpense = (BigDecimal) data[3]; // Tổng chi tiêu
+        BigDecimal totalIncome = (BigDecimal) data[2];
+        BigDecimal totalExpense = (BigDecimal) data[3];
 
-        // Tính tỷ lệ phần trăm
         BigDecimal total = totalIncome.add(totalExpense);
-        BigDecimal incomePercentage = total.compareTo(BigDecimal.ZERO) > 0 ? (totalIncome.divide(total, 4, BigDecimal.ROUND_HALF_UP)).multiply(BigDecimal.valueOf(100)) : BigDecimal.ZERO;
-        BigDecimal expensePercentage = total.compareTo(BigDecimal.ZERO) > 0 ? (totalExpense.divide(total, 4, BigDecimal.ROUND_HALF_UP)).multiply(BigDecimal.valueOf(100)) : BigDecimal.ZERO;
 
-        return new Object[]{incomePercentage, expensePercentage};  // Trả về tỷ lệ phần trăm của INCOME và EXPENSE
+        BigDecimal incomePercentage = total.compareTo(BigDecimal.ZERO) > 0
+                ? (totalIncome.divide(total, 4, BigDecimal.ROUND_HALF_UP)).multiply(BigDecimal.valueOf(100))
+                : BigDecimal.ZERO;
+
+        BigDecimal expensePercentage = total.compareTo(BigDecimal.ZERO) > 0
+                ? (totalExpense.divide(total, 4, BigDecimal.ROUND_HALF_UP)).multiply(BigDecimal.valueOf(100))
+                : BigDecimal.ZERO;
+
+        Map<String, BigDecimal> response = new HashMap<>();
+        response.put("incomePercentage", incomePercentage);
+        response.put("expensePercentage", expensePercentage);
+        response.put("totalIncome", totalIncome);
+        response.put("totalExpense", totalExpense);
+
+        return response;
+    }
+
+    public Map<String, BigDecimal> getIncomeAndExpensePercentage() {
+        List<Object[]> result = transactionRepository.findIncomeAndExpensePercentage();
+
+        // Khởi tạo Map để trả về kết quả
+        Map<String, BigDecimal> response = new HashMap<>();
+
+        if (!result.isEmpty()) {
+            Object[] data = result.get(0);
+            BigDecimal totalIncome = (BigDecimal) data[0];  // Tổng thu nhập
+            BigDecimal totalExpense = (BigDecimal) data[1];  // Tổng chi tiêu
+            BigDecimal incomePercentage = (BigDecimal) data[2]; // Phần trăm thu nhập
+            BigDecimal expensePercentage = (BigDecimal) data[3]; // Phần trăm chi tiêu
+
+            // Đưa kết quả vào Map
+            response.put("totalIncome", totalIncome);
+            response.put("totalExpense", totalExpense);
+            response.put("incomePercentage", incomePercentage);
+            response.put("expensePercentage", expensePercentage);
+        }
+        return response;
     }
 }

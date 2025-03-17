@@ -1,5 +1,9 @@
 package com.example.SE2_Project.Dto;
 
+import com.example.SE2_Project.utils.LocalDateDeserializer;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -7,8 +11,18 @@ public class ExpenseTransactionDto {
     private BigDecimal amount;
     private String description;
     private String notes;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate transactionDate;
     private Long categoryId;
+    private Long userId;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public BigDecimal getAmount() {
         return amount;

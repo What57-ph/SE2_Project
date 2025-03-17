@@ -1,5 +1,7 @@
 package com.example.SE2_Project.Dto;
 
+import com.example.SE2_Project.utils.LocalDateDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -13,6 +15,8 @@ public class IncomeTransactionDto {
     private Long userId;
     private Long categoryId;
     private BigDecimal amount;
+
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate transactionDate;
     private String notes;
 
