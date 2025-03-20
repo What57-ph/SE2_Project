@@ -6,31 +6,37 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String username;
     private String password;
     private String name;
+    private boolean status;
 
-    private LocalDateTime createdDate;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdDate = LocalDateTime.now();
+
     private String role;
+
+    @OneToMany(mappedBy = "user")
+    private List<TransactionEntity> transactions;
 
     public UserEntity(Long id, String username, String password, String name, LocalDateTime createdDate, String role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.name = name;
-        this.createdDate = createdDate;
+        this.createdDate = LocalDateTime.now();;
         this.role = role;
+        this.status = status;
     }
 
-    @OneToMany(mappedBy = "user")
-    private List<TransactionEntity> transactions;
 
     public UserEntity() {
 
@@ -82,6 +88,14 @@ public class UserEntity {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public List<TransactionEntity> getTransactions() {
