@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 
 public class UserEntity {
     @Id
@@ -16,6 +16,8 @@ public class UserEntity {
     private String username;
     private String password;
     private String name;
+    private boolean status;
+
 
     private LocalDateTime createdDate;
     private String role;
@@ -34,6 +36,14 @@ public class UserEntity {
 
     public UserEntity() {
 
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public Long getId() {

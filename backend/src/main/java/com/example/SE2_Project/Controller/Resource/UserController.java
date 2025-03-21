@@ -21,4 +21,5 @@ public class UserController {
         UserEntity user = userService.getUserById(id); // Lấy người dùng từ service
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
 }
