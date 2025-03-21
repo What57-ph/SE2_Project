@@ -2,6 +2,7 @@ package com.example.SE2_Project.Entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,10 +20,10 @@ public class UserEntity {
     private boolean status;
 
 
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
     private String role;
 
-    public UserEntity(Long id, String username, String password, String name, LocalDateTime createdDate, String role) {
+    public UserEntity(Long id, String username, String password, String name, LocalDate createdDate, String role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -78,11 +79,11 @@ public class UserEntity {
         this.name = name;
     }
 
-    public LocalDateTime getCreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
+    public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
 

@@ -5,23 +5,27 @@ import com.example.SE2_Project.Dto.UserDto;
 import com.example.SE2_Project.Entity.UserEntity;
 import com.example.SE2_Project.Repository.UserRepository;
 import com.example.SE2_Project.Security.SecurityUtils;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Service
 @Slf4j
 public class LoginService {
+
         @Autowired
         private UserRepository userRepository;
 
         @Autowired
         private PasswordEncoder passwordEncoder;
 
-        public UserEntity registerUser(UserDto userDTO) {
+     @Transactional
+         public UserEntity registerUser(UserDto userDTO) {
             if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
                 throw new RuntimeException("Username đã tồn tại!");
             }
@@ -32,11 +36,15 @@ public class LoginService {
             user.setStatus(true);
             user.setRole("ROLE_USER");
             user.setName(userDTO.getName());
+            user.setCreatedDate(LocalDate.now());
 
-            return userRepository.save(user);
+        UserEntity savedUser = userRepository.save(user);
+        System.out.println("User saved: " + savedUser.getUsername());
+         userRepository.flush();
+         return savedUser;
+
         }
 
-        // Tìm người dùng theo username
         public UserEntity findByUsername(String username) {
             return userRepository.findByUsername(username).orElseThrow(
                     () -> new RuntimeException("Không tìm thấy người dùng!")

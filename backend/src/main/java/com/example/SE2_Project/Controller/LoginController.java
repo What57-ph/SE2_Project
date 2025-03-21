@@ -23,7 +23,7 @@ public class LoginController {
 
 
 
-    @PostMapping("/login")
+    @PostMapping("/process-login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
         try {
             // Gọi service login và xử lý chuyển hướng
@@ -39,6 +39,11 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during redirect: " + e.getMessage());
         }
     }
+    @GetMapping("/login")
+    public String loginForm() {
+        return "auth/login";
+    }
+
 
     @GetMapping(value = "/process-after-login")
     public String processAfterLoginController(){

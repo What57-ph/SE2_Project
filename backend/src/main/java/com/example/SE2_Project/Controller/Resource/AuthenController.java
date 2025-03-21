@@ -23,7 +23,7 @@ public class AuthenController {
     public ResponseEntity<?> registerUser(@RequestBody UserDto userDTO) {
         try {
             UserEntity newUser = loginService.registerUser(userDTO);
-            return ResponseEntity.ok(newUser); // Trả về thông tin user vừa tạo
+            return ResponseEntity.ok(newUser);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

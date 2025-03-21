@@ -18,7 +18,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserEntity> getUser(@PathVariable long id) {
-        UserEntity user = userService.getUserById(id); // Lấy người dùng từ service
+        UserEntity user = userService.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

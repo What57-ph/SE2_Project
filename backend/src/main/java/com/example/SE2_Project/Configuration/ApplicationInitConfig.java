@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ApplicationInitConfig {
 
-    @Value("${admin.username:admin}") // Giá trị mặc định là 'admin' nếu không cấu hình
+    @Value("${admin.username:admin}")
     private String ADMIN_USERNAME;
 
-    @Value("${admin.password:admin123}") // Giá trị mặc định là 'admin123'
+    @Value("${admin.password:admin123}")
     private String ADMIN_PASSWORD;
 
     private final PasswordEncoder passwordEncoder;
