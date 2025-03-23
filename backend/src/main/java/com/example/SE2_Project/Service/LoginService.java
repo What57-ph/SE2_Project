@@ -34,7 +34,7 @@ public class LoginService {
             user.setUsername(userDTO.getUsername());
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             user.setStatus(true);
-            user.setRole("ROLE_USER");
+            user.setRole("USER");
             user.setName(userDTO.getName());
             user.setCreatedDate(LocalDate.now());
 
@@ -56,9 +56,9 @@ public class LoginService {
         log.info("User roles: {}", roleCode);
 
         if (roleCode.contains("ROLE_ADMIN")) {
-            return "redirect:/report"; // Redirect to admin page
+            return "redirect:/report";
         }
-        return "redirect:/homepage"; // Redirect to user page
+        return "redirect:/homepage";
     }
     public String loginAndRedirect(AuthenticationRequest request) {
         // 1. Tìm user theo username

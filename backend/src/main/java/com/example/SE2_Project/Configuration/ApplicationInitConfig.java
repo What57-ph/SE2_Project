@@ -43,7 +43,7 @@ public class ApplicationInitConfig {
                 admin.setUsername(ADMIN_USERNAME);
                 admin.setPassword(passwordEncoder.encode(ADMIN_PASSWORD));
                 admin.setUsername("admin"); // Thêm email mặc định
-                admin.setRole("ADMIN"); // Gán role là ADMIN
+                admin.setRole("ROLE_ADMIN"); // Gán role là ADMIN
 
                 userRepository.save(admin);
                 log.info("✅ Admin user '{}' created successfully.", ADMIN_USERNAME);

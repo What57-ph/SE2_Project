@@ -1,28 +1,29 @@
 package com.example.SE2_Project.Configuration;
 
-import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;  // Đảm bảo dùng đúng lớp này từ Spring Web
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
 @Configuration
-
 public class CrossConfig {
 
     @Bean
-    public CorsFilter corsFilter(){
+    public CorsFilter corsFilter() {
+        // Sử dụng đúng UrlBasedCorsConfigurationSource của Spring Web
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3000");
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowedMethods(List.of("*"));
-        source.registerCorsConfiguration("/**", config);
+        config.setAllowCredentials(true); // Cho phép gửi cookie
+        config.addAllowedOrigin("http://localhost:3000"); // Frontend của bạn
+        config.setAllowedHeaders(List.of("*")); // Cho phép tất cả các headers
+        config.setAllowedMethods(List.of("*")); // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE,...)
 
-        return new CorsFilter();
+        source.registerCorsConfiguration("/**", config); // Đảm bảo CORS cho tất cả URL
+
+        return new CorsFilter(source); // Trả về đối tượng CorsFilter của Spring
     }
 }

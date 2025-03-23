@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="login-header d-flex justify-content-between align-items-center">
-        <div class="w-100 h-100 login-header-left"> 
+        <div class="w-100 h-100 login-header-left">
             <img src="../../static/img/login-head.png">
             <span class="px-4">MoneyNote</span>
         </div>
@@ -24,27 +24,24 @@
       </div>
   <div class="login-form col-md-6 p-5 d-flex justify-content-center flex-column align-items-center">
     <img src="../../static/img/avatar.png">
-    <form>
-      <div class="form-group position-relative">
-        
-        <input type="email" class="form-control form-input mt-5 px-4" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username/Email Address">
-        <i class="fa-solid fa-user translate-middle"></i>
-      </div>
-      <div class="form-group position-relative">
-
-        <input type="password" class="form-control form-input mt-5 px-4" id="exampleInputPassword1" placeholder="Password">
-        <i class="fa-solid fa-key translate-middle"></i>
-      </div>
-      <div class="form-group form-check d-flex justify-content-between p-4">
-        <div>
-          <input type="checkbox" class="form-check-input " id="exampleCheck1">
-          <label class="form-check-label" for="exampleCheck1">Remember me</label>
-        </div>
-
-        <a href="http://127.0.0.1:5500/template/auth/register.html">Forgot password</a>
-      </div>
-      <button type="submit" class="btn btn-danger mt-4">Login</button>
-    </form>
+      <form action="/process-login" method="post">
+          <div class="form-group position-relative">
+              <input type="text" class="form-control form-input mt-5 px-4" name="username" placeholder="Username/Email Address">
+              <i class="fa-solid fa-user translate-middle"></i>
+          </div>
+          <div class="form-group position-relative">
+              <input type="password" class="form-control form-input mt-5 px-4" name="password" placeholder="Password">
+              <i class="fa-solid fa-key translate-middle"></i>
+          </div>
+          <div class="form-group form-check d-flex justify-content-between p-4">
+              <div>
+                  <input type="checkbox" class="form-check-input " id="exampleCheck1">
+                  <label class="form-check-label" for="exampleCheck1">Remember me</label>
+              </div>
+              <a href="http://127.0.0.1:5500/templates/auth/register.html">Forgot password</a>
+          </div>
+          <button type="submit" class="btn btn-danger mt-4">Login</button>
+      </form>
   </div>
     </div>
 </body>

@@ -23,6 +23,16 @@ public class SecurityUtils {
         return "";
     }
 
+//    public static void printCurrentUserInfo() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+//            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+//            System.out.println("Username: " + userDetails.getUsername());
+//            System.out.println("Full name: " + userDetails.getUserEntity().getName()); // Lấy tên đầy đủ
+//            System.out.println("Authorities: " + authentication.getAuthorities());
+//        }
+//    }
+
     public static final String PREFIX_ROLE = "ROLE_";
     public static enum Role {
         ADMIN(1),

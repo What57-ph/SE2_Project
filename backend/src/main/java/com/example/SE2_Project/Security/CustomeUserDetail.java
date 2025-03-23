@@ -15,34 +15,36 @@ import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class CustomeUserDetail implements  UserDetailsService {
-
     @Autowired
     private  UserRepository userRepository;
 
 
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        if(StringUtils.isEmpty(username)){
+        // Check if username is empty
+        if (StringUtils.isEmpty(username)) {
             throw new UsernameNotFoundException("Username is empty");
         }
+
+        // Fetch user entity based on username (status is false means active)
         UserEntity userEntity = userRepository.findByUsernameAndStatusIsFalse(username);
         if (userEntity == null) {
-            throw new UsernameNotFoundException("Username not found");
+            throw new UsernameNotFoundException("User not found");
         }
 
-        // Tạo danh sách quyền từ chuỗi role (ví dụ: "ADMIN", "USER")
-        Set<GrantedAuthority> grantedAuthorities = Collections.singleton(
-                new SimpleGrantedAuthority("ROLE_" + userEntity.getRole().toUpperCase())
-        );
+        // Create authorities list from user roles
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + userEntity.getRole().toUpperCase()));
 
-        return new CustomUserDetails(userEntity, grantedAuthorities);
+        // Return UserDetails with username, password, and authorities
+        return new User(userEntity.getUsername(), userEntity.getPassword(), grantedAuthorities);
     }
-    }
-
+}
 
 
