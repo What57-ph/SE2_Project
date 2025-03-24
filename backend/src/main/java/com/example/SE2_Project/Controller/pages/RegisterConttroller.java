@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RegisterConttroller {
 
     @GetMapping("/register")
-    public String registerForm(Model model) {
+    public String registerForm() {
         return "auth/register";
     }
 }

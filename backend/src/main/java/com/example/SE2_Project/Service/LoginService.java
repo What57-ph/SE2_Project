@@ -61,11 +61,9 @@ public class LoginService {
         return "redirect:/homepage";
     }
     public String loginAndRedirect(AuthenticationRequest request) {
-        // 1. Tìm user theo username
         UserEntity user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Tên đăng nhập không tồn tại"));
 
-        // 2. Kiểm tra mật khẩu
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Tên đăng nhập hoặc mật khẩu không chính xác");
         }

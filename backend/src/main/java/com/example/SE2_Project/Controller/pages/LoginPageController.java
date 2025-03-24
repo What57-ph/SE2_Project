@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Set;
 
 @Controller
-@RequestMapping("")
 public class LoginPageController {
+
     @Autowired
    private  LoginService loginService;
 
@@ -27,7 +27,7 @@ public class LoginPageController {
 
     @GetMapping("/homepage")
     public String homepage() {
-        return "expenses/homepage";
+        return "expenses/index";
     }
 
     @GetMapping("/process-after-login")
