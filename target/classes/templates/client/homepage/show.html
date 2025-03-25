@@ -57,7 +57,7 @@
       <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
           <div class="nav">
-
+            
             <a class="nav-link fs-5" href="/">
               <div class="sb-nav-link-icon fs-5">
                 <i class="fa-solid fa-house"></i>
@@ -315,11 +315,11 @@
       reviewCategory.forEach(item => {
         item.classList.remove("active");
 
-
+       
       });
       totalSavingContainer.innerHTML="";
       element.classList.add("active");
-      totalSavingInfo(element.textContent);
+      totalSavingInfo(element.textContent);   
     }
     let totalSavingInfo= (categoryName)=>{
       for (let i = 0; i < totalSavingData.length; i++) {
@@ -347,7 +347,7 @@
         } else if (categoryName==="Quarter 4"){
           if (i<9) totalSavingContainer.innerHTML="";
         }
-      }
+      } 
     }
     totalSavingInfo();
 
