@@ -5,6 +5,7 @@
     import com.example.SE2_Project.Entity.TransactionEntity;
     import com.example.SE2_Project.Service.TransactionService;
     import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.ui.Model;
     import org.springframework.web.bind.annotation.*;
 
     import java.math.BigDecimal;
@@ -19,11 +20,18 @@
              private TransactionService transactionService;
 
 
-       @PostMapping("/addIncome")
-               public TransactionEntity addIncomeTransaction(@RequestBody IncomeTransactionDto transaction) {
-                TransactionEntity transactionEntity = transactionService.addIncome(transaction);
-                return transactionEntity;
-            }
+        @GetMapping("/addIncome")
+        public String showIncomeForm(Model model) {
+            model.addAttribute("transaction", new IncomeTransactionDto());
+            model.addAttribute("categories", transactionService.getAllExpenseTransactions());
+            return "addIncome";
+        }
+
+        @PostMapping("/addNew")
+        public String addIncomeTransaction(@ModelAttribute("transaction") IncomeTransactionDto transactionDto, Model model) {
+            transactionService.addIncome(transactionDto);
+            return "redirect:expenses/addNew";
+        }
         @GetMapping("/get/all")
                public List<TransactionEntity> getAllTransactions() {
                return transactionService.getAllIncomeTransaction();

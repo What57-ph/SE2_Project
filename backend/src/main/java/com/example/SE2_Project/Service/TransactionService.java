@@ -27,7 +27,6 @@ public class TransactionService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    // Logic thêm thu nhập
     public TransactionEntity addIncome(IncomeTransactionDto transactionEntity) {
 
         // Tạo đối tượng giao dịch

@@ -7,15 +7,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true)
 @Configuration
 public class SecurityConfig {
 
@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-//                        .loginPage("/guest/login")
+                        .loginPage("/guest/login")
                         .loginProcessingUrl("/process-login")
                         .failureUrl("/login?error=true")
                         .defaultSuccessUrl("/process-after-login", true)  // Chuyển hướng đến trang homepage sau khi đăng nhập thành công
@@ -54,9 +54,9 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .sessionManagement(session -> session
-                        .invalidSessionUrl("/login?invalid-session=true")  // Chuyển hướng nếu session không hợp lệ
-                        .maximumSessions(1)  // Giới hạn số lượng session
-                        .expiredUrl("/login?expired=true")  // Nếu session hết hạn, chuyển hướng đến trang login
+                        .invalidSessionUrl("/login?invalid-session=true")
+                        .maximumSessions(1)
+                        .expiredUrl("/login?expired=true")
                 );
         http.authenticationProvider(authenticationProvider());
 
