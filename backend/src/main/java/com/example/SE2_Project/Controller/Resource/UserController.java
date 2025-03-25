@@ -1,6 +1,6 @@
 package com.example.SE2_Project.Controller.Resource;
 
-import com.example.SE2_Project.Entity.UserEntity;
+import com.example.SE2_Project.Dto.UserDto;
 import com.example.SE2_Project.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,26 +16,28 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable long id) {
-        UserEntity user = userService.getUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserDto> getUserById(@PathVariable long id) {
+        UserDto userDto = userService.convertToDto(userService.getUserById(id)); // Chuyển đổi từ Entity sang DTO
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<UserEntity>> getAllUsers() {
-        List<UserEntity> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.getAllUsers().stream()
+                .map(user -> userService.convertToDto(user)) // Chuyển đổi các UserEntity sang UserDto
+                .toList();
         return ResponseEntity.ok(users);
     }
 
     @PostMapping
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user) {
-        UserEntity newUser = userService.createUser(user);
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+        UserDto newUser = userService.createUser(userDto); // Tạo người dùng mới từ DTO
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserEntity> updateUser(@PathVariable Long id, @RequestBody UserEntity userDetails) {
-        UserEntity updatedUser = userService.updateUser(id, userDetails);
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+        UserDto updatedUser = userService.updateUser(id, userDto); // Cập nhật người dùng từ DTO
         return ResponseEntity.ok(updatedUser);
     }
 
