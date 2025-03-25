@@ -2,6 +2,7 @@ package com.example.SE2_Project.Controller.pages;
 
 import com.example.SE2_Project.Security.SecurityUtils;
 import com.example.SE2_Project.Service.LoginService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("")
+@Slf4j
 public class LoginPageController {
     @Autowired
    private  LoginService loginService;
