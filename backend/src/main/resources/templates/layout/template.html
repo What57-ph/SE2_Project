@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/fdd309eb2f.js" crossorigin="anonymous"></script>
+    <script th:src="@{|/js/chart.js|}"></script>
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body >
+
+
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark d-flex justify-content-between">
+    <div>
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="/admin">Expense Tracker App</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+    </div>
+
+    <!-- Navbar-->
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4 ">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user fa-fw"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#!">Settings</a></li>
+                <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
+                <li>
+                    <form method="post" action="/logout">
+                        <input type="hidden" value="" />
+                        <button type="submit" class="dropdown-item">Log out</button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<div id="layoutSidenav">
+
+
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+
+                    <a class="nav-link" href="/admin">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    <a class="nav-link" href="/admin/user">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        User
+                    </a>
+                    <a class="nav-link" href="/admin/transaction">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Transaction
+                    </a>
+                    <a class="nav-link" href="/admin/category">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Category
+                    </a>
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Expense Tracker App Dashboard</div>
+
+            </div>
+        </nav>
+    </div>
+
+    <div id="layoutSidenav_content" >
+    <main layout:fragment="content">
+
+    </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-white border-5 text-center rounded-4 p-4 shadow-lg">
+            <div class="modal-header border-bottom-0 d-flex justify-content-end">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-5">
+                <form>
+                    <div class="mb-4">
+                        <i class="fas fa-exclamation-triangle text-danger fs-1"></i>
+                    </div>
+                    <h1 class="modal-title fs-3 fw-semibold">Delete Confirmation</h1>
+                    <p class="fs-5 text-secondary mt-3">Are you sure you want to delete this item?</p>
+                    <div class="modal-footer mt-4 px-0 d-flex justify-content-center gap-3 border-top-0">
+                        <button type="button" class="btn btn-outline-secondary fs-5 px-4 py-2 rounded-pill" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-danger fs-5 px-4 py-2 rounded-pill shadow-sm">
+                            <i class="fas fa-trash-alt me-2"></i>Delete
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script th:inline="javascript">
+    let transactionDate = document.querySelectorAll("#transactionTime");
+
+    function formatDateTime(datetimeString) {
+        const date = new Date(datetimeString);
+        const now = new Date();
+
+        const isToday = date.toDateString() === now.toDateString();
+
+        if (isToday) {
+
+            return date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        } else {
+
+            return date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            }) + date.toLocaleDateString('en-GB');
+        }
+
+    }
+    for (let i = 0; i < transactionDate.length; i++) {
+        transactionDate[i].innerHTML = formatDateTime(new Date());
+    }
+</script>
+<script>
+    let transactionDate=document.querySelectorAll("#transactionTime");
+    function formatDateTime(datetimeString) {
+        const date = new Date(datetimeString);
+        const now = new Date();
+
+        const isToday = date.toDateString() === now.toDateString();
+
+        if (isToday) {
+
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        } else {
+
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })+date.toLocaleDateString('en-GB');
+        }
+
+    }
+    for (let i=0;i<transactionDate.length;i++){
+        transactionDate[i].innerHTML=formatDateTime(new Date());
+    }
+
+</script>
+<script th:inline="javascript">
+    const ctx = document.querySelector(".saving-line-chart").getContext("2d");
+    const income = document.querySelector(".income-donut-chart");
+    const expense = document.querySelector(".expense-donut-chart");
+    const totalSavingContainer = document.querySelector(".total-saving-review");
+    const labelsIncome = ["Salary", "Freelance"];
+    const incomeBgColor = ["rgb(255, 99, 132)", "rgb(54, 162, 235)"];
+    const labelsSaving = ["", "Mar", "Jun", "Sep", "Dec"];
+    const labelsExpense = ["Rent", "Retail", "Utilities", "Dining Out"];
+    const expenseBgColor = [
+        "rgb(54, 170, 200)",
+        "rgb(54, 162, 235)",
+        "rgb(54, 162,200)",
+        "rgb(54, 162,150)",
+    ];
+    const reviewCategory = document.querySelectorAll(".filter-options li");
+    let totalSavingData = [{
+        month: "January",
+        income: "$6500",
+        expense: "$3655",
+    },
+        {
+            month: "February",
+            income: "$6500",
+            expense: "$3655"
+        }, {
+            month: "March",
+            income: "$6500",
+            expense: "$3655"
+        }, {
+            month: "April",
+            income: "$6500",
+            expense: "$3655"
+        }, {
+            month: "May",
+            income: "$6500",
+            expense: "$3655"
+        }, {
+            month: "June",
+            income: "$6500",
+            expense: "$3655"
+        }, {
+            month: "July",
+            income: "$6500",
+            expense: "$3655"
+        }, {
+            month: "August",
+            income: "$6500",
+            expense: "$3655"
+        }, {
+            month: "September",
+            income: "$6500",
+            expense: "$3655"
+        }, {
+            month: "October",
+            income: "$6500",
+            expense: "$3655"
+        }, {
+            month: "November",
+            income: "$6500",
+            expense: "$3655"
+        }, {
+            month: "December",
+            income: "$6500",
+            expense: "$3655"
+        }
+    ];
+
+    function setActive(element) {
+        reviewCategory.forEach(item => {
+            item.classList.remove("active");
+
+
+        });
+        totalSavingContainer.innerHTML="";
+        element.classList.add("active");
+        totalSavingInfo(element.textContent);
+    }
+    let totalSavingInfo= (categoryName)=>{
+        for (let i = 0; i < totalSavingData.length; i++) {
+            let index=0;
+            let circleColor = 0 <= i && i <= 2 ? "blue" : 3 <= i && i <= 5 ? "green" : 6 <= i && i <= 8 ? "orange" : "red"
+            totalSavingContainer.innerHTML += `
+          <div class="monthly-saving-box rounded shadow-sm bg-opacity-100 p-3 col-xl-2 col-3">
+            <h5 class="h5 fw-semibold mb-3">
+              <i class="fa-solid fa-circle-dot" style="color:${circleColor}"></i>
+              &nbsp;&nbsp;${totalSavingData[i].month}
+            </h5>
+            <p>Income:&nbsp;${totalSavingData[0].income}</p>
+            <p>Expense:&nbsp;${totalSavingData[0].expense}</p>
+          </div>`;
+            if (categoryName==="Quarter 1"){
+                if (i===2){
+                    return;
+                }
+            } else if (categoryName==="Quarter 2"){
+                if (i<3) totalSavingContainer.innerHTML="";
+                if (i===5) return;
+            } else if (categoryName==="Quarter 3"){
+                if (i<6) totalSavingContainer.innerHTML="";
+                if (i===8) return;
+            } else if (categoryName==="Quarter 4"){
+                if (i<9) totalSavingContainer.innerHTML="";
+            }
+        }
+    }
+    totalSavingInfo();
+
+    let expenseLegend = document.querySelector(".custom-legend-expense");
+
+    for (var i = 0; i < labelsExpense.length; i++) {
+        expenseLegend.innerHTML += `<span class="legend-item">
+                        <span class="legend-color" style="background-color:${expenseBgColor[i]}"></span> ${labelsExpense[i]}
+                    </span>`;
+    }
+    let incomeLegend = document.querySelector(".custom-legend-income");
+
+    for (var i = 0; i < labelsIncome.length; i++) {
+        incomeLegend.innerHTML += `<span class="legend-item">
+                        <span class="legend-color" style="background-color:${incomeBgColor[i]}"></span> ${labelsIncome[i]}
+                    </span>`;
+
+    }
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, "rgba(75, 192, 192, 0.5)");
+    gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+    //Saving chart
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labelsSaving,
+            datasets: [{
+                label: "Balance",
+                data: [0, 7.2, 15, 5, 6],
+                borderWidth: 2,
+                borderColor: "rgb(75, 192, 192)",
+                backgroundColor: gradient,
+                tension: 0.4,
+            }, ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        },
+    });
+    //Income chart
+    new Chart(document.querySelector(".income-donut-chart"), {
+        type: "doughnut",
+        data: {
+            labels: ["Salary", "Freelance"],
+            datasets: [{
+                data: [5000, 3000],
+                backgroundColor: incomeBgColor,
+                hoverOffset: 4,
+                borderWidth: 1,
+                weight: 5,
+            }, ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutoutPercentage: 85,
+
+            legend: {
+                display: false,
+            },
+        },
+    });
+    //Expense chart
+    new Chart(document.querySelector(".expense-donut-chart"), {
+        type: "doughnut",
+        data: {
+            labels: labelsExpense,
+            datasets: [{
+                data: [5000, 3000, 2000, 1000],
+                backgroundColor: expenseBgColor,
+                hoverOffset: 4,
+                borderWidth: 1,
+                weight: 5,
+            }, ],
+        },
+        options: {
+            legend: {
+                display: false,
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            cutoutPercentage: 85,
+        },
+    });
+</script>
+</body>
+</html>

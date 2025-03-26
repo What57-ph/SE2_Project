@@ -1,0 +1,61 @@
+
+.homepage-container img{
+    width:4rem;
+    height:4rem;
+}
+.saving-chart-container {
+    height: 350px;
+    margin: auto;
+}
+
+.donut-chart-container{
+    height: 300px;
+}
+
+
+.legend-item {
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+.total-each-period ul{
+    font-size: 18px;
+}
+.total-each-period{
+    color: rgb(65 64 58);
+}
+.filter-options li {
+    cursor: pointer;
+    padding: 8px 25px;
+    transition: 0.3s ease-in-out;
+}
+
+.filter-options li:hover {
+    background: #f1f1f1;
+}
+
+.filter-options .active {
+    border-bottom: 3px solid #000;
+    
+    font-weight: bold;
+}
+.monthly-saving-box{
+    background-color: #fafafa;
+    border: 0.5px solid #f0f0f0;
+    width: 180px !important;
+    height: 150px;
+}
+
+
+
+
+
