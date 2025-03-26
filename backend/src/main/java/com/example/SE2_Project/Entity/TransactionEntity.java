@@ -38,6 +38,9 @@ public class TransactionEntity {
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
+    public String getCategoryName() {
+        return category != null ? category.getName() : "Unknown";  // Trả về tên category nếu có, nếu không trả về "Unknown"
+    }
 
     public Long getId() {
         return id;

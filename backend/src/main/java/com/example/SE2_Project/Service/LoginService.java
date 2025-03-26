@@ -56,9 +56,9 @@ public class LoginService {
         log.info("User roles: {}", roleCode);
 
         if (roleCode.contains("ROLE_ADMIN")) {
-            return "redirect:/report";
+            return "redirect:/admin/show";
         }
-        return "redirect:/homepage";
+        return "redirect:/user/show";
     }
     public String loginAndRedirect(AuthenticationRequest request) {
         UserEntity user = userRepository.findByUsername(request.getUsername())

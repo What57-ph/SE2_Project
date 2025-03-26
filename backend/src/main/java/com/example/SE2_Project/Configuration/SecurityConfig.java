@@ -33,7 +33,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                         // Các URL cho phép truy cập mà không cần đăng nhập
                         .requestMatchers("/process-login","/categories/**", "/users/**", "/process-after-login", "/report", "/homepage", "/api/auth/register","/guest/register").permitAll()
-                        .requestMatchers("/auth/**", "/calender/**", "/report/**", "/expenses/**", "/css/**", "/img/**", "/js/**","/img/**").permitAll()
+                        .requestMatchers("/auth/**", "/calender/**", "/report/**", "/expenses/**", "/css/**", "/img/**", "/js/**","/img/**", "/transactions/**").permitAll()
                         .requestMatchers("/login", "/guest/login").permitAll()
                         // Tất cả các request còn lại đều phải xác thực
                         .anyRequest().authenticated()

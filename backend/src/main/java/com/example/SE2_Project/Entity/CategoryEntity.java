@@ -25,6 +25,7 @@ public class CategoryEntity {
     @OneToMany(mappedBy = "category")
     private List<TransactionEntity> transactions;
 
+
     public Long getId() {
         return id;
     }

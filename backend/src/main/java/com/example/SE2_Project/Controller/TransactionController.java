@@ -32,6 +32,8 @@
         public void deleteTransaction(@PathVariable long id) {
             transactionService.deleteIncomeTransaction(id);
         }
+
+
         @PostMapping("/addExpense")
         public TransactionEntity addExpenseTransaction(@RequestBody ExpenseTransactionDto transactionDto) {
             return transactionService.addExpenseTransaction(transactionDto);

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/show")
 public class DashboardController {
     @GetMapping("")
     public String getAdminPage(){
@@ -48,4 +48,6 @@ public class DashboardController {
     public String getUserUpdatePage(@PathVariable("id") Long id){
         return "admin/user/update";
     }
+
+
 }
