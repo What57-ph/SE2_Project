@@ -22,6 +22,9 @@ public class UserEntity {
 
     private LocalDate createdDate;
     private String role;
+    @OneToMany(mappedBy = "user")
+    private List<TransactionEntity> transactions;
+
 
     public UserEntity(Long id, String username, String password, String name, LocalDate createdDate, String role) {
         this.id = id;
@@ -32,8 +35,6 @@ public class UserEntity {
         this.role = role;
     }
 
-    @OneToMany(mappedBy = "user")
-    private List<TransactionEntity> transactions;
 
     public UserEntity() {
 
