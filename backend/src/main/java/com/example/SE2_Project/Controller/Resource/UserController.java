@@ -21,7 +21,7 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/getAll/")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = userService.getAllUsers().stream()
                 .map(user -> userService.convertToDto(user)) // Chuyển đổi các UserEntity sang UserDto
@@ -29,19 +29,19 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping
+    @PostMapping("/create/")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         UserDto newUser = userService.createUser(userDto); // Tạo người dùng mới từ DTO
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
         UserDto updatedUser = userService.updateUser(id, userDto); // Cập nhật người dùng từ DTO
         return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
