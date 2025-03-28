@@ -114,11 +114,11 @@
                         </div>
                         <div class="modal-body px-5">
                             <form id="updateForm" method="post" th:action="@{/transactions/update}" th:object="${transaction}">
-                                <input type="hidden" name="id" th:value="*{id}" />
+                                <input type="hidden" name="id" id="transactionId">
 
                                 <div class="form-group mb-3">
                                     <label class="fs-4">Type of category</label>
-                                    <select class="form-control fs-4 mt-1" id="categoryId">
+                                    <select class="form-control fs-4 mt-1" id="categoryId" name="categoryId">
                                         <option th:each="category : ${categories}"
                                                 th:value="${category.id}"
                                                 th:text="${category.name}">
@@ -128,11 +128,11 @@
 
                                 <div class="form-group mb-3">
                                     <label class="fs-4">Amount</label>
-                                    <input type="text" class="form-control fs-4 mt-1" id="amount">
+                                    <input type="text" class="form-control fs-4 mt-1" id="amount" name="amount">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="fs-4">Date</label>
-                                    <input type="date" class="form-control fs-4 mt-1" id="createdDate">
+                                    <input type="date" class="form-control fs-4 mt-1" id="createdDate" name="createdDate">
                                 </div>
 
                                 <div class="modal-footer mt-5 px-0 d-flex justify-content-between border-top-0">
@@ -177,14 +177,14 @@
                     const amount = this.getAttribute("data-amount");
                     const createdDate = this.getAttribute("data-date");
 
-                    // Điền dữ liệu vào form
-                    document.querySelector("#updateForm input[name='id']").value = id;
-                    document.querySelector("#updateForm select[name='categoryId']").value = categoryId;
-                    document.querySelector("#updateForm input[name='amount']").value = amount;
-                    document.querySelector("#updateForm input[name='createdDate']").value = createdDate;
+                    document.querySelector("#transactionId").value = id;
+                    document.querySelector("#categoryId").value = categoryId;
+                    document.querySelector("#amount").value = amount;
+                    document.querySelector("#createdDate").value = createdDate;
                 });
             });
         });
+
     </script>
 
 
