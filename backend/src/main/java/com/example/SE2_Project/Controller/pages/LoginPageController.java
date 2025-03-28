@@ -22,10 +22,6 @@ public class LoginPageController {
         return "auth/login";
     }
 
-    @GetMapping("/report")
-    public String reportPage() {
-        return "report/report";
-    }
 
     @GetMapping("/homepage")
     public String homepage() {

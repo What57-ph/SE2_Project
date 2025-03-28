@@ -44,6 +44,34 @@ document.addEventListener("DOMContentLoaded", function () {
         today=dayInput.value;
     })
 });
+document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+    // Get the transaction id you want to delete
+    const transactionId = 3; // Replace this with the actual id you want to delete
+
+    // Send the DELETE request to the API
+    fetch(`/transactions/deleteExpense/${transactionId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                // Handle successful deletion
+                console.log('Transaction deleted successfully');
+                // Close the modal
+                const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                modal.hide();
+            } else {
+                // Handle error response from the API
+                console.error('Failed to delete transaction');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
 
 export {makeItemActive, getAdjacentDays};
 

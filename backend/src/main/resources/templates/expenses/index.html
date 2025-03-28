@@ -65,14 +65,23 @@
                 <td th:text="${transaction.amount}"></td>
                 <td th:text="${transaction.createdDate}"></td>
                 <td>
-                    <button type="button" class="btn fs-2" data-bs-toggle="modal" data-bs-target="#updateModal">
+                    <button type="button" class="btn fs-2 update-btn"
+                            data-bs-toggle="modal" data-bs-target="#updateModal"
+                            th:attr="data-id=${transaction.id},
+                     data-category-id=${transaction.category.id},
+                     data-amount=${transaction.amount},
+                     data-date=${transaction.createdDate}">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                 </td>
                 <td>
-                    <button type="button" class="btn fs-2" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
+                    <form th:action="@{/transactions/delete/{id}(id=${transaction.id})}" method="post">
+                        <button type="submit" class="btn fs-2 text-danger">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </form>
+
+                    <!-- Modal for delete confirmation -->
                 </td>
             </tr>
             </tbody>
@@ -96,39 +105,45 @@
   
   <!-- Modal -->
    <!-- update modal -->
-  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content ">
-        <div class="modal-header">
-          <h1 class="modal-title fs-1 px-5" >Update</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body px-5 ">         
-                <form>
-                    <div class="form-group mb-3">
-                      <label class="fs-4">Type of category</label>
-                      <input type="text" class="form-control fs-4 mt-1" >
-                    </div>
-                    <div class="form-group mb-3">
-                      <label class="fs-4">Amount</label>
-                      <input type="text" class="form-control fs-4 mt-1">
-                    </div>
-                    <div class="form-group mb-3">
-                      <label class="fs-4">Date</label>
-                      <input type="text" class="form-control fs-4 mt-1">
-                    </div>
-                    <div class="modal-footer mt-5 px-0 d-flex justify-content-between border-top-0">
-                        <button type="submit" class="btn btn-secondary fs-4 p-3" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger fs-4 p-3">Update</button>
-                    </div>
+            <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-1 px-5">Update</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body px-5">
+                            <form id="updateForm" method="post" th:action="@{/transactions/update}" th:object="${transaction}">
+                                <input type="hidden" name="id" th:value="*{id}" />
 
-                  </form>
-      
-        </div>
-       
-      </div>
-    </div>
-  </div>
+                                <div class="form-group mb-3">
+                                    <label class="fs-4">Type of category</label>
+                                    <select class="form-control fs-4 mt-1" id="categoryId">
+                                        <option th:each="category : ${categories}"
+                                                th:value="${category.id}"
+                                                th:text="${category.name}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="fs-4">Amount</label>
+                                    <input type="text" class="form-control fs-4 mt-1" id="amount">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="fs-4">Date</label>
+                                    <input type="date" class="form-control fs-4 mt-1" id="createdDate">
+                                </div>
+
+                                <div class="modal-footer mt-5 px-0 d-flex justify-content-between border-top-0">
+                                    <button type="button" class="btn btn-secondary fs-4 p-3" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger fs-4 p-3">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
   <!-- delete modal -->
   <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -153,6 +168,25 @@
   </div>
         </div>
     </div>
-   
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".update-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    const id = this.getAttribute("data-id");
+                    const categoryId = this.getAttribute("data-category-id");
+                    const amount = this.getAttribute("data-amount");
+                    const createdDate = this.getAttribute("data-date");
+
+                    // Điền dữ liệu vào form
+                    document.querySelector("#updateForm input[name='id']").value = id;
+                    document.querySelector("#updateForm select[name='categoryId']").value = categoryId;
+                    document.querySelector("#updateForm input[name='amount']").value = amount;
+                    document.querySelector("#updateForm input[name='createdDate']").value = createdDate;
+                });
+            });
+        });
+    </script>
+
+
 </body>
 </html>

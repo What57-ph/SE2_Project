@@ -105,7 +105,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public TransactionEntity updateExpenseTransaction(Long id, ExpenseTransactionDto transactionDto) {
+    public TransactionEntity updateTransaction(Long id, ExpenseTransactionDto transactionDto) {
         TransactionEntity transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Expense Transaction not found"));
 
@@ -118,7 +118,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public void deleteExpenseTransaction(Long id) {
+    public void deleteTransaction(Long id) {
         TransactionEntity transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Expense Transaction not found"));
 

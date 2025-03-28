@@ -33,4 +33,10 @@ public class HomePageController {
         return "expenses/index";
     }
 
+    @GetMapping("/calendar")
+    public String calendarPage(Model model) {
+        return "/calendar/calendar";
+    }
+
+
 }
