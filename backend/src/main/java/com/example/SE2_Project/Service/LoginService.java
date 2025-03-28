@@ -55,7 +55,8 @@ public class LoginService {
         Set<String> roleCode = SecurityUtils.getRolesCurrentUser();
         log.info("User roles: {}", roleCode);
 
-        if (roleCode.contains("ADMIN")) {
+        if (roleCode.contains("ROLE_ADMIN")) {
+            log.info("redirecting to admin page");
             return "redirect:/admin/show";
         }
         return "redirect:/user/show";

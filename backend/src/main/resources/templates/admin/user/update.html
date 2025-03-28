@@ -16,12 +16,15 @@
 <body class="sb-nav-fixed">
 
       <main class="p-5" layout:fragment="content">
-        <h1 class="text-center">Update Transaction</h1>
-        <form class="container-fluid mx-5 px-5 mt-5">
+        <h1 class="text-center">Update User</h1>
+        <h4 class="text-center" th:text="'ID: ' + ${user.id}"></h4>
+        <form class="container-fluid mx-5 px-5 mt-5" th:object="${user}" th:action="@{/admin/show/user/save}" method="POST">
+          <input type="hidden" th:field="*{id}"/>
+
           <div class="row mx-5 px-5">
             <div class="col">
-              <label>User name</label>
-              <input type="text" class="form-control mt-2" placeholder="User name">
+              <label>Name</label>
+              <input type="text" class="form-control mt-2" placeholder="Name" th:field="*{name}">
             </div>
             <div class="col">
 
@@ -31,6 +34,21 @@
             </div>
           
             
+
+          </div>
+          <div class="row mx-5 px-5 mt-4">
+            <div class="col">
+              <label>User name</label>
+              <input type="text" class="form-control mt-2" placeholder="User name" th:field="*{username}">
+            </div>
+            <div class="col">
+
+              <label>Password</label>
+              <input type="text" class="form-control mt-2" placeholder="Email" th:field="*{password}">
+
+            </div>
+
+
 
           </div>
           <div class="row mx-5 px-5 mt-4">
@@ -50,19 +68,26 @@
           <div class="row mx-5 px-5 mt-4">
             <div class="col">
               <label>Role</label>
-              <select class="form-control mt-2" id="exampleFormControlSelect1" disabled>
-                <option>ADMIN</option>
-                <option>USER</option>
+              <select class="form-control mt-2" id="exampleFormControlSelect1" name="role" th:field="*{role}">
+                <option value="ROLE_ADMIN" th:selected="${user.role == 'ROLE_ADMIN' }">ADMIN</option>
+                <option value="USER" th:selected="${user.role == 'USER' }">USER</option>
               </select>
             </div>
             <div class="col">
-              <label>Address</label>
-              <input placeholder="User address" class="form-control mt-2" type="text">
+              <label>Status</label>
+              <select class="form-control mt-2" id="statusSelect" name="status" th:field="*{status}">
+                <option value=false th:selected="${user.status == false }">Active</option>
+                <option value=true th:selected="${user.status == true }">Deleted</option>
+              </select>
             </div>
+<!--            <div class="col">-->
+<!--              <label>Address</label>-->
+<!--              <input placeholder="User address" class="form-control mt-2" type="text">-->
+<!--            </div>-->
           </div>
          
           <div class="mt-5 mx-5 px-5 d-flex justify-content-start">
-            <a href="/admin/transaction"><button class="btn btn-primary ms-2" style="width: 150px; height: 50px;" type="submit">Update</button></a>           
+            <button class="btn btn-primary ms-2" style="width: 150px; height: 50px;" type="submit">Update</button>
           </div>
 
         </form>
