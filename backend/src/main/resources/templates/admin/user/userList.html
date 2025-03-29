@@ -45,113 +45,39 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" -->
           <table class="table table-hover table-bordered m-0 table-striped align-middle">
             <thead>
               <tr>
-                <th scope="col">No</th>
+                <th scope="col">Id</th>
                 <th scope="col">Profile</th>
                 <th scope="col">Email</th>
                 <th scope="col">Phone</th>
                 <th scope="col">Total amount</th>
                 <th scope="col">Role</th>
-
+                <th scope="col">Active</th>
+                <th scope="col">Created date</th>
                 <th scope="col" class="w-auto text-center">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th>1</th>
+              <tr th:each="user: ${users}">
+                <th th:text="${user.id}"></th>
                 <td>
-                  <img th:src="@{/img/avatar.png}" class="img-fluid rounded-circle profile-img">
-                  &nbsp;&nbsp;Mark
+                  <img
+                    th:src="@{/img/avatar.png}" class="img-fluid rounded-circle profile-img"
+                    th:text="${user.name}"
+                  >
                 </td>
-                <td>Otto@gmail.com</td>
-                <td>0123456789</td>
-                <td>1000$</td>
-                <td>User</td>
-
-                <td>
-                  <span class="d-flex justify-content-center">
-              <a href=""><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
-              <button class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button>
-                  </span>
-
-                </td>
-              </tr>
-              <tr>
-                <th>1</th>
-                <td>
-                  <img th:src="@{/img/avatar.png}" class="img-fluid rounded-circle profile-img">
-                  &nbsp;&nbsp;Mark
-                </td>
-                <td>Otto@gmail.com</td>
-                <td>0123456789</td>
-                <td>1000$</td>
-                <td>User</td>
-
+                <td></td>
+                <td></td>
+                <td>0$</td>
+                <td th:text="${user.role}"></td>
+                <td th:text="${user.status == false ? 'yes' : 'no'}"></td>
+                <td th:text="${user.createdDate}"></td>
                 <td>
                   <span class="d-flex justify-content-center">
-              <a href=""><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
-              <button class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button>
+                    <a th:href="'/admin/show/user/update/' + ${user.id}"><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
+                    <button class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button>
                   </span>
-
                 </td>
               </tr>
-              <tr>
-                <th>1</th>
-                <td>
-                  <img th:src="@{/img/avatar.png}" class="img-fluid rounded-circle profile-img">
-                  &nbsp;&nbsp;Mark
-                </td>
-                <td>Otto@gmail.com</td>
-                <td>0123456789</td>
-                <td>1000$</td>
-                <td>User</td>
-
-                <td>
-                  <span class="d-flex justify-content-center">
-              <a href=""><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
-              <button class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button>
-                  </span>
-
-                </td>
-              </tr>
-              <tr>
-                <th>1</th>
-                <td>
-                  <img th:src="@{/img/avatar.png}" class="img-fluid rounded-circle profile-img">
-                  &nbsp;&nbsp;Mark
-                </td>
-                <td>Otto@gmail.com</td>
-                <td>0123456789</td>
-                <td>1000$</td>
-                <td>User</td>
-
-                <td>
-                  <span class="d-flex justify-content-center">
-              <a href=""><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
-              <button class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button>
-                  </span>
-
-                </td>
-              </tr>
-              <tr>
-                <th>1</th>
-                <td>
-                  <img th:src="@{/img/avatar.png}" class="img-fluid rounded-circle profile-img">
-                  &nbsp;&nbsp;Mark
-                </td>
-                <td>Otto@gmail.com</td>
-                <td>0123456789</td>
-                <td>1000$</td>
-                <td>User</td>
-
-                <td>
-                  <span class="d-flex justify-content-center">
-              <a href=""><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
-              <button class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button>
-                  </span>
-
-                </td>
-              </tr>
-
 
             </tbody>
           </table>
