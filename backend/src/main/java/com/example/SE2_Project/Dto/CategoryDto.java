@@ -2,7 +2,6 @@ package com.example.SE2_Project.Dto;
 
 public class CategoryDto {
 
-
     private String name;
     private String createDate;
 
