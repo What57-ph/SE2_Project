@@ -19,7 +19,7 @@ public class CategoryController {
 
     @GetMapping("/all")
     public String getAllCategories(Model model) {
-        List<CategoryEntity> categories = categoryService.getAllCategories();
+        List<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
         model.addAttribute("categories", categories);
         return "admin/category/categoryPage";
     }

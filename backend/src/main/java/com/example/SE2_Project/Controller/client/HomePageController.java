@@ -26,8 +26,8 @@ public class HomePageController {
 
     @GetMapping("/expense")
     public String expensePage(Model model) {
-        List<TransactionEntity> transactions = transactionService.getAllExpenseTransactions();
-        List<CategoryEntity> categories = categoryService.getAllCategories();
+        List<TransactionEntity> transactions = transactionService.getTransactionsForCurrentUser();
+        List<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
         model.addAttribute("transactions", transactions);
         model.addAttribute("categories", categories);
         return "expenses/index";

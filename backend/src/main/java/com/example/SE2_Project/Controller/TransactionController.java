@@ -54,10 +54,7 @@
             return transactionService.getExpenseTransaction(id);
         }
 
-        @GetMapping("/getAllExpenses")
-        public List<TransactionEntity> getAllExpenseTransactions() {
-            return transactionService.getAllExpenseTransactions();
-        }
+
 
         @GetMapping("/search")
         public List<TransactionEntity> getTransactionsByMonthAndType(
@@ -76,6 +73,7 @@
 
             return transactionService.getTransactionsByAmountAndType(minAmount, maxAmount, type);
         }
+
         @GetMapping("/categoryIncomeReport")
         public List<Map<String, Object>> getCategoryIncomeReport(
                 @RequestParam("month") int month,

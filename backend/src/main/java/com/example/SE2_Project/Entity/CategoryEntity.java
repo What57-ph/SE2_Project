@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 
 public class CategoryEntity {
-    @Id
+ @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
@@ -24,7 +24,17 @@ public class CategoryEntity {
 
     @OneToMany(mappedBy = "category")
     private List<TransactionEntity> transactions;
+    @ManyToOne
+    @JoinColumn(name = "user_id") // Liên kết với bảng UserEntity
+    private UserEntity user;
 
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
 
     public Long getId() {
         return id;

@@ -1,16 +1,12 @@
 package com.example.SE2_Project.Controller.pages;
 
-import com.example.SE2_Project.Dto.ExpenseTransactionDto;
-import com.example.SE2_Project.Dto.IncomeTransactionDto;
 import com.example.SE2_Project.Entity.CategoryEntity;
 import com.example.SE2_Project.Entity.TransactionEntity;
-import com.example.SE2_Project.Entity.UserEntity;
 import com.example.SE2_Project.Repository.CategoryRepository;
 import com.example.SE2_Project.Repository.TransactionRepository;
 import com.example.SE2_Project.Repository.UserRepository;
 import com.example.SE2_Project.Service.CategoryService;
 import com.example.SE2_Project.Service.TransactionService;
-import com.example.SE2_Project.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/transactions")
@@ -45,7 +41,7 @@ public class Transaction {
     @GetMapping("/addNew")
     public String addNewTransaction(Model model) {
         TransactionEntity transaction = new TransactionEntity();
-        List<CategoryEntity> categories = categoryService.getAllCategories(); // Retrieve all categories
+        List<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser(); // Retrieve all categories
 
         // Set the transaction and categories to the model
         model.addAttribute("transaction", transaction);
@@ -72,7 +68,7 @@ public class Transaction {
 
     @GetMapping("/listTransaction")
     public String listTransactions(Model model) {
-        List<TransactionEntity> transactions = transactionService.getAllExpenseTransactions();
+        List<TransactionEntity> transactions = transactionService.getTransactionsForCurrentUser();
         model.addAttribute("transactions", transactions);
         return "transaction/listTransaction"; // The view name for listTransaction
     }
@@ -110,4 +106,73 @@ public class Transaction {
     }
 
 
+
+    @ResponseBody
+    @GetMapping("/expenseChartData")
+    public List<Map<String, Object>> getExpenseChartData(
+            @RequestParam("month") int month,
+            @RequestParam("year") int year) {
+
+        return transactionService.getCategoryExpenseReport(month, year);
+    }
+
+
+    //Tạo chart xem income expense chiếm bao nhiêu % theo tháng
+    @GetMapping("/incomeExpenseReport")
+    public String getIncomeExpenseReport(@RequestParam(value = "month", required = false, defaultValue = "3") int month,
+                                         @RequestParam(value = "year", required = false, defaultValue = "2025") int year,
+                                         Model model) {
+        Map<String, BigDecimal> reportData = transactionService.getIncomeAndExpenseReport(month, year);
+
+        // Thêm dữ liệu vào model để hiển thị trên Thymeleaf
+        model.addAttribute("month", month);
+        model.addAttribute("year", year);
+        model.addAttribute("totalIncome", reportData.get("totalIncome"));
+        model.addAttribute("totalExpense", reportData.get("totalExpense"));
+        model.addAttribute("incomePercentage", reportData.get("incomePercentage"));
+        model.addAttribute("expensePercentage", reportData.get("expensePercentage"));
+
+        return "incomeExpenseReport";
+    }
+
+    @GetMapping("/incomeExpensePercentage")
+    public String getIncomeAndExpensePercentage(Model model) {
+        Map<String, BigDecimal> report = transactionService.getIncomeAndExpensePercentage();
+
+        model.addAttribute("totalIncome", report.get("totalIncome"));
+        model.addAttribute("totalExpense", report.get("totalExpense"));
+        model.addAttribute("incomePercentage", report.get("incomePercentage"));
+        model.addAttribute("expensePercentage", report.get("expensePercentage"));
+
+        return "incomeExpensePercentage";
+    }
+
+
+    @GetMapping("/categoryExpenseReport")
+    public String getCategoryExpenseReport(@RequestParam(value = "month", required = false, defaultValue = "3") int month,
+                                           @RequestParam(value = "year", required = false, defaultValue = "2025") int year,
+                                           Model model) {
+        List<Map<String, Object>> report = transactionService.getCategoryExpenseReport(month, year);
+
+        model.addAttribute("report", report);
+        model.addAttribute("month", month);
+        model.addAttribute("year", year);
+
+        return "categoryExpenseReport";
+    }
+
+    @GetMapping("/categoryIncomeReport")
+    public String getCategoryIncomeReport(
+            @RequestParam(value = "month", required = false, defaultValue = "3") int month,
+            @RequestParam(value = "year", required = false, defaultValue = "2025") int year,
+            Model model) {
+
+        List<Map<String, Object>> report = transactionService.getCategoryIncomeReport(month, year);
+
+        model.addAttribute("report", report);
+        model.addAttribute("month", month);
+        model.addAttribute("year", year);
+
+        return "categoryIncomeReport";
+    }
 }

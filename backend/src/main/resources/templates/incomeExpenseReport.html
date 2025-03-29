@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Income & Expense Report</title>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Giới hạn kích thước của biểu đồ */
+        .chart-container {
+            width: 300px;  /* Đặt chiều rộng nhỏ hơn */
+            height: 300px; /* Đặt chiều cao nhỏ hơn */
+            margin: auto; /* Canh giữa biểu đồ */
+        }
+    </style>
+</head>
+<body>
+<h2>Income & Expense Report</h2>
+
+<!-- Form chọn tháng và năm -->
+<form action="/transactions/incomeExpenseReport" method="get">
+    <label for="month">Month:</label>
+    <input type="number" id="month" name="month" min="1" max="12" required>
+
+    <label for="year">Year:</label>
+    <input type="number" id="year" name="year" min="2000" required>
+
+    <button type="submit">View Report</button>
+</form>
+
+<hr>
+
+<h3>Report for <span th:text="${month}"></span>/<span th:text="${year}"></span></h3>
+<p>Total Income: <span th:text="${totalIncome}"></span></p>
+<p>Total Expense: <span th:text="${totalExpense}"></span></p>
+
+<!-- Biểu đồ Pie Chart (Kích thước nhỏ hơn) -->
+<div class="chart-container">
+    <canvas id="incomeExpenseChart"></canvas>
+</div>
+
+<script th:inline="javascript">
+    var income = /*[[${totalIncome}]]*/ 0;
+    var expense = /*[[${totalExpense}]]*/ 0;
+
+    var ctx = document.getElementById("incomeExpenseChart").getContext("2d");
+    new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: ["Income", "Expense"],
+            datasets: [{
+                data: [income, expense],
+                backgroundColor: ["#4CAF50", "#F44336"],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Cho phép thay đổi kích thước
+            plugins: {
+                legend: { position: "top" },
+                title: { display: true, text: "Income vs Expense Distribution" }
+            }
+        }
+    });
+</script>
+</body>
+</html>
