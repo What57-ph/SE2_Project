@@ -29,7 +29,9 @@
     </div>
     <div class="expense-body d-flex position-relative">
         <div class="expense-sidebar py-5 position-relative">
-            <h1 class="fw-bold text-center">Home</h1>
+            <button onclick="window.location.href='/'" class="btn btn-primary">
+               <h1>Home</h1>
+            </button>
             <p class="p-5 mt-5">
                 <span><i class="fa-solid fa-pen-nib"></i></span>
                 <span>Expenses</span>
@@ -63,14 +65,14 @@
             <tr th:each="transaction : ${transactions}">
                 <th scope="row" th:text="${transaction.categoryName}"></th>  <!-- Hiển thị categoryName -->
                 <td th:text="${transaction.amount}"></td>
-                <td th:text="${transaction.createdDate}"></td>
+                <td th:text="${transaction.transactionDate}"></td>
                 <td>
                     <button type="button" class="btn fs-2 update-btn"
                             data-bs-toggle="modal" data-bs-target="#updateModal"
                             th:attr="data-id=${transaction.id},
                      data-category-id=${transaction.category.id},
                      data-amount=${transaction.amount},
-                     data-date=${transaction.createdDate}">
+                     data-date=${transaction.transactionDate}">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                 </td>

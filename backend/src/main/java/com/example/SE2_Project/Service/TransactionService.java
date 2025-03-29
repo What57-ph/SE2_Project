@@ -27,6 +27,26 @@ public class TransactionService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    public void addExpense(BigDecimal amount, LocalDate transactionDate, Long categoryId, String notes, String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        CategoryEntity category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+
+        TransactionEntity transaction = new TransactionEntity();
+        transaction.setAmount(amount);
+        transaction.setTransactionDate(transactionDate);
+        transaction.setNotes(notes);
+        transaction.setStatus(true);
+        transaction.setCreatedDate(LocalDate.now());
+        transaction.setType("EXPENSE");
+        transaction.setUser(user);
+        transaction.setCategory(category);
+
+        transactionRepository.save(transaction);
+    }
+
     public TransactionEntity addIncome(IncomeTransactionDto transactionEntity) {
 
         // Tạo đối tượng giao dịch

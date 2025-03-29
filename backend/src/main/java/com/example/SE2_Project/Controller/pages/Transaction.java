@@ -54,53 +54,29 @@ public class Transaction {
         return "expenses/addNew"; // Return to the addNew.html page
     }
     @PostMapping("/addExpense")
-    public String addExpenseTransaction(@ModelAttribute("transaction") TransactionEntity transaction, Model model) {
-        // Check if categoryId is null or invalid
-        if (transaction.getCategoryId() == null) {
-            // Handle the error: category ID must be selected
-            model.addAttribute("error", "Please select a category.");
-            return "redirect:/transactions/addNew";  // Redirect to the form with an error message
+    public String addExpenseTransaction(@RequestParam("amount") BigDecimal amount,
+                                        @RequestParam("transactionDate") LocalDate transactionDate,
+                                        @RequestParam("categoryId") Long categoryId,
+                                        @RequestParam("notes") String notes) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        if (categoryId == null) {
+            throw new IllegalArgumentException("Category ID must not be null");
         }
 
-        // Lấy userId từ người dùng hiện tại đang đăng nhập
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName(); // Lấy username của người dùng
-        UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        // Lấy categoryId từ form
-        Long categoryId = transaction.getCategoryId();  // Get categoryId from the form input
-
-        // Kiểm tra xem categoryId có hợp lệ không
-        CategoryEntity category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-
-        // Tạo TransactionEntity từ form
-        transaction.setAmount(transaction.getAmount());
-        transaction.setTransactionDate(transaction.getTransactionDate());
-        transaction.setNotes(transaction.getNotes());
-        transaction.setStatus(true);  // Giá trị mặc định cho status
-        transaction.setCreatedDate(LocalDate.now());
-        transaction.setType("EXPENSE");
-
-        // Gán User và Category vào Transaction
-        transaction.setUser(user);
-        transaction.setCategory(category);
-
-        // Lưu Transaction vào cơ sở dữ liệu
-        transactionRepository.save(transaction);
-
-        // Redirect tới trang expense list sau khi lưu thành công
+        transactionService.addExpense(amount, transactionDate, categoryId, notes, username);
         return "redirect:/user/expense";
     }
 
-    // Handle GET request to display list of transactions
+
     @GetMapping("/listTransaction")
     public String listTransactions(Model model) {
         List<TransactionEntity> transactions = transactionService.getAllExpenseTransactions();
         model.addAttribute("transactions", transactions);
         return "transaction/listTransaction"; // The view name for listTransaction
     }
+
     @PostMapping("/delete/{id}")
     public String deleteTransaction(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
@@ -111,6 +87,7 @@ public class Transaction {
         }
         return "redirect:/user/expense";
     }
+
     @PostMapping("/update")
     public String updateTransaction(@RequestParam Long id,
                                     @RequestParam Long categoryId,

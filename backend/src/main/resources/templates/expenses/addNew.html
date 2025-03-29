@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,7 +46,7 @@
     </div>
 
     <div class="expense-body-content">
-        <form th:action="@{/transactions/addExpense}" th:object="${transaction}" method="post">
+        <form action="/transactions/addExpense" method="post" th:object="${transaction}">
             <!-- Hidden type field -->
             <input th:field="*{type}" type="hidden" id="selectedType">
 
@@ -91,18 +90,14 @@
                     <i class="fa-solid fa-list bg-success p-3 text-center"></i>
                     <span>Choose category</span>
                 </p>
-                <input th:field="*{categoryId}" type="hidden" name="categoryId" id="selectedCategory">
-
-                <div class="category-list d-flex gap-5 justify-content-center mt-5">
-                    <!-- Loop through categories and create a clickable list -->
-                    <div class="category-list-item text-center bg-white"
-                         th:each="category : ${categories}"
-                         th:attr="data-id=${category.id}"
-                         onclick="setCategory(this, ${categoryId})">
-                        <i class="fa-solid fa-utensils"></i>
-                        <p th:text="${category.name}"></p>
-                    </div>
-                </div>
+                <select name="categoryId" id="categorySelect" required onchange="updateSelectedCategory(this)">
+                    <option value="">-- Select Category --</option>
+                    <option th:each="category : ${categories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}">
+                    </option>
+                </select>
+                <input type="hidden" name="categoryId" id="selectedCategory">
             </div>
 
             <button type="submit" class="add-button enter-button btn fs-1 px-4 position-relative bottom-0 start-50 translate-middle btn-danger">
@@ -113,23 +108,22 @@
 </div>
 
 <script th:inline="javascript">
+    function updateSelectedCategory(selectElement) {
+        document.getElementById("selectedCategory").value = selectElement.value;
+    }
     function setCategory(element, id) {
-        // Kiểm tra nếu có phần tử input ẩn không
         let categoryInput = document.getElementById("selectedCategory");
         if (!categoryInput) {
-            console.error("Không tìm thấy input ẩn để lưu categoryId!");
+            console.error("Hidden input for categoryId not found!");
             return;
         }
 
-        categoryInput.value = id; // Gán ID vào input ẩn
-        console.log("Selected Category ID:", id); // Debug xem ID có đúng không
+        categoryInput.value = id; // Set selected category ID
+        console.log("Selected Category ID:", categoryInput.value);
 
-        // Xóa class 'selected' khỏi tất cả danh mục
         document.querySelectorAll('.category-list-item').forEach(item => {
             item.classList.remove('selected');
         });
-
-        // Thêm class 'selected' vào danh mục vừa chọn
         element.classList.add('selected');
     }
     document.addEventListener("DOMContentLoaded", function () {
@@ -146,21 +140,14 @@
             });
         });
     });
-    function addNewExpense() {
-        console.log("Thêm mới Expense..."); // Kiểm tra hàm có chạy không
+    document.querySelector("form").addEventListener("submit", function(event) {
         let categoryId = document.getElementById("selectedCategory").value;
-        let amount = document.getElementById("amount").value;
-
-        if (!categoryId || !amount) {
-            console.error("Thiếu dữ liệu cần nhập!");
-            alert("Vui lòng chọn danh mục và nhập số tiền!");
-            return;
+        if (!categoryId) {
+            event.preventDefault(); // Stop form submission
+            alert("Please select a category before submitting!");
         }
+    });
 
-        console.log("Thêm Expense với Category ID:", categoryId, "Amount:", amount);
-
-        // Gửi dữ liệu hoặc thực hiện logic tiếp theo...
-    }
 </script>
 
 </body>
