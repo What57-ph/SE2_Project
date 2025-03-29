@@ -2,20 +2,27 @@ package com.example.SE2_Project.Controller.admin;
 
 import com.example.SE2_Project.Entity.UserEntity;
 import com.example.SE2_Project.Repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.rmi.server.LogStream.log;
+
+@Slf4j
 @Controller
 @RequestMapping("/admin/show")
 public class DashboardController {
 
     private final UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public DashboardController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -73,8 +80,19 @@ public class DashboardController {
     }
 
     @PostMapping(value = "/user/save")
-    public String saveUpdate(UserEntity user){
-        userRepository.save(user);
+    public String saveUpdate(UserEntity user, @RequestParam(value = "newPassword", required = false) String newPassword){
+        UserEntity existingUser = userRepository.getReferenceById(user.getId());
+        // Cập nhật chỉ những trường có trong form
+        existingUser.setName(user.getName());
+        existingUser.setUsername(user.getUsername());
+        if (newPassword != null && !newPassword.isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(newPassword));
+        }
+        existingUser.setRole(user.getRole());
+        existingUser.setStatus(user.isStatus());
+
+        // Lưu lại entity sau khi cập nhật
+        userRepository.save(existingUser);
         return "redirect:/admin/show/user";
     }
 
