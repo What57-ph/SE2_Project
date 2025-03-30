@@ -11,7 +11,7 @@
     <link rel="stylesheet" th:href="@{/css/expense.css}">
     <script th:src="@{/js/expense.js}" type="module"></script>
 </head>
-<body>
+<body class="sb-nav-fixed">
 <main layout:fragment="content">
     <div class="expense-body-content">
         <form action="/transactions/addExpense" method="post" th:object="${transaction}">

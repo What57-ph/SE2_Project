@@ -15,4 +15,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
       );
     });
   }
+  const layoutSidenav = document.getElementById("layoutSidenav");
+
+  if (sidebarToggle && layoutSidenav) {
+    sidebarToggle.addEventListener("click", function () {
+      layoutSidenav.classList.toggle("sb-sidenav-toggled");
+    });
+  }
 });
