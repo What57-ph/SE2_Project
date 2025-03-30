@@ -1,11 +1,13 @@
 package com.example.SE2_Project.Entity;
 
+import com.example.SE2_Project.Repository.CategoryRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,6 +18,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 
 public class TransactionEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Đây là phương thức tự động tạo giá trị ID (Auto Increment)
@@ -37,6 +40,18 @@ public class TransactionEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
+
+    public String getCategoryName() {
+        return category != null ? category.getName() : "Unknown";  // Trả về tên category nếu có, nếu không trả về "Unknown"
+    }
+    @Transient
+    private Long categoryId;
+    public Long getCategoryId() {
+        return category != null ? category.getId() : null;  // Get the ID of the category if present
+    }
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
 
 
     public Long getId() {

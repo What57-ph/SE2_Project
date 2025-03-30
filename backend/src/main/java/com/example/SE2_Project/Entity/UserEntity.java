@@ -2,11 +2,12 @@ package com.example.SE2_Project.Entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 
 public class UserEntity {
     @Id
@@ -16,11 +17,16 @@ public class UserEntity {
     private String username;
     private String password;
     private String name;
+    private boolean status;
 
-    private LocalDateTime createdDate;
+
+    private LocalDate createdDate;
     private String role;
+    @OneToMany(mappedBy = "user")
+    private List<TransactionEntity> transactions;
 
-    public UserEntity(Long id, String username, String password, String name, LocalDateTime createdDate, String role) {
+
+    public UserEntity(Long id, String username, String password, String name, LocalDate createdDate, String role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -29,11 +35,17 @@ public class UserEntity {
         this.role = role;
     }
 
-    @OneToMany(mappedBy = "user")
-    private List<TransactionEntity> transactions;
 
     public UserEntity() {
 
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public Long getId() {
@@ -68,11 +80,11 @@ public class UserEntity {
         this.name = name;
     }
 
-    public LocalDateTime getCreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
+    public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
 

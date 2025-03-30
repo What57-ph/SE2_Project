@@ -12,7 +12,7 @@
     import java.util.Map;
 
     @RestController
-    @RequestMapping("/transactions")
+    @RequestMapping("/")
     public class TransactionController {
 
             @Autowired
@@ -32,30 +32,29 @@
         public void deleteTransaction(@PathVariable long id) {
             transactionService.deleteIncomeTransaction(id);
         }
-        @PostMapping("/addExpense")
-        public TransactionEntity addExpenseTransaction(@RequestBody ExpenseTransactionDto transactionDto) {
-            return transactionService.addExpenseTransaction(transactionDto);
-        }
 
-        @PutMapping("/updateExpense/{id}")
-        public TransactionEntity updateExpenseTransaction(@PathVariable Long id, @RequestBody ExpenseTransactionDto transactionDto) {
-            return transactionService.updateExpenseTransaction(id, transactionDto);
-        }
 
-        @DeleteMapping("/deleteExpense/{id}")
-        public void deleteExpenseTransaction(@PathVariable Long id) {
-            transactionService.deleteExpenseTransaction(id);
-        }
+//        @PostMapping("/addExpense")
+//        public TransactionEntity addExpenseTransaction(@RequestBody ExpenseTransactionDto transactionDto) {
+//            return transactionService.addExpenseTransaction(transactionDto);
+//        }
+
+//        @PutMapping("/updateExpense/{id}")
+//        public TransactionEntity updateExpenseTransaction(@PathVariable Long id, @RequestBody ExpenseTransactionDto transactionDto) {
+//            return transactionService.updateTransaction(id, transactionDto);
+//        }
+//
+//        @DeleteMapping("/deleteTransaction/{id}")
+//        public void deleteExpenseTransaction(@PathVariable Long id) {
+//            transactionService.deleteTransaction(id);
+//        }
 
         @GetMapping("/getExpense/{id}")
         public TransactionEntity getExpenseTransaction(@PathVariable Long id) {
             return transactionService.getExpenseTransaction(id);
         }
 
-        @GetMapping("/getAllExpenses")
-        public List<TransactionEntity> getAllExpenseTransactions() {
-            return transactionService.getAllExpenseTransactions();
-        }
+
 
         @GetMapping("/search")
         public List<TransactionEntity> getTransactionsByMonthAndType(
@@ -74,6 +73,7 @@
 
             return transactionService.getTransactionsByAmountAndType(minAmount, maxAmount, type);
         }
+
         @GetMapping("/categoryIncomeReport")
         public List<Map<String, Object>> getCategoryIncomeReport(
                 @RequestParam("month") int month,

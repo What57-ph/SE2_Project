@@ -9,6 +9,7 @@ import com.example.SE2_Project.Repository.CategoryRepository;
 import com.example.SE2_Project.Repository.TransactionRepository;
 import com.example.SE2_Project.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,9 +26,31 @@ public class TransactionService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private CategoryRepository categoryRepository;
 
-    // Logic thêm thu nhập
+    public void addExpense(BigDecimal amount, LocalDate transactionDate, Long categoryId, String notes, String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        CategoryEntity category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+
+        TransactionEntity transaction = new TransactionEntity();
+        transaction.setAmount(amount);
+        transaction.setTransactionDate(transactionDate);
+        transaction.setNotes(notes);
+        transaction.setStatus(true);
+        transaction.setCreatedDate(LocalDate.now());
+        transaction.setType("EXPENSE");
+        transaction.setUser(user);
+        transaction.setCategory(category);
+
+        transactionRepository.save(transaction);
+    }
+
     public TransactionEntity addIncome(IncomeTransactionDto transactionEntity) {
 
         // Tạo đối tượng giao dịch
@@ -106,7 +129,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public TransactionEntity updateExpenseTransaction(Long id, ExpenseTransactionDto transactionDto) {
+    public TransactionEntity updateTransaction(Long id, ExpenseTransactionDto transactionDto) {
         TransactionEntity transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Expense Transaction not found"));
 
@@ -119,7 +142,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public void deleteExpenseTransaction(Long id) {
+    public void deleteTransaction(Long id) {
         TransactionEntity transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Expense Transaction not found"));
 
@@ -131,10 +154,13 @@ public class TransactionService {
                 .orElseThrow(() -> new IllegalArgumentException("Expense Transaction not found"));
     }
 
-    public List<TransactionEntity> getAllExpenseTransactions() {
-        return transactionRepository.findAll();
-    }
+    public List<TransactionEntity> getTransactionsForCurrentUser() {
+        // Giả sử bạn đang sử dụng Spring Security và có thể lấy username từ SecurityContext
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        // Lọc giao dịch cho người dùng hiện tại, giả sử TransactionEntity có thuộc tính 'user'
+        return transactionRepository.findByUserUsername(username); // Bạn cần viết phương thức trong Repository để lọc theo username
+    }
     public List<TransactionEntity> getTransactionsByMonthAndType(int month, int year, String type) {
         return transactionRepository.findByMonthAndType(month, year, type);
     }
@@ -143,7 +169,9 @@ public class TransactionService {
         return transactionRepository.findByAmountAndType(minAmount, maxAmount, type);
     }
     public List<Map<String, Object>> getCategoryIncomeReport(int month, int year) {
-        List<Object[]> result = transactionRepository.findCategoryIncomeReport(month, year);
+
+        Long userId = userService.getCurrentUserId();  // 🟢 Tìm userId dựa trên username
+        List<Object[]> result = transactionRepository.findCategoryIncomeReport(month, year, userId);
 
         List<Map<String, Object>> responseList = new ArrayList<>();
 
@@ -161,7 +189,8 @@ public class TransactionService {
     }
 
     public List<Map<String, Object>> getCategoryExpenseReport(int month, int year) {
-        List<Object[]> result = transactionRepository.findCategoryExpenseReport(month, year);
+        Long userId = userService.getCurrentUserId();
+        List<Object[]> result = transactionRepository.findCategoryExpenseReport(month, year, userId);
 
         List<Map<String, Object>> responseList = new ArrayList<>();
 
@@ -180,16 +209,18 @@ public class TransactionService {
 
 
     public Map<String, BigDecimal> getIncomeAndExpenseReport(int month, int year) {
-        List<Object[]> result = transactionRepository.findIncomeAndExpenseReport(month, year);
+        Long userId = userService.getCurrentUserId(); // Lấy ID người dùng đăng nhập
+        List<Object[]> result = transactionRepository.findIncomeAndExpenseReport(month, year,userId);
 
-        if (result.isEmpty()) {
-            return Map.of("message", BigDecimal.ZERO);
+
+        BigDecimal totalIncome = BigDecimal.ZERO;
+        BigDecimal totalExpense = BigDecimal.ZERO;
+
+        if (!result.isEmpty()) {
+            Object[] data = result.get(0);
+            totalIncome = (BigDecimal) data[2];
+            totalExpense = (BigDecimal) data[3];
         }
-
-        Object[] data = result.get(0);
-
-        BigDecimal totalIncome = (BigDecimal) data[2];
-        BigDecimal totalExpense = (BigDecimal) data[3];
 
         BigDecimal total = totalIncome.add(totalExpense);
 
@@ -211,9 +242,9 @@ public class TransactionService {
     }
 
     public Map<String, BigDecimal> getIncomeAndExpensePercentage() {
-        List<Object[]> result = transactionRepository.findIncomeAndExpensePercentage();
+        Long userId = userService.getCurrentUserId();
+        List<Object[]> result = transactionRepository.findIncomeAndExpensePercentage(userId);
 
-        // Khởi tạo Map để trả về kết quả
         Map<String, BigDecimal> response = new HashMap<>();
 
         if (!result.isEmpty()) {
