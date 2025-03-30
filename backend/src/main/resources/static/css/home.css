@@ -1,61 +1,98 @@
-
-.homepage-container img{
-    width:4rem;
-    height:4rem;
+.homepage-container img {
+  width: 4rem;
+  height: 4rem;
 }
 .saving-chart-container {
-    height: 350px;
-    margin: auto;
+  height: 350px;
+  margin: auto;
 }
 
-.donut-chart-container{
-    height: 300px;
+.donut-chart-container {
+  height: 300px;
 }
-
 
 .legend-item {
-    font-size: 14px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    margin-right: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
 }
 
 .legend-color {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 5px;
 }
-.total-each-period ul{
-    font-size: 18px;
+.total-each-period ul {
+  font-size: 18px;
 }
-.total-each-period{
-    color: rgb(65 64 58);
+.total-each-period {
+  color: rgb(65 64 58);
 }
 .filter-options li {
-    cursor: pointer;
-    padding: 8px 25px;
-    transition: 0.3s ease-in-out;
+  cursor: pointer;
+  padding: 8px 25px;
+  transition: 0.3s ease-in-out;
 }
 
 .filter-options li:hover {
-    background: #f1f1f1;
+  background: #f1f1f1;
 }
 
 .filter-options .active {
-    border-bottom: 3px solid #000;
-    
-    font-weight: bold;
+  border-bottom: 3px solid #000;
+
+  font-weight: bold;
 }
-.monthly-saving-box{
-    background-color: #fafafa;
-    border: 0.5px solid #f0f0f0;
-    width: 180px !important;
-    height: 150px;
+.monthly-saving-box {
+  background-color: #fafafa;
+  border: 0.5px solid #f0f0f0;
+  width: 180px !important;
+  height: 150px;
 }
-
-
-
-
-
+.report-row {
+  border-top: 5px solid transparent;
+  border-image: linear-gradient(
+    to right,
+    #f06525 0%,
+    #ee6424 0%,
+    #d75a21 23%,
+    #8a3a15 100%
+  );
+  border-image-slice: 1;
+  width: 42vw;
+}
+.report-row input {
+  background-color: #fadfb5;
+}
+.transaction-overview button {
+  width: 20rem;
+  height: 5rem;
+  background-color: #bbe7c8;
+  border: 0;
+}
+.transaction-overview button:nth-child(2) {
+  border-left: 2px solid #000;
+  border-right: 2px solid #000;
+}
+.report-list-item svg {
+  background: #000;
+  width: 1.2rem;
+  height: 1.2rem;
+  padding: 0.8rem;
+}
+.report-list-item p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#income-chart {
+  width: 300px;
+  height: 300px;
+}
+.type-active {
+  background-color: #034617 !important;
+  color: #fff;
+}
