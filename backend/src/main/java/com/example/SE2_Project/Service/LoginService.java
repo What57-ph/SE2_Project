@@ -55,7 +55,7 @@ public class LoginService {
         Set<String> roleCode = SecurityUtils.getRolesCurrentUser();
         log.info("User roles: {}", roleCode);
 
-        if (roleCode.contains("ROLE_ADMIN")) {
+        if (roleCode.contains("ADMIN")) {
             log.info("redirecting to admin page");
             return "redirect:/admin/show";
         }
@@ -69,7 +69,6 @@ public class LoginService {
             throw new IllegalArgumentException("Tên đăng nhập hoặc mật khẩu không chính xác");
         }
 
-        // 3. Kiểm tra role và chuyển hướng theo vai trò
         return processAfterLogin();
     }
 }
