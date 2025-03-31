@@ -23,9 +23,9 @@ public class LoginPageController {
     }
 
 
-    @GetMapping("/homepage")
+    @GetMapping("/expense")
     public String homepage() {
-        return "expenses/homepage";
+        return "expenses/index";
     }
 
     @GetMapping("/process-after-login")

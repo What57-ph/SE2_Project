@@ -28,6 +28,42 @@ function getMonthScope(date) {
   };
 }
 
+const createReportChart = (type) => {
+  const ctx = document.getElementById(`${type}-chart`);
+  document.getElementById(`${type}-chart`).style.width = "300px";
+  document.getElementById(`${type}-chart`).style.height = "300px";
+  return new Chart(ctx, {
+    type: "pie",
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: "bottom",
+        },
+      },
+    },
+    data: {
+      labels: ["Food", "Save", "Debt", "Travel", "Drink"],
+      datasets: [
+        {
+          label: "Expenses Breakdown",
+          data: [500000, 50000, 40000, 60000, 70000],
+          backgroundColor: [
+            "rgb(255, 99, 132)",
+            "rgb(54, 162, 235)",
+            "rgb(255, 205, 86)",
+            "rgb(75, 192, 192)",
+            "rgb(255, 159, 64)",
+          ],
+          hoverOffset: 4,
+          borderWidth: 1,
+        },
+      ],
+    },
+  });
+};
 document.addEventListener("DOMContentLoaded", function () {
   const sidebarItems = document.querySelectorAll(".report-sidebar p");
   const dayInput = document.getElementById("createdDate");
@@ -57,34 +93,26 @@ document.addEventListener("DOMContentLoaded", function () {
     currentDate.setMonth(currentDate.getMonth() + 1);
     updateDayInput();
   });
-});
-const ctx = document.getElementById("report-chart");
+  const incomeBtn = document.getElementById("show-income");
+  const expenseBtn = document.getElementById("show-expense");
+  const incomeSection = document.getElementById("income-section");
+  const expenseSection = document.getElementById("expense-section");
 
-new Chart(ctx, {
-  type: "pie",
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-  },
-  data: {
-    labels: ["Food", "Save", "Debt", "Travel", "Drink"],
-    datasets: [
-      {
-        label: "Expenses Breakdown",
-        data: [500000, 50000, 40000, 60000, 70000],
-        backgroundColor: [
-          "rgb(255, 99, 132)",
-          "rgb(54, 162, 235)",
-          "rgb(255, 205, 86)",
-          "rgb(75, 192, 192)",
-          "rgb(255, 159, 64)",
-        ],
-        hoverOffset: 4,
-        borderWidth: 1,
-      },
-    ],
-  },
-});
+  incomeBtn.addEventListener("click", function () {
+    incomeSection.classList.remove("d-none");
+    expenseSection.classList.add("d-none");
+    incomeBtn.classList.add("type-active");
+    expenseBtn.classList.remove("type-active");
+    createReportChart("income");
+  });
 
-document.getElementById("myChart").style.width = "300px";
-document.getElementById("myChart").style.height = "300px";
+  expenseBtn.addEventListener("click", function () {
+    expenseSection.classList.remove("d-none");
+    incomeSection.classList.add("d-none");
+    expenseBtn.classList.add("type-active");
+    incomeBtn.classList.remove("type-active");
+    createReportChart("expense");
+  });
+
+  createReportChart("expense");
+});
