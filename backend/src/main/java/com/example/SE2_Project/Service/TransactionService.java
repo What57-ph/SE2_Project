@@ -155,10 +155,8 @@ public class TransactionService {
     }
 
     public List<TransactionEntity> getTransactionsForCurrentUser() {
-        // Giả sử bạn đang sử dụng Spring Security và có thể lấy username từ SecurityContext
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // Lọc giao dịch cho người dùng hiện tại, giả sử TransactionEntity có thuộc tính 'user'
         return transactionRepository.findByUserUsername(username); // Bạn cần viết phương thức trong Repository để lọc theo username
     }
     public List<TransactionEntity> getTransactionsByMonthAndType(int month, int year, String type) {

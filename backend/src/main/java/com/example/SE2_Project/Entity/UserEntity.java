@@ -33,6 +33,7 @@ public class UserEntity {
         this.name = name;
         this.createdDate = createdDate;
         this.role = role;
+        
     }
 
 

@@ -33,7 +33,7 @@ public class LoginService {
             UserEntity user = new UserEntity();
             user.setUsername(userDTO.getUsername());
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            user.setStatus(true);
+            user.setStatus(false);
             user.setRole("USER");
             user.setName(userDTO.getName());
             user.setCreatedDate(LocalDate.now());

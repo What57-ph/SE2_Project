@@ -18,15 +18,24 @@ public class CategoryEntity {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
-
+    private String type;
     private String name;
     private LocalDateTime createdDate;
 
     @OneToMany(mappedBy = "category")
     private List<TransactionEntity> transactions;
+
     @ManyToOne
     @JoinColumn(name = "user_id") // Liên kết với bảng UserEntity
     private UserEntity user;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public UserEntity getUser() {
         return user;
