@@ -62,4 +62,10 @@ public class UserService {
         user.setStatus(true);
         userRepository.save(user);
     }
+
+    public void activateUser(Long id) {
+        UserEntity user = getUserById(id);
+        user.setStatus(false);
+        userRepository.save(user);
+    }
 }

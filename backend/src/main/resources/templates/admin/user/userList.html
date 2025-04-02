@@ -40,11 +40,25 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" -->
         <div class="d-flex align-items-center border-2 border-danger bg-dark text-light rounded-top p-3 ">
             <h2 class="">User List</h2>
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                <div class="input-group">
-                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
-                           aria-describedby="btnNavbarSearch"/>
-                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i>
-                    </button>
+<!--                <div class="input-group">-->
+<!--                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."-->
+<!--                           aria-describedby="btnNavbarSearch"/>-->
+<!--                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i>-->
+<!--                    </button>-->
+<!--                </div>-->
+                <div class="">
+                    Role:
+                    <select name="" id="filterRole">
+                        <option value="default">All</option>
+                        <option value="ROLE_ADMIN" th:selected="${param.role == 'ROLE_ADMIN'}">ADMIN</option>
+                        <option value="USER" th:selected="${param.role == 'USER'}">USER</option>
+                    </select>
+                    Status:
+                    <select name="" id="filterStatus">
+                        <option value="0">All</option>
+                        <option value="1" th:selected="${param.status == '1'}">Disabled</option>
+                        <option value="2" th:selected="${param.status == '2'}">Active</option>
+                    </select>
                 </div>
             </form>
         </div>
@@ -56,9 +70,9 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" -->
                 <th scope="col">Profile</th>
 <!--                <th scope="col">Email</th>-->
 <!--                <th scope="col">Phone</th>-->
-                <th scope="col">Total amount</th>
+<!--                <th scope="col">Total amount</th>-->
                 <th scope="col">Role</th>
-                <th scope="col">Active</th>
+                <th scope="col">Status</th>
                 <th scope="col">Created date</th>
                 <th scope="col" class="w-auto text-center">Action</th>
             </tr>
@@ -66,26 +80,36 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" -->
             <tbody>
             <tr th:each="user: ${users}">
                 <th th:text="${user.id}"></th>
-                <td>
-                    <img
-                            th:src="@{/img/avatar.png}" class="img-fluid rounded-circle profile-img"
-                            th:text="${user.name}"
-                    >
+                <td th:text="${user.name}">
+
+
+
+<!--                    th:src="@{/img/avatar.png}" class="img-fluid rounded-circle profile-img"-->
+
                 </td>
-                <td>0$</td>
+<!--                <td>0$</td>-->
                 <td th:text="${user.role}"></td>
                 <td th:text="${user.status == false ? activeIcon : deletedIcon}"></td>
                 <td th:text="${user.createdDate}"></td>
                 <td>
                   <span class="d-flex justify-content-center">
                     <a th:href="'/admin/show/user/update/' + ${user.id}"><button class="btn btn-primary"><i
-                            class="fa-solid fa-pen-to-square"></i> Edit</button></a>
-                    <form th:action="@{/admin/show/user/delete/{id}(id=${user.id})}" method="post">
+                            class="fa-solid fa-pen-to-square"></i> Edit</button>
+                    </a>
+
+                    <form th:action="@{/admin/show/user/delete/{id}(id=${user.id})}" th:if="${user.status == false}" method="post">
                       <button
                               type="submit"
-                              class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                              class="btn btn-danger ms-3"
                       ><i class="fa-solid fa-trash"></i> Disable</button>
                     </form>
+                      <form th:action="@{/admin/show/user/activate/{id}(id=${user.id})}" th:if="${user.status == true}" method="post">
+                      <button
+                              type="submit"
+                              class="btn btn-success ms-3"
+                      ><i class="fa-solid fa-check"></i> Activate</button>
+                    </form>
+<!--                      data-bs-toggle="modal" data-bs-target="#deleteModal"-->
                   </span>
                 </td>
             </tr>
