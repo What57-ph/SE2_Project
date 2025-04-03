@@ -29,11 +29,14 @@
         <div class="wrapper">
             <div class="form-container">
                 <div class="slide-controls">
+
                     <input type="radio" name="slide" id="login" checked>
                     <input type="radio" name="slide" id="signup">
-                    <label for="login" class="slide login">Login</label>
-                    <label for="signup" class="slide signup">Signup</label>
+                    <label for="login" class="slide login"><a th:href="@{/guest/login}" class="text-decoration-none">Login</a></label>
+                    <label for="signup" class="slide signup"><a th:href="@{/guest/register}" class="text-decoration-none">Signup</a></label>
                     <div class="slider-tab"></div>
+
+
                 </div>
                 <div class="form-inner">
                     <!--                Login-->
@@ -51,83 +54,16 @@
                             <div class="btn-layer"></div>
                             <input type="submit" value="Login">
                         </div>
-                        <div class="signup-link">Create an account <a href="">Signup now</a></div>
+                        <div class="signup-link">Create an account <a th:href="@{/guest/register}">Signup now</a></div>
                     </form>
                     <!--                Register-->
-                    <form action="#" class="signup">
-                        <div class="field">
-                            <input type="text" id="username" placeholder="Username" required>
-                        </div>
-                        <div class="field">
-                            <input type="text" placeholder="Email Address" id="email" required>
-                        </div>
-                        <div class="field">
-                            <input type="password" placeholder="Password" id="password" required>
-                        </div>
-                        <div class="field">
-                            <input type="password" placeholder="Confirm password" id="confirmPassword" required>
-                        </div>
-                        <div class="field btn">
-                            <div class="btn-layer"></div>
-                            <input type="submit" value="Signup">
-                        </div>
-                        <div class="signup-link">Already have an account? <a href="">Login</a></div>
-                    </form>
+
                 </div>
             </div>
         </div>
     </div>
 
 </div>
-<script th:inline="javascript">
-    const loginText = document.querySelector(".title-text .login");
-    const loginForm = document.querySelector("form.login");
-    const loginBtn = document.querySelector("label.login");
-    const signupBtn = document.querySelector("label.signup");
-    const signupLink = document.querySelector("form .signup-link a");
-    signupBtn.onclick = (()=>{
-        loginForm.style.marginLeft = "-50%";
-        loginText.style.marginLeft = "-50%";
-    });
-    loginBtn.onclick = (()=>{
-        loginForm.style.marginLeft = "0%";
-        loginText.style.marginLeft = "0%";
-    });
-    signupLink.onclick = (()=>{
-        signupBtn.click();
-        return false;
-    });
-    document.getElementById('registerForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent default form submission
 
-        const userData = {
-            username: document.getElementById('username').value,
-            password: document.getElementById('password').value,
-            name: document.getElementById('name').value
-        };
-
-        // Send POST request to the backend
-        fetch('/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        })
-            .then(response => response.json())
-            .then(data => {
-            if (data.id) {
-                alert('Registration successful');
-                window.location.href = '/login'; // Redirect to login page after success
-            } else {
-                alert('Registration failed');
-            }
-        })
-            .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred');
-        });
-    });
-</script>
 </body>
 </html>

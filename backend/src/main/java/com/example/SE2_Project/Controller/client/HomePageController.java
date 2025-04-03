@@ -37,6 +37,14 @@ public class HomePageController {
     public String calendarPage(Model model) {
         return "/calendar/calendar";
     }
+    @GetMapping("/income")
+    public String incomePage(Model model) {
+        List<TransactionEntity> transactions = transactionService.getTransactionsForCurrentUser();
+        List<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("categories", categories);
+        return "income/index";
+    }
 
 
 }
