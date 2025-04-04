@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "category")
@@ -14,9 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 
 public class CategoryEntity {
- @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String type;
     private String name;
@@ -25,9 +26,18 @@ public class CategoryEntity {
     @OneToMany(mappedBy = "category")
     private List<TransactionEntity> transactions;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id") // Liên kết với bảng UserEntity
-    private UserEntity user;
+//    @JoinColumn(name = "user_id") // Liên kết với bảng UserEntity
+    @ManyToMany(mappedBy = "categories")
+    private Set<UserEntity> users;
+
+    public CategoryEntity(String name, String type, LocalDateTime now) {
+        this.name=name;
+        this.type=type;
+        this.createdDate= now;
+        this.users= new HashSet<>();
+    }
+
+
 
     public String getType() {
         return type;
@@ -37,12 +47,12 @@ public class CategoryEntity {
         this.type = type;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public Set<UserEntity> getUsers() {
+        return users;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setUsers(Set<UserEntity> users) {
+        this.users = users;
     }
 
     public Long getId() {

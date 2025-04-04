@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/category")
@@ -19,7 +20,7 @@ public class CategoryController {
 
     @GetMapping("/all")
     public String getAllCategories(Model model) {
-        List<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
+        Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
         model.addAttribute("categories", categories);
         return "admin/category/categoryPage";
     }

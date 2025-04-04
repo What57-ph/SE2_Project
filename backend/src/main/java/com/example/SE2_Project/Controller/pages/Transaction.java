@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/transactions")
@@ -41,7 +42,7 @@ public class Transaction {
     @GetMapping("/addNew")
     public String addNewTransaction(Model model) {
         TransactionEntity transaction = new TransactionEntity();
-        List<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser(); // Retrieve all categories
+        Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser(); // Retrieve all categories
 
         // Set the transaction and categories to the model
         model.addAttribute("transaction", transaction);
