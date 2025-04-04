@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -25,15 +27,23 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     private List<TransactionEntity> transactions;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_category",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<CategoryEntity> categories = new HashSet<>();
 
-    public UserEntity(Long id, String username, String password, String name, LocalDate createdDate, String role) {
+
+    public UserEntity(Long id, String username, String password, String name, LocalDate createdDate, String role, Set<CategoryEntity> categories) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.name = name;
         this.createdDate = createdDate;
         this.role = role;
-        
+        this.categories=categories;
     }
 
 
@@ -103,5 +113,13 @@ public class UserEntity {
 
     public void setTransactions(List<TransactionEntity> transactions) {
         this.transactions = transactions;
+    }
+
+    public Set<CategoryEntity> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<CategoryEntity> categories) {
+        this.categories = categories;
     }
 }

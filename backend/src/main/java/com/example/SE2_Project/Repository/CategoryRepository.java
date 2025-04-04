@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
     boolean existsByName(String name);
-    List<CategoryEntity> findByUserUsername(String username);
-    boolean existsByNameAndUser(String name, UserEntity user);
-
-
+    List<CategoryEntity> findByUsersUsername(String username);
+    boolean existsByNameAndUsers(String name, UserEntity user);
+    Optional<CategoryEntity> findByNameIgnoreCase(String name);
+    List<CategoryEntity> findAllByIdBetween(Long startId, Long endId);
 
 }
