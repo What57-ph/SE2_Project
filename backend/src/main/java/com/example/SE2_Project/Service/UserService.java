@@ -1,6 +1,8 @@
 package com.example.SE2_Project.Service;
 
+import com.example.SE2_Project.Entity.CategoryEntity;
 import com.example.SE2_Project.Entity.UserEntity;
+import com.example.SE2_Project.Repository.CategoryRepository;
 import com.example.SE2_Project.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -8,17 +10,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -41,12 +47,22 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Transactional
     public UserEntity createUser(UserEntity user) {
         user.setRole("USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(false);
         user.setTransactions(Collections.emptyList());
         user.setCreatedDate(LocalDate.now());
+        List<CategoryEntity> defaultCategories = categoryRepository.findAllByIdBetween(1L, 12L);
+        // Chuyển defaultCategory từ List thành Set
+        Set<CategoryEntity> defaultCategorySet = new HashSet<>(defaultCategories);
+        user.setCategories(defaultCategorySet);
+        // Gán người dùng vào mỗi CategoryEntity (gán ngược lại để đảm bảo quan hệ 2 chiều)
+        for (CategoryEntity category : defaultCategorySet) {
+            category.getUsers().add(user);  // Gán người dùng vào danh sách users của category
+        }
+        categoryRepository.saveAll(defaultCategorySet);  // Lưu tất cả các category đã thay đổi
         return userRepository.save(user);
     }
 
