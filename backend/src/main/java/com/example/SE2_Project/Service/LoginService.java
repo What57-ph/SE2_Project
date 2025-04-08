@@ -33,7 +33,7 @@ public class LoginService {
             UserEntity user = new UserEntity();
             user.setUsername(userDTO.getUsername());
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            user.setStatus(true);
+            user.setStatus(false);
             user.setRole("USER");
             user.setName(userDTO.getName());
             user.setCreatedDate(LocalDate.now());
@@ -55,7 +55,7 @@ public class LoginService {
         Set<String> roleCode = SecurityUtils.getRolesCurrentUser();
         log.info("User roles: {}", roleCode);
 
-        if (roleCode.contains("ROLE_ADMIN")) {
+        if (roleCode.contains("ADMIN")) {
             log.info("redirecting to admin page");
             return "redirect:/admin/show";
         }
@@ -69,7 +69,6 @@ public class LoginService {
             throw new IllegalArgumentException("Tên đăng nhập hoặc mật khẩu không chính xác");
         }
 
-        // 3. Kiểm tra role và chuyển hướng theo vai trò
         return processAfterLogin();
     }
 }

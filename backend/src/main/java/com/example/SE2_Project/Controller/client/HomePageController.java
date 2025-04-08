@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/user")
@@ -27,7 +28,7 @@ public class HomePageController {
     @GetMapping("/expense")
     public String expensePage(Model model) {
         List<TransactionEntity> transactions = transactionService.getTransactionsForCurrentUser();
-        List<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
+        Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
         model.addAttribute("transactions", transactions);
         model.addAttribute("categories", categories);
         return "expenses/index";
@@ -40,7 +41,7 @@ public class HomePageController {
     @GetMapping("/income")
     public String incomePage(Model model) {
         List<TransactionEntity> transactions = transactionService.getTransactionsForCurrentUser();
-        List<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
+        List<CategoryEntity> categories = (List<CategoryEntity>) categoryService.getCategoriesForCurrentUser();
         model.addAttribute("transactions", transactions);
         model.addAttribute("categories", categories);
         return "income/index";

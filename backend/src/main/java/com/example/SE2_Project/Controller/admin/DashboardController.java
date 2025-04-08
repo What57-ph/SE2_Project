@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 import static java.rmi.server.LogStream.log;
 
@@ -69,11 +70,26 @@ public class DashboardController {
     }
 
     @GetMapping("/user")
-    public String getUserPage(Model model) {
-        List<UserEntity> users = userRepository.findAll();
+    public String getUserPage(Model model,
+                              @RequestParam(value = "role", required = false, defaultValue = "default") String role,
+                              @RequestParam(value = "status", required = false, defaultValue = "0") int status
+    ) {
+        List<UserEntity> users ;
+
+        boolean dbStatus = status==1;
+
+        if (!role.equals("default") && status != 0) {
+            users = userRepository.findByRoleAndStatus(role, dbStatus);
+        } else if (role.equals("default") && status != 0) {
+            users = userRepository.findByStatus(dbStatus);
+        } else if (!role.equals("default")) {
+            users = userRepository.findByRole(role);
+        } else {
+            users = userService.getAllUsers(); // Lấy tất cả user
+        }
         model.addAttribute("users", users);
-        model.addAttribute("activeIcon", "✅");
-        model.addAttribute("deletedIcon", "❌");
+        model.addAttribute("activeIcon", "✅" + "Active");
+        model.addAttribute("deletedIcon", "❌" + "Disabled");
 
         return "admin/user/userList";
     }
@@ -116,8 +132,14 @@ public class DashboardController {
     }
 
     @PostMapping(value = "/user/delete/{id}")
-    public String deleteUser(@PathVariable Long id){
+    public String deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+        return "redirect:/admin/show/user";
+    }
+
+    @PostMapping(value = "/user/activate/{id}")
+    public String activateUser(@PathVariable Long id) {
+        userService.activateUser(id);
         return "redirect:/admin/show/user";
     }
 }
