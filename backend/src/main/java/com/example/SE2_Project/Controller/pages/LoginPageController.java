@@ -32,4 +32,9 @@ public class LoginPageController {
     public String processAfterLogin() {
         return loginService.processAfterLogin();
     }
+
+    @GetMapping("/homepage/show")
+    public String getHomePage(){
+        return "/homepage/show";
+    }
 }

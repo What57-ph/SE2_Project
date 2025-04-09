@@ -138,24 +138,31 @@
         </div>
     </div>
 </main>
-    <script th:inline="javascript">
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".update-btn").forEach(button => {
-                button.addEventListener("click", function () {
-                    const id = this.getAttribute("data-id");
-                    const categoryId = this.getAttribute("data-category-id");
-                    const amount = this.getAttribute("data-amount");
-                    const createdDate = this.getAttribute("data-date");
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".update-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                const id = this.getAttribute("data-id");
+                const categoryId = this.getAttribute("data-category-id");
+                const amount = this.getAttribute("data-amount");
+                const createdDate = this.getAttribute("data-date");
 
-                    document.querySelector("#transactionId").value = id;
-                    document.querySelector("#categoryId").value = categoryId;
-                    document.querySelector("#amount").value = amount;
-                    document.querySelector("#createdDate").value = createdDate;
-                });
+                console.log("🟢 Gán ID vào input:", id);
+
+                document.getElementById("transactionId").value = id;
+                document.getElementById("categoryId").value = categoryId;
+                document.getElementById("amount").value = amount;
+                document.getElementById("createdDate").value = createdDate;
             });
         });
+    });
+</script>
+</script>
 
-    </script>
+</script>
+
+
+</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>

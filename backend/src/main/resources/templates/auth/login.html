@@ -53,13 +53,13 @@
                         </div>
                         <div class="signup-link">Create an account <a href="">Signup now</a></div>
                     </form>
-                    <!--                Register-->
-                    <form action="#" class="signup">
+
+                    <form action="#" class="signup"  id="registerForm">
                         <div class="field">
                             <input type="text" id="username" placeholder="Username" required>
                         </div>
                         <div class="field">
-                            <input type="text" placeholder="Email Address" id="email" required>
+                            <input type="text" placeholder="Name" id="name" required>
                         </div>
                         <div class="field">
                             <input type="password" placeholder="Password" id="password" required>
@@ -98,7 +98,7 @@
         return false;
     });
     document.getElementById('registerForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
 
         const userData = {
             username: document.getElementById('username').value,
@@ -118,7 +118,7 @@
             .then(data => {
             if (data.id) {
                 alert('Registration successful');
-                window.location.href = '/login'; // Redirect to login page after success
+                window.location.href = '/login';
             } else {
                 alert('Registration failed');
             }
