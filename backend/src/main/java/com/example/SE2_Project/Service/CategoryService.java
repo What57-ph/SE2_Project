@@ -95,6 +95,7 @@ public class CategoryService {
         // Gán 2 chiều
         currentCat.getUsers().add(currentUser);
         currentUser.getCategories().add(currentCat);
+        //lưu 2 chiều
         CategoryEntity cat = categoryRepository.save(currentCat);
         userRepository.save(currentUser);
         return cat;
@@ -114,20 +115,37 @@ public class CategoryService {
     }
 
     public CategoryEntity updateCategory(Long id, CategoryDto categoryDto) {
-        CategoryEntity category = categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-
-        category.setName(categoryDto.getName());
-        category.setType(categoryDto.getType());
-        category.setCreatedDate(LocalDateTime.now());
-
-        return categoryRepository.save(category);
+//        CategoryEntity category = categoryRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        CategoryEntity newCat = categoryRepository.findByNameIgnoreCase(categoryDto.getName()).orElse(null);
+        CategoryEntity category = new CategoryEntity();
+        //neu category mới trùng với category đã có trong db, gán cho ng dùng, nếu chưa có, tạo mới. và xóa cate cũ đi
+        if (newCat == null) {
+            category = addCategory(categoryDto);
+        } else {
+            // Gán 2 chiều
+            newCat.getUsers().add(currentUser);
+            currentUser.getCategories().add(newCat);
+            //lưu 2 chiều
+            category = categoryRepository.save(newCat);
+            userRepository.save(currentUser);
+        }
+        deleteCategory(id);
+        return category;
     }
 
     public void deleteCategory(Long id) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
         CategoryEntity category = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
 
-        categoryRepository.delete(category);
+        currentUser.getCategories().remove(category);
+        userRepository.save(currentUser);
     }
 }
