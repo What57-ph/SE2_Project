@@ -20,10 +20,7 @@ public class HomePageController {
     private TransactionService transactionService;
     @Autowired
     private CategoryService categoryService;
-    @GetMapping("/show")
-    public String getHomePage(){
-        return "/homepage/show";
-    }
+
 
     @GetMapping("/expense")
     public String expensePage(Model model) {

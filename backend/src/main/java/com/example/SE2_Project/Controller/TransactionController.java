@@ -19,11 +19,7 @@
              private TransactionService transactionService;
 
 
-       @PostMapping("/addIncome")
-               public TransactionEntity addIncomeTransaction(@RequestBody IncomeTransactionDto transaction) {
-                TransactionEntity transactionEntity = transactionService.addIncome(transaction);
-                return transactionEntity;
-            }
+
         @GetMapping("/get/all")
                public List<TransactionEntity> getAllTransactions() {
                return transactionService.getAllIncomeTransaction();
