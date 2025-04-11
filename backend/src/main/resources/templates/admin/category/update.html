@@ -25,6 +25,13 @@
         <input type="text" id="name" name="name" class="form-control" th:value="${category.name}" required>
       </div>
       <div class="mb-3">
+        <label>Type</label>
+        <select class="form-control mt-2" name="type">
+          <option value="INCOME" th:selected="${category != null and category.type == 'INCOME'}">INCOME</option>
+          <option value="EXPENSE" th:selected="${category != null and category.type == 'EXPENSE'}">EXPENSE</option>
+        </select>
+      </div>
+      <div class="mb-3">
         <label for="createdDate" class="form-label">Created Date</label>
         <input type="text" id="createdDate" class="form-control" th:value="${#temporals.format(category.createdDate, 'dd/MM/yyyy')}" disabled>
       </div>

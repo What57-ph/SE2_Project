@@ -118,6 +118,7 @@ public class CategoryService {
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
 
         category.setName(categoryDto.getName());
+        category.setType(categoryDto.getType());
         category.setCreatedDate(LocalDateTime.now());
 
         return categoryRepository.save(category);
