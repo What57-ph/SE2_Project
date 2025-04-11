@@ -28,6 +28,15 @@
                th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" readonly>
       </div>
     </div>
+    <div class="row mx-5 px-5">
+      <div class="col">
+        <label>Type</label>
+        <select class="form-control mt-2" name="type">
+          <option value="INCOME" th:selected="${category != null and category.type == 'INCOME'}">INCOME</option>
+          <option value="EXPENSE" th:selected="${category != null and category.type == 'EXPENSE'}">EXPENSE</option>
+        </select>
+      </div>
+    </div>
 
     <div class="mt-5 mx-5 px-5 d-flex justify-content-start">
       <button class="btn btn-primary ms-2" style="width: 150px; height: 50px;" type="submit">Add</button>
