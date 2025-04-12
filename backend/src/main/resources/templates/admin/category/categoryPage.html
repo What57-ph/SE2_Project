@@ -44,6 +44,7 @@
             <tr>
               <th scope="col">No</th>
               <th scope="col">Name</th>
+              <th scope="col">Type</th>
               <th scope="col">Created Date</th>
               <th scope="col" class="text-center w-auto">Action</th>
             </tr>
@@ -52,6 +53,7 @@
             <tr th:each="category, iterStat : ${categories}">
               <th th:text="${iterStat.count}"></th>
               <td th:text="${category.name}"></td>
+              <td th:text="${category.type}"></td>
               <td th:text="${#temporals.format(category.createdDate, 'dd/MM/yyyy')}"></td>
               <td>
                         <span class="d-flex justify-content-center">
@@ -61,7 +63,7 @@
     </button>
 </a>
                              <form th:action="@{/category/delete/{id}(id=${category.id})}" method="post" style="display:inline;">
-              <button type="submit" class="btn btn-danger">Delete</button>
+              <button type="submit" class="btn btn-danger ms-2">Delete</button>
             </form>
                         </span>
               </td>

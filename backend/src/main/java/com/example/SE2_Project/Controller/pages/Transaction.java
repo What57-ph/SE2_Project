@@ -48,7 +48,7 @@ public class Transaction {
         model.addAttribute("transaction", transaction);
         model.addAttribute("categories", categories);
 
-        return "expenses/addNew"; // Return to the addNew.html page
+        return "expenses/addNew";
     }
     @PostMapping("/addExpense")
     public String addExpenseTransaction(@RequestParam("amount") BigDecimal amount,
@@ -66,12 +66,27 @@ public class Transaction {
         return "redirect:/user/expense";
     }
 
+    @PostMapping("/addIncome")
+    public String addIncomeTransaction(@RequestParam("amount") BigDecimal amount,
+                                       @RequestParam("transactionDate") LocalDate transactionDate,
+                                       @RequestParam("categoryId") Long categoryId,
+                                       @RequestParam("notes") String notes
+                                       ){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        if (categoryId == null) {
+            throw new IllegalArgumentException("Category ID must not be null");
+        }
+        transactionService.addIncome(amount, transactionDate, categoryId, notes, username);
+        return "redirect:/user/expense";
+    }
+
 
     @GetMapping("/listTransaction")
     public String listTransactions(Model model) {
         List<TransactionEntity> transactions = transactionService.getTransactionsForCurrentUser();
         model.addAttribute("transactions", transactions);
-        return "transaction/listTransaction"; // The view name for listTransaction
+        return "transaction/listTransaction";
     }
 
     @PostMapping("/delete/{id}")
@@ -93,11 +108,9 @@ public class Transaction {
         TransactionEntity existingTransaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
 
-        // Tìm danh mục từ ID
         CategoryEntity category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
 
-        // Cập nhật thông tin giao dịch
         existingTransaction.setCategory(category);
         existingTransaction.setAmount(amount);
         existingTransaction.setCreatedDate(LocalDate.parse(createdDate));
@@ -159,7 +172,7 @@ public class Transaction {
         model.addAttribute("month", month);
         model.addAttribute("year", year);
 
-        return "categoryExpenseReport";
+        return "report/categoryExpenseReport";
     }
 
     @GetMapping("/categoryIncomeReport")

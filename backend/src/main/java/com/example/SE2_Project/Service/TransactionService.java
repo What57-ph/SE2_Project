@@ -51,32 +51,25 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public TransactionEntity addIncome(IncomeTransactionDto transactionEntity) {
+    public void addIncome(BigDecimal amount, LocalDate transactionDate, Long categoryId, String notes, String username) {
 
-        // Tạo đối tượng giao dịch
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        CategoryEntity category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+
         TransactionEntity transaction = new TransactionEntity();
-        transaction.setAmount(transactionEntity.getAmount());
-        transaction.setTransactionDate(transactionEntity.getTransactionDate());
-        transaction.setNotes(transactionEntity.getNotes());
-        transaction.setStatus(true);  // Giá trị mặc định cho status
+        transaction.setAmount(amount);
+        transaction.setTransactionDate(transactionDate);
+        transaction.setNotes(notes);
+        transaction.setStatus(true);
         transaction.setCreatedDate(LocalDate.now());
         transaction.setType("INCOME");
-
-
-        // Lấy thông tin người dùng
-        Optional<UserEntity> userOptional = userRepository.findById(transactionEntity.getUserId());
-        UserEntity user = userOptional.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy người dùng"));
-
-        // Lấy thông tin danh mục
-        Optional<CategoryEntity> categoryOptional = categoryRepository.findById(transactionEntity.getCategoryId());
-        CategoryEntity category = categoryOptional.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy danh mục"));
-
-        // Gán thông tin người dùng và danh mục vào giao dịch
         transaction.setUser(user);
         transaction.setCategory(category);
 
-        // Lưu giao dịch vào cơ sở dữ liệu
-        return transactionRepository.save(transaction);
+        transactionRepository.save(transaction);
     }
 
     public TransactionEntity updateIncome(long id, IncomeTransactionDto transactionEntity) {
