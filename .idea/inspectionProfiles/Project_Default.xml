@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="17">
+          <list size="21">
             <item index="0" class="java.lang.String" itemvalue="xsi:schemaLocation" />
             <item index="1" class="java.lang.String" itemvalue="th:href" />
             <item index="2" class="java.lang.String" itemvalue="layout:fragment" />
@@ -22,6 +22,10 @@
             <item index="14" class="java.lang.String" itemvalue="th:action" />
             <item index="15" class="java.lang.String" itemvalue="th:attr" />
             <item index="16" class="java.lang.String" itemvalue="th:object" />
+            <item index="17" class="java.lang.String" itemvalue="th:data-id" />
+            <item index="18" class="java.lang.String" itemvalue="th:data-category-id" />
+            <item index="19" class="java.lang.String" itemvalue="th:data-amount" />
+            <item index="20" class="java.lang.String" itemvalue="th:data-date" />
           </list>
         </value>
       </option>
