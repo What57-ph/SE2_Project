@@ -86,5 +86,6 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             "ELSE 0 END AS expensePercentage " +
             "FROM TransactionEntity t WHERE t.user.id = :userId")
     List<Object[]> findIncomeAndExpensePercentage(@Param("userId") Long userId);
+    List<TransactionEntity> findByTypeAndUserId(String type,Long userId);
 
 }

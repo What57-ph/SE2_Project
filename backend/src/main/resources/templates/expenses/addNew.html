@@ -52,7 +52,7 @@
             <div>
                 <div class="d-flex justify-content-center gap-3 mt-4">
                     <button type="submit" class="btn btn-danger px-4">Submit</button>
-                    <a href="/user/expense" class="btn btn-secondary px-4">
+                    <a href="/user/transactions" class="btn btn-secondary px-4">
                         <i class="fa-solid fa-arrow-left me-2"></i>Back
                     </a>
                 </div>
@@ -61,38 +61,39 @@
 
         </form>
     </div>
+    <!-- ✅ JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("transactionForm");
+            const typeInput = document.getElementById("selectedType");
+            const typeButtons = document.querySelectorAll(".transaction-type");
+
+            // Handle type switching
+            typeButtons.forEach(btn => {
+                btn.addEventListener("click", function () {
+                    // Remove active class
+                    typeButtons.forEach(b => b.classList.remove("active"));
+                    this.classList.add("active");
+
+                    const selected = this.getAttribute("data-type");
+                    typeInput.value = selected;
+
+                    // ✅ Update form action
+                    form.action = selected === "INCOME"
+                    ? "/transactions/addIncome"
+                    : "/transactions/addExpense";
+
+                    console.log(`Type: ${selected}, Form Action: ${form.action}`);
+                });
+            });
+
+            // Default date: today
+            const today = new Date().toISOString().split("T")[0];
+            document.getElementById("transactionDate").value = today;
+        });
+    </script>
 </main>
 
-<!-- ✅ JavaScript -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("transactionForm");
-        const typeInput = document.getElementById("selectedType");
-        const typeButtons = document.querySelectorAll(".transaction-type");
 
-        // Handle type switching
-        typeButtons.forEach(btn => {
-            btn.addEventListener("click", function () {
-                // Remove active class
-                typeButtons.forEach(b => b.classList.remove("active"));
-                this.classList.add("active");
-
-                const selected = this.getAttribute("data-type");
-                typeInput.value = selected;
-
-                // ✅ Update form action
-                form.action = selected === "INCOME"
-                ? "/transactions/addIncome"
-                : "/transactions/addExpense";
-
-                console.log(`Type: ${selected}, Form Action: ${form.action}`);
-            });
-        });
-
-        // Default date: today
-        const today = new Date().toISOString().split("T")[0];
-        document.getElementById("transactionDate").value = today;
-    });
-</script>
 </body>
 </html>

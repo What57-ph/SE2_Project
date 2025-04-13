@@ -63,7 +63,7 @@ public class Transaction {
         }
 
         transactionService.addExpense(amount, transactionDate, categoryId, notes, username);
-        return "redirect:/user/expense";
+        return "redirect:/user/transactions";
     }
 
     @PostMapping("/addIncome")
@@ -78,7 +78,7 @@ public class Transaction {
             throw new IllegalArgumentException("Category ID must not be null");
         }
         transactionService.addIncome(amount, transactionDate, categoryId, notes, username);
-        return "redirect:/user/expense";
+        return "redirect:/user/transactions";
     }
 
 
@@ -97,7 +97,7 @@ public class Transaction {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error deleting transaction.");
         }
-        return "redirect:/user/expense";
+        return "redirect:/user/transactions";
     }
 
     @PostMapping("/update")
@@ -116,7 +116,7 @@ public class Transaction {
         existingTransaction.setCreatedDate(LocalDate.parse(createdDate));
 
         transactionRepository.save(existingTransaction);
-        return "redirect:/user/expense";
+        return "redirect:/user/transactions";
     }
 
 

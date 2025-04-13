@@ -8,6 +8,7 @@ import com.example.SE2_Project.Entity.CategoryEntity;
 import com.example.SE2_Project.Repository.CategoryRepository;
 import com.example.SE2_Project.Repository.TransactionRepository;
 import com.example.SE2_Project.Repository.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -252,5 +253,15 @@ public class TransactionService {
             response.put("expensePercentage", expensePercentage);
         }
         return response;
+    }
+
+    public List<TransactionEntity> findTransactionByTypeAndUserId(String type){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<UserEntity> currentUser =this.userRepository.findByUsername(username);
+        if (!currentUser.isPresent()){
+            throw new IllegalArgumentException("User not found");
+        }
+        Long userId=currentUser.get().getId();
+        return this.transactionRepository.findByTypeAndUserId(type,userId);
     }
 }

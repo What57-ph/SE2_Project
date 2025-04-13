@@ -145,7 +145,7 @@
                     var ctx = document.getElementById("categoryExpenseChart");
                     if (ctx) {
                         new Chart(ctx.getContext("2d"), {
-                            type: "doughnut",
+                            type: "bar",
                             data: {
                                 labels: categories,
                                 datasets: [{
@@ -164,6 +164,14 @@
                                     legend: {
                                         position: 'right'
                                     }
+                                },scales: {
+                                    yAxes: [
+                                        {
+                                            ticks: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    ]
                                 }
                             }
                         });

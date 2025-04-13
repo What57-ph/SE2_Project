@@ -22,7 +22,7 @@ public class HomePageController {
     private CategoryService categoryService;
 
 
-    @GetMapping("/expense")
+    @GetMapping("/transactions")
     public String expensePage(Model model) {
         List<TransactionEntity> transactions = transactionService.getTransactionsForCurrentUser();
         Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
@@ -30,7 +30,16 @@ public class HomePageController {
         model.addAttribute("categories", categories);
         return "expenses/index";
     }
-
+    @GetMapping("/transactionType")
+    public String transactionTypePage(Model model){
+        List<TransactionEntity> expensesList=transactionService.findTransactionByTypeAndUserId("EXPENSE");
+        model.addAttribute("expenses",expensesList);
+        List<TransactionEntity> incomeList=transactionService.findTransactionByTypeAndUserId("INCOME");
+        model.addAttribute("incomes",incomeList);
+        Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
+        model.addAttribute("categories", categories);
+        return "expenses/transactionType";
+    }
     @GetMapping("/calendar")
     public String calendarPage(Model model) {
         return "/calendar/calendar";
