@@ -1,5 +1,6 @@
 package com.example.SE2_Project.Controller.pages;
 
+import com.example.SE2_Project.Dto.CategoryExpenseDTO;
 import com.example.SE2_Project.Dto.MonthlySummaryDTO;
 import com.example.SE2_Project.Entity.CategoryEntity;
 import com.example.SE2_Project.Entity.TransactionEntity;
@@ -219,5 +220,38 @@ public class Transaction {
         model.addAttribute("year", year);
 
         return "report/monthlySummary";
+    }
+
+    @GetMapping("/currentMonthExpensePie")
+    public String viewCurrentMonthExpensePieChart(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        List<CategoryExpenseDTO> data = transactionService.getCurrentMonthExpenseCategoryTotals(username);
+
+        // Tách dữ liệu ra để gán vào model (labels + values)
+        List<String> categories = data.stream().map(CategoryExpenseDTO::getCategory).toList();
+        List<BigDecimal> amounts = data.stream().map(CategoryExpenseDTO::getTotalAmount).toList();
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("amounts", amounts);
+
+        return "report/currentMonthExpensePie"; // trỏ đến file HTML Thymeleaf
+    }
+
+    @GetMapping("/currentMonthIncomePie")
+    public String viewCurrentMonthIncomePieChart(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        List<CategoryExpenseDTO> data = transactionService.getCurrentMonthIncomeCategoryTotals(username);
+
+        List<String> categories = data.stream().map(CategoryExpenseDTO::getCategory).toList();
+        List<BigDecimal> amounts = data.stream().map(CategoryExpenseDTO::getTotalAmount).toList();
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("amounts", amounts);
+
+        return "report/currentMonthIncomePie";  // trỏ tới view HTML
     }
 }

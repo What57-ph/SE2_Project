@@ -9,12 +9,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
     Page<TransactionEntity> findByUser_Username(String username, Pageable pageable);
     List<TransactionEntity> findByUserUsername(String username);
+    List<TransactionEntity> findByUserUsernameAndTypeAndCreatedDateBetween(
+            String username, String type, LocalDate startDate, LocalDate endDate);
 
     @Query("SELECT t FROM TransactionEntity t WHERE " +
             "MONTH(t.transactionDate) = :month AND " +

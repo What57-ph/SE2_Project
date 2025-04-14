@@ -307,7 +307,7 @@
                         </button>
                     </td>
                     <td>
-                        <form th:action="@{/transactions/delete/{id}(id=${transaction.id})}" method="post">
+                        <form th:action="@{/transactions/delete/{id}(id=${transaction.id})}" method="post" class="delete-form">
                             <button type="submit" class="btn btn-link p-0 action-btn delete-btn">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
@@ -412,6 +412,17 @@
 
     <script th:inline="javascript">
         document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".delete-form").forEach(form => {
+                form.addEventListener("submit", function (e) {
+                    const confirmDelete = confirm("⚠️ Bạn có chắc chắn muốn xóa giao dịch này?");
+                    if (!confirmDelete) {
+                        e.preventDefault(); // Ngăn form submit nếu chọn "Không"
+                    }
+                });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
             // Update modal form population
             document.querySelectorAll(".update-btn").forEach(button => {
                 button.addEventListener("click", function () {
@@ -443,7 +454,26 @@
             window.addEventListener('resize', adjustTableForMobile);
             adjustTableForMobile();
         });
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get("updateSuccess")) {
+                const toastElement = document.getElementById('updateToast');
+                const toast = new bootstrap.Toast(toastElement);
+                toast.show();
+            }
+        });
+
     </script>
 </main>
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    <div id="updateToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                ✅ Giao dịch đã được cập nhật thành công!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

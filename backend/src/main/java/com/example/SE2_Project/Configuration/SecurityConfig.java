@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/guest/login")
                         .loginProcessingUrl("/process-login")
-                        .failureUrl("/login?error=true")
+                        .failureUrl("/guest/login?error=true")
                         .defaultSuccessUrl("/process-after-login", true)  // Chuyển hướng đến trang homepage sau khi đăng nhập thành công
                         .permitAll()
                 )

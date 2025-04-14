@@ -121,6 +121,15 @@
 //
 //    });
 
+const params = new URLSearchParams(window.location.search);
+if (params.get("loginSuccess")) {
+    alert("Login successful!");
+    // Hoặc log ra
+    console.log("Login successful!");
+} else if (params.get("error")) {
+    document.getElementById("login-failed-error").textContent = "Incorrect username or password";
+}
+
     const registerForm = document.getElementById('registerForm');
     registerForm.addEventListener('submit', function (event) {
         event.preventDefault();

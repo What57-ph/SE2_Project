@@ -16,6 +16,8 @@
 </head>
 
 <body class="sb-nav-fixed">
+
+
   <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
     <a class="navbar-brand ps-3" href="/admin">MoneyNote</a>
@@ -31,7 +33,10 @@
           <i class="fas fa-search"></i>
         </button>
       </div>
+
+
     </form>
+
     <!-- Navbar-->
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
       <li class="nav-item dropdown">
@@ -113,33 +118,37 @@
                 <canvas class="saving-line-chart"></canvas>
               </div>
             </div>
-            <div class="px-4 col-xl-3 col-12 mt-xl-0 mt-5">
-              <div class="border-bottom fw-medium shadow-sm p-2 px-4">
-                <i class="fa-solid fa-chart-pie"></i> &nbsp; Expense Breakdown
-              </div>
-              <div class="donut-chart-container position-relative mt-3 p-3">
-                <canvas class="expense-donut-chart"></canvas>
-                <div class="custom-legend-expense mt-3 d-flex flex-wrap justify-content-center gap-3 ms-3"></div>
 
-                <div class="position-absolute top-50 start-50 translate-middle" style="z-index: -1;">
-                  <h1 class="fs-1 text-center">$10K</h1>
-                  <p class="text-dark text-opacity-50">Total Amount</p>
-                </div>
+              <!-- Biểu đồ Expense -->
+              <div class="px-4 col-xl-3 col-12 mt-xl-0 mt-5">
+                  <div class="border-bottom fw-medium shadow-sm p-2 px-4">
+                      <i class="fa-solid fa-chart-pie"></i> &nbsp; Expense Breakdown
+                  </div>
+                  <div class="donut-chart-container position-relative mt-3 p-3">
+                      <canvas class="expense-donut-chart"></canvas>
+                      <div class="custom-legend-expense mt-3 d-flex flex-wrap justify-content-center gap-3 ms-3"></div>
+                      <div class="position-absolute top-50 start-50 translate-middle" style="z-index: -1;">
+                          <h1 class="fs-1 text-center" th:text="'$' + ${totalExpense}">0</h1>
+                          <p class="text-dark text-opacity-50">Total Amount</p>
+                      </div>
+                  </div>
               </div>
-            </div>
-            <div class="px-4 col-xl-3 col-12 mt-xl-0 mt-5">
-              <div class="border-bottom fw-medium shadow-sm p-2 px-4">
-                <i class="fa-solid fa-chart-pie"></i> &nbsp; Income Breakdown
+
+              <!-- Biểu đồ Income -->
+              <div class="px-4 col-xl-3 col-12 mt-xl-0 mt-5">
+                  <div class="border-bottom fw-medium shadow-sm p-2 px-4">
+                      <i class="fa-solid fa-chart-pie"></i> &nbsp; Income Breakdown
+                  </div>
+                  <div class="donut-chart-container position-relative mt-3 p-3">
+                      <canvas class="income-donut-chart"></canvas>
+                      <div class="custom-legend-income mt-3 d-flex flex-wrap justify-content-center align-items-center ms-3"></div>
+                      <div class="position-absolute top-50 start-50 translate-middle" style="z-index: -1;">
+                          <h1 class="fs-1 text-center" th:text="'$' + ${totalIncome}">0</h1>
+                          <p class="text-dark text-opacity-50">Total Amount</p>
+                      </div>
+                  </div>
               </div>
-              <div class="donut-chart-container position-relative mt-3 p-3">
-                <canvas class="income-donut-chart"></canvas>
-                <div class="custom-legend-income mt-3 d-flex flex-wrap justify-content-center align-items-center ms-3"></div>
-                <div class="position-absolute top-50 start-50 translate-middle"  style="z-index: -1;">
-                  <h1 class="fs-1 text-center">$20K</h1>
-                  <p class="text-dark text-opacity-50">Total Amount</p>
-                </div>
-              </div>
-            </div>
+
           </div>
           <div class="container mt-5 total-each-period pt-5 pt-xl-0">
             <div>
@@ -247,197 +256,157 @@
   <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 
   <script th:inline="javascript">
-    const ctx = document.querySelector(".saving-line-chart").getContext("2d");
-    const income = document.querySelector(".income-donut-chart");
-    const expense = document.querySelector(".expense-donut-chart");
-    const totalSavingContainer = document.querySelector(".total-saving-review");
-    const labelsIncome = ["Salary", "Freelance"];
-    const incomeBgColor = ["rgb(255, 99, 132)", "rgb(54, 162, 235)"];
-    const labelsSaving = ["", "Mar", "Jun", "Sep", "Dec"];
-    const labelsExpense = ["Rent", "Retail", "Utilities", "Dining Out"];
-    const expenseBgColor = [
-      "rgb(54, 170, 200)",
-      "rgb(54, 162, 235)",
-      "rgb(54, 162,200)",
-      "rgb(54, 162,150)",
-    ];
-    const reviewCategory = document.querySelectorAll(".filter-options li");
-    let totalSavingData = [{
-        month: "January",
-        income: "$6500",
-        expense: "$3655",
-      },
-      {
-        month: "February",
-        income: "$6500",
-        expense: "$3655"
-      }, {
-        month: "March",
-        income: "$6500",
-        expense: "$3655"
-      }, {
-        month: "April",
-        income: "$6500",
-        expense: "$3655"
-      }, {
-        month: "May",
-        income: "$6500",
-        expense: "$3655"
-      }, {
-        month: "June",
-        income: "$6500",
-        expense: "$3655"
-      }, {
-        month: "July",
-        income: "$6500",
-        expense: "$3655"
-      }, {
-        month: "August",
-        income: "$6500",
-        expense: "$3655"
-      }, {
-        month: "September",
-        income: "$6500",
-        expense: "$3655"
-      }, {
-        month: "October",
-        income: "$6500",
-        expense: "$3655"
-      }, {
-        month: "November",
-        income: "$6500",
-        expense: "$3655"
-      }, {
-        month: "December",
-        income: "$6500",
-        expense: "$3655"
-      }
-    ];
+      const ctx = document.querySelector(".saving-line-chart").getContext("2d");
+      const totalSavingContainer = document.querySelector(".total-saving-review");
 
-    function setActive(element) {
-      reviewCategory.forEach(item => {
-        item.classList.remove("active");
+      // ✅ Ép dữ liệu từ Thymeleaf sang JS array hợp lệ
+      const labelsExpense = /*[[${expenseLabels}]]*/ [];
+      const valuesExpense = /*[[${expenseValues}]]*/ [];
+      const labelsIncome = /*[[${incomeLabels}]]*/ [];
+      const valuesIncome = /*[[${incomeValues}]]*/ [];
 
+      // 🎨 Tạo màu động cho biểu đồ
+      const generateColors = (length, offset = 0) =>
+          Array.from({ length }, (_, i) => `hsl(${(i * 60 + offset) % 360}, 70%, 60%)`);
 
+      const expenseColors = generateColors(labelsExpense.length);
+      const incomeColors = generateColors(labelsIncome.length, 30);
+
+      // 📊 Vẽ biểu đồ Expense
+      new Chart(document.querySelector(".expense-donut-chart"), {
+          type: "doughnut",
+          data: {
+              labels: labelsExpense,
+              datasets: [{
+                  data: valuesExpense,
+                  backgroundColor: expenseColors,
+                  hoverOffset: 4,
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: "85%",
+              plugins: { legend: { display: false } }
+          }
       });
-      totalSavingContainer.innerHTML="";
-      element.classList.add("active");
-      totalSavingInfo(element.textContent);
-    }
-    let totalSavingInfo= (categoryName)=>{
-      for (let i = 0; i < totalSavingData.length; i++) {
-        let index=0;
-        let circleColor = 0 <= i && i <= 2 ? "blue" : 3 <= i && i <= 5 ? "green" : 6 <= i && i <= 8 ? "orange" : "red"
-        totalSavingContainer.innerHTML += `
-          <div class="monthly-saving-box rounded shadow-sm bg-opacity-100 p-3 col-xl-2 col-3">
-            <h5 class="h5 fw-semibold mb-3">
-              <i class="fa-solid fa-circle-dot" style="color:${circleColor}"></i>
-              &nbsp;&nbsp;${totalSavingData[i].month}
-            </h5>
-            <p>Income:&nbsp;${totalSavingData[0].income}</p>
-            <p>Expense:&nbsp;${totalSavingData[0].expense}</p>
-          </div>`;
-        if (categoryName==="Quarter 1"){
-            if (i===2){
-              return;
-            }
-        } else if (categoryName==="Quarter 2"){
-          if (i<3) totalSavingContainer.innerHTML="";
-          if (i===5) return;
-        } else if (categoryName==="Quarter 3"){
-          if (i<6) totalSavingContainer.innerHTML="";
-          if (i===8) return;
-        } else if (categoryName==="Quarter 4"){
-          if (i<9) totalSavingContainer.innerHTML="";
-        }
+
+      // 📊 Vẽ biểu đồ Income
+      new Chart(document.querySelector(".income-donut-chart"), {
+          type: "doughnut",
+          data: {
+              labels: labelsIncome,
+              datasets: [{
+                  data: valuesIncome,
+                  backgroundColor: incomeColors,
+                  hoverOffset: 4,
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: "85%",
+              plugins: { legend: { display: false } }
+          }
+      });
+
+      // 🧾 Custom Legend - Expense
+      const expenseLegend = document.querySelector(".custom-legend-expense");
+      expenseLegend.innerHTML = labelsExpense.map((label, i) => `
+      <span class="legend-item">
+        <span class="legend-color" style="background-color:${expenseColors[i]}"></span> ${label}
+      </span>
+    `).join("");
+
+      // 🧾 Custom Legend - Income
+      const incomeLegend = document.querySelector(".custom-legend-income");
+      incomeLegend.innerHTML = labelsIncome.map((label, i) => `
+      <span class="legend-item">
+        <span class="legend-color" style="background-color:${incomeColors[i]}"></span> ${label}
+      </span>
+    `).join("");
+
+      // 💰 Saving Line Chart
+      const labelsSaving = ["", "Mar", "Jun", "Sep", "Dec"];
+      const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+      gradient.addColorStop(0, "rgba(75, 192, 192, 0.5)");
+      gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+
+      new Chart(ctx, {
+          type: "line",
+          data: {
+              labels: labelsSaving,
+              datasets: [{
+                  label: "Balance",
+                  data: [0, 7.2, 15, 5, 6],
+                  borderWidth: 2,
+                  borderColor: "rgb(75, 192, 192)",
+                  backgroundColor: gradient,
+                  tension: 0.4,
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+          }
+      });
+
+      // 💹 Filter Quarterly Savings
+      const reviewCategory = document.querySelectorAll(".filter-options li");
+
+      let totalSavingData = [
+          { month: "January", income: "$6500", expense: "$3655" },
+          { month: "February", income: "$6500", expense: "$3655" },
+          { month: "March", income: "$6500", expense: "$3655" },
+          { month: "April", income: "$6500", expense: "$3655" },
+          { month: "May", income: "$6500", expense: "$3655" },
+          { month: "June", income: "$6500", expense: "$3655" },
+          { month: "July", income: "$6500", expense: "$3655" },
+          { month: "August", income: "$6500", expense: "$3655" },
+          { month: "September", income: "$6500", expense: "$3655" },
+          { month: "October", income: "$6500", expense: "$3655" },
+          { month: "November", income: "$6500", expense: "$3655" },
+          { month: "December", income: "$6500", expense: "$3655" }
+      ];
+
+      function setActive(element) {
+          reviewCategory.forEach(item => item.classList.remove("active"));
+          element.classList.add("active");
+          totalSavingContainer.innerHTML = "";
+          totalSavingInfo(element.textContent);
       }
-    }
-    totalSavingInfo();
 
-    let expenseLegend = document.querySelector(".custom-legend-expense");
+      function totalSavingInfo(categoryName) {
+          for (let i = 0; i < totalSavingData.length; i++) {
+              let color =
+                  i <= 2 ? "blue" :
+                      i <= 5 ? "green" :
+                          i <= 8 ? "orange" : "red";
 
-    for (var i = 0; i < labelsExpense.length; i++) {
-      expenseLegend.innerHTML += `<span class="legend-item">
-                        <span class="legend-color" style="background-color:${expenseBgColor[i]}"></span> ${labelsExpense[i]}
-                    </span>`;
-    }
-    let incomeLegend = document.querySelector(".custom-legend-income");
+              if (
+                  (categoryName === "Quarter 1" && i > 2) ||
+                  (categoryName === "Quarter 2" && (i < 3 || i > 5)) ||
+                  (categoryName === "Quarter 3" && (i < 6 || i > 8)) ||
+                  (categoryName === "Quarter 4" && i < 9)
+              ) continue;
 
-    for (var i = 0; i < labelsIncome.length; i++) {
-      incomeLegend.innerHTML += `<span class="legend-item">
-                        <span class="legend-color" style="background-color:${incomeBgColor[i]}"></span> ${labelsIncome[i]}
-                    </span>`;
+              totalSavingContainer.innerHTML += `
+                <div class="monthly-saving-box rounded shadow-sm bg-opacity-100 p-3 col-xl-2 col-3">
+                    <h5 class="h5 fw-semibold mb-3">
+                        <i class="fa-solid fa-circle-dot" style="color:${color}"></i>
+                        &nbsp;&nbsp;${totalSavingData[i].month}
+                    </h5>
+                    <p>Income: ${totalSavingData[i].income}</p>
+                    <p>Expense: ${totalSavingData[i].expense}</p>
+                </div>`;
+          }
+      }
 
-    }
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, "rgba(75, 192, 192, 0.5)");
-    gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-    //Saving chart
-    new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: labelsSaving,
-        datasets: [{
-          label: "Balance",
-          data: [0, 7.2, 15, 5, 6],
-          borderWidth: 2,
-          borderColor: "rgb(75, 192, 192)",
-          backgroundColor: gradient,
-          tension: 0.4,
-        }, ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
-    });
-    //Income chart
-    new Chart(document.querySelector(".income-donut-chart"), {
-      type: "doughnut",
-      data: {
-        labels: ["Salary", "Freelance"],
-        datasets: [{
-          data: [5000, 3000],
-          backgroundColor: incomeBgColor,
-          hoverOffset: 4,
-          borderWidth: 1,
-          weight: 5,
-        }, ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutoutPercentage: 85,
-
-        legend: {
-          display: false,
-        },
-      },
-    });
-    //Expense chart
-    new Chart(document.querySelector(".expense-donut-chart"), {
-      type: "doughnut",
-      data: {
-        labels: labelsExpense,
-        datasets: [{
-          data: [5000, 3000, 2000, 1000],
-          backgroundColor: expenseBgColor,
-          hoverOffset: 4,
-          borderWidth: 1,
-          weight: 5,
-        }, ],
-      },
-      options: {
-        legend: {
-          display: false,
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        cutoutPercentage: 85,
-      },
-    });
-
+      totalSavingInfo("All Months");
   </script>
+
 </body>
 
 </html>

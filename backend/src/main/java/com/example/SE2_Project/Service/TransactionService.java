@@ -1,5 +1,6 @@
 package com.example.SE2_Project.Service;
 
+import com.example.SE2_Project.Dto.CategoryExpenseDTO;
 import com.example.SE2_Project.Dto.ExpenseTransactionDto;
 import com.example.SE2_Project.Dto.IncomeTransactionDto;
 import com.example.SE2_Project.Dto.MonthlySummaryDTO;
@@ -23,6 +24,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -304,4 +306,46 @@ public class TransactionService {
 
         return new ArrayList<>(map.values());
     }
+    public List<CategoryExpenseDTO> getCurrentMonthExpenseCategoryTotals(String username) {
+        LocalDate now = LocalDate.now();
+        LocalDate start = LocalDate.of(now.getYear(), now.getMonthValue(), 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+
+        List<TransactionEntity> expenses = transactionRepository.findByUserUsernameAndTypeAndCreatedDateBetween(
+                username, "EXPENSE", start, end
+        );
+
+        return expenses.stream()
+                .collect(Collectors.groupingBy(
+                        t -> t.getCategory().getName(),
+                        Collectors.mapping(TransactionEntity::getAmount,
+                                Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))
+                ))
+                .entrySet()
+                .stream()
+                .map(entry -> new CategoryExpenseDTO(entry.getKey(), entry.getValue()))
+                .toList();
+    }
+
+    public List<CategoryExpenseDTO> getCurrentMonthIncomeCategoryTotals(String username) {
+        LocalDate now = LocalDate.now();
+        LocalDate start = LocalDate.of(now.getYear(), now.getMonthValue(), 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+
+        List<TransactionEntity> incomes = transactionRepository.findByUserUsernameAndTypeAndCreatedDateBetween(
+                username, "INCOME", start, end
+        );
+
+        return incomes.stream()
+                .collect(Collectors.groupingBy(
+                        t -> t.getCategory().getName(),
+                        Collectors.mapping(TransactionEntity::getAmount,
+                                Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))
+                ))
+                .entrySet()
+                .stream()
+                .map(entry -> new CategoryExpenseDTO(entry.getKey(), entry.getValue()))
+                .toList();
+    }
+
 }

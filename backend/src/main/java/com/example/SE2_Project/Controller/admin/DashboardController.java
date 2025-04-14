@@ -12,9 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
-import static java.rmi.server.LogStream.log;
 
 @Slf4j
 @Controller
