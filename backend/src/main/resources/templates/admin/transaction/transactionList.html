@@ -60,7 +60,7 @@
         <td th:text="${tx.category.name}">Education</td>
         <td th:text="${tx.amount}">1000$</td>
         <td th:text="${tx.type}">Expense</td>
-        <td th:text="${tx.transactionDate}"></td>
+        <td th:text="${#temporals.format(tx.transactionDate, 'dd/MM/yyyy')}"></td>
         <td>
               <span class="d-flex justify-content-center">
                 <a th:href="'transaction/update/' + ${tx.id}"><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>

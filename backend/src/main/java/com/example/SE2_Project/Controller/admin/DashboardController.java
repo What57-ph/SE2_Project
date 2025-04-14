@@ -1,5 +1,6 @@
 package com.example.SE2_Project.Controller.admin;
 
+import com.example.SE2_Project.Entity.CategoryEntity;
 import com.example.SE2_Project.Entity.TransactionEntity;
 import com.example.SE2_Project.Entity.UserEntity;
 import com.example.SE2_Project.Repository.CategoryRepository;
@@ -78,9 +79,30 @@ public class DashboardController {
     }
 
     @GetMapping("/transaction/update/{id}")
-    public String getTransactionUpdatePage(@PathVariable("id") Long id) {
+    public String getTransactionUpdatePage(@PathVariable("id") Long id, Model model) {
+        TransactionEntity tr = transactionRepository.findById(id).orElse(null);
+        if (tr != null) {
+            long userId = tr.getUser().getId();
+            List<CategoryEntity> categories = categoryRepository.findByUsers_IdAndType(userId, tr.getType());
+            model.addAttribute("transaction", tr);
+            model.addAttribute("categories", categories);
+        }
         return "admin/transaction/update";
     }
+
+    @PostMapping("/transaction/update")
+    public String updateTransaction(@ModelAttribute TransactionEntity transactionForm) {
+        TransactionEntity trans = transactionRepository.findById(transactionForm.getId()).orElseThrow();
+
+        trans.setAmount(transactionForm.getAmount());
+        trans.setTransactionDate(transactionForm.getTransactionDate());
+        trans.setNotes(transactionForm.getNotes());
+        trans.setCategory(transactionForm.getCategory());
+
+        transactionRepository.save(trans);
+        return "redirect:/admin/show/transaction";
+    }
+
 
     @GetMapping("/user")
     public String getUserPage(Model model,
