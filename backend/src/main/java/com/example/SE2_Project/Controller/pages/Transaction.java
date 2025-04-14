@@ -1,5 +1,6 @@
 package com.example.SE2_Project.Controller.pages;
 
+import com.example.SE2_Project.Dto.MonthlySummaryDTO;
 import com.example.SE2_Project.Entity.CategoryEntity;
 import com.example.SE2_Project.Entity.TransactionEntity;
 import com.example.SE2_Project.Repository.CategoryRepository;
@@ -150,13 +151,15 @@ public class Transaction {
     }
 
     @GetMapping("/incomeExpensePercentage")
-    public String getIncomeAndExpensePercentage(Model model) {
-        Map<String, BigDecimal> report = transactionService.getIncomeAndExpensePercentage();
+    public String getIncomeAndExpensePercentage(@RequestParam(value = "month", required = false, defaultValue = "3") int month,
+                                                @RequestParam(value = "year", required = false, defaultValue = "2025") int year,
+                                                Model model) {
 
-        model.addAttribute("totalIncome", report.get("totalIncome"));
-        model.addAttribute("totalExpense", report.get("totalExpense"));
-        model.addAttribute("incomePercentage", report.get("incomePercentage"));
-        model.addAttribute("expensePercentage", report.get("expensePercentage"));
+        List<Map<String, Object>> report = transactionService.getCategoryIncomeReport(month, year);
+        model.addAttribute("report", report);
+        model.addAttribute("month" , month);
+        model.addAttribute("year" , year);
+
 
         return "incomeExpensePercentage";
     }
@@ -171,9 +174,20 @@ public class Transaction {
         model.addAttribute("report", report);
         model.addAttribute("month", month);
         model.addAttribute("year", year);
+        model.addAttribute("reportType", "expense");
 
         return "report/categoryExpenseReport";
     }
+
+    @ResponseBody
+    @GetMapping("/incomeChartData")
+    public List<Map<String, Object>> getIncomeChartData(
+            @RequestParam("month") int month,
+            @RequestParam("year") int year) {
+
+        return transactionService.getCategoryIncomeReport(month, year);
+    }
+
 
     @GetMapping("/categoryIncomeReport")
     public String getCategoryIncomeReport(
@@ -186,7 +200,24 @@ public class Transaction {
         model.addAttribute("report", report);
         model.addAttribute("month", month);
         model.addAttribute("year", year);
+        model.addAttribute("reportType", "income");
 
-        return "categoryIncomeReport";
+        return "report/categoryExpenseReport";
+    }
+
+    @GetMapping("/monthly-summary")
+    public String getMonthlySummary(
+            @RequestParam(value = "year", required = false) Integer year,
+            Model model) {
+
+        if (year == null) {
+            year = LocalDate.now().getYear();  // Lấy năm hiện tại nếu không được truyền vào
+        }
+
+        List<MonthlySummaryDTO> monthlySummary = transactionService.getMonthlySummary(year);
+        model.addAttribute("summary", monthlySummary);
+        model.addAttribute("year", year);
+
+        return "report/monthlySummary";
     }
 }

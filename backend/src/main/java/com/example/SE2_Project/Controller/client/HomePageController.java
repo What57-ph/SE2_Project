@@ -5,10 +5,16 @@ import com.example.SE2_Project.Entity.TransactionEntity;
 import com.example.SE2_Project.Service.CategoryService;
 import com.example.SE2_Project.Service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Set;
@@ -23,13 +29,35 @@ public class HomePageController {
 
 
     @GetMapping("/transactions")
-    public String expensePage(Model model) {
-        List<TransactionEntity> transactions = transactionService.getTransactionsForCurrentUser();
-        Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
-        model.addAttribute("transactions", transactions);
-        model.addAttribute("categories", categories);
+    public String expensePage(Model model,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "7") int size,
+                              @RequestParam(defaultValue = "transactionDate,asc") String sort) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Tách field và thứ tự
+        String[] sortParams = sort.split(",");
+        String sortField = sortParams[0];
+        String sortOrder = sortParams.length > 1 ? sortParams[1] : "asc";
+
+        // Tạo sort đúng cách
+        Sort sortObj = sortOrder.equalsIgnoreCase("desc")
+                ? Sort.by(sortField).descending()
+                : Sort.by(sortField).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sortObj);
+
+        Page<TransactionEntity> transactionPage = transactionService.getTransactionsForUserPaginated(username, pageable);
+
+        model.addAttribute("transactionPage", transactionPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", transactionPage.getTotalPages());
+        model.addAttribute("sort", sort); // để Thymeleaf dùng lại
+
         return "expenses/index";
     }
+
     @GetMapping("/transactionType")
     public String transactionTypePage(Model model){
         List<TransactionEntity> expensesList=transactionService.findTransactionByTypeAndUserId("EXPENSE");

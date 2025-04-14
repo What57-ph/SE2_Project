@@ -1,6 +1,8 @@
 package com.example.SE2_Project.Repository;
 
 import com.example.SE2_Project.Entity.TransactionEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
+    Page<TransactionEntity> findByUser_Username(String username, Pageable pageable);
     List<TransactionEntity> findByUserUsername(String username);
 
     @Query("SELECT t FROM TransactionEntity t WHERE " +
@@ -25,20 +28,19 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             "t.type = :type")
     List<TransactionEntity> findByAmountAndType(BigDecimal minAmount, BigDecimal maxAmount, String type);
 
-    @Query("SELECT EXTRACT(MONTH FROM t.transactionDate) AS month, " +
-            "EXTRACT(YEAR FROM t.transactionDate) AS year, " +
+    @Query("SELECT MONTH(t.transactionDate) AS month, " +
+            "YEAR(t.transactionDate) AS year, " +
             "COALESCE(t.category.name, 'UNKNOWN') AS category, " +
             "SUM(t.amount) AS totalAmount, " +
-            "(SUM(t.amount) / COALESCE((SELECT SUM(t2.amount) FROM TransactionEntity t2 " +
-            "WHERE EXTRACT(MONTH FROM t2.transactionDate) = :month " +
-            "AND EXTRACT(YEAR FROM t2.transactionDate) = :year " +
-            "AND t2.type = 'INCOME' AND t2.user.id = :userId), 1)) * 100 AS categoryPercentage " +
+            "(SUM(t.amount) / COALESCE((SELECT SUM(t2.amount) FROM TransactionEntity t2 WHERE " +
+            "MONTH(t2.transactionDate) = :month AND " +
+            "YEAR(t2.transactionDate) = :year AND t2.type = 'INCOME' AND t2.user.id = :userId), 1)) * 100 " +
+            "AS categoryPercentage " +
             "FROM TransactionEntity t " +
-            "WHERE t.type = 'INCOME' " +
-            "AND EXTRACT(MONTH FROM t.transactionDate) = :month " +
-            "AND EXTRACT(YEAR FROM t.transactionDate) = :year " +
+            "WHERE t.type = 'INCOME' AND t.transactionDate IS NOT NULL " +
+            "AND MONTH(t.transactionDate) = :month AND YEAR(t.transactionDate) = :year " +
             "AND t.user.id = :userId " +
-            "GROUP BY EXTRACT(MONTH FROM t.transactionDate), EXTRACT(YEAR FROM t.transactionDate), t.category.name " +
+            "GROUP BY MONTH(t.transactionDate), YEAR(t.transactionDate), t.category.name " +
             "ORDER BY category")
     List<Object[]> findCategoryIncomeReport(@Param("month") int month,
                                             @Param("year") int year,
@@ -87,5 +89,11 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             "FROM TransactionEntity t WHERE t.user.id = :userId")
     List<Object[]> findIncomeAndExpensePercentage(@Param("userId") Long userId);
     List<TransactionEntity> findByTypeAndUserId(String type,Long userId);
+
+    @Query("SELECT FUNCTION('MONTH', t.transactionDate) AS month, t.type, SUM(t.amount) " +
+            "FROM TransactionEntity t " +
+            "WHERE FUNCTION('YEAR', t.transactionDate) = :year AND t.status = true " +
+            "GROUP BY FUNCTION('MONTH', t.transactionDate), t.type")
+    List<Object[]> getMonthlyIncomeAndExpense(@Param("year") int year);
 
 }

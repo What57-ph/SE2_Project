@@ -24,8 +24,10 @@ public class LoginService {
         @Autowired
         private PasswordEncoder passwordEncoder;
 
+
      @Transactional
          public UserEntity registerUser(UserDto userDTO) {
+
             if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
                 throw new RuntimeException("Username đã tồn tại!");
             }

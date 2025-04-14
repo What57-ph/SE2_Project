@@ -2,6 +2,7 @@ package com.example.SE2_Project.Service;
 
 import com.example.SE2_Project.Dto.ExpenseTransactionDto;
 import com.example.SE2_Project.Dto.IncomeTransactionDto;
+import com.example.SE2_Project.Dto.MonthlySummaryDTO;
 import com.example.SE2_Project.Entity.TransactionEntity;
 import com.example.SE2_Project.Entity.UserEntity;
 import com.example.SE2_Project.Entity.CategoryEntity;
@@ -10,11 +11,17 @@ import com.example.SE2_Project.Repository.TransactionRepository;
 import com.example.SE2_Project.Repository.UserRepository;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.*;
 
 @Service
@@ -72,6 +79,12 @@ public class TransactionService {
 
         transactionRepository.save(transaction);
     }
+
+    public Page<TransactionEntity> getTransactionsForUserPaginated(String username, Pageable pageable) {
+        return transactionRepository.findByUser_Username(username, pageable);
+    }
+
+
 
     public TransactionEntity updateIncome(long id, IncomeTransactionDto transactionEntity) {
         Optional<TransactionEntity> transactionSearch = transactionRepository.findById(id);
@@ -161,8 +174,7 @@ public class TransactionService {
         return transactionRepository.findByAmountAndType(minAmount, maxAmount, type);
     }
     public List<Map<String, Object>> getCategoryIncomeReport(int month, int year) {
-
-        Long userId = userService.getCurrentUserId();  // 🟢 Tìm userId dựa trên username
+        Long userId = userService.getCurrentUserId();
         List<Object[]> result = transactionRepository.findCategoryIncomeReport(month, year, userId);
 
         List<Map<String, Object>> responseList = new ArrayList<>();
@@ -179,6 +191,8 @@ public class TransactionService {
         }
         return responseList;
     }
+
+
 
     public List<Map<String, Object>> getCategoryExpenseReport(int month, int year) {
         Long userId = userService.getCurrentUserId();
@@ -263,5 +277,31 @@ public class TransactionService {
         }
         Long userId=currentUser.get().getId();
         return this.transactionRepository.findByTypeAndUserId(type,userId);
+    }
+
+    public List<MonthlySummaryDTO> getMonthlySummary(int year) {
+        List<Object[]> rawData = transactionRepository.getMonthlyIncomeAndExpense(year);
+
+        // Khởi tạo dữ liệu mặc định 12 tháng
+        Map<Integer, MonthlySummaryDTO> map = new HashMap<>();
+        for (int i = 1; i <= 12; i++) {
+            String monthName = Month.of(i).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+            map.put(i, new MonthlySummaryDTO(monthName));
+        }
+
+        for (Object[] row : rawData) {
+            int month = (int) row[0];
+            String type = (String) row[1];
+            BigDecimal amount = (BigDecimal) row[2];
+
+            MonthlySummaryDTO dto = map.get(month);
+            if ("income".equalsIgnoreCase(type)) {
+                dto.setIncome(amount);
+            } else if ("expense".equalsIgnoreCase(type)) {
+                dto.setExpense(amount);
+            }
+        }
+
+        return new ArrayList<>(map.values());
     }
 }

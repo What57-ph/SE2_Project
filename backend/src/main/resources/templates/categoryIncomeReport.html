@@ -1,76 +1,90 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Category Income Report</title>
     <meta charset="UTF-8">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Category Report</title>
     <style>
-        canvas {
-            max-width: 600px;
-            max-height: 400px;
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .filter-form {
+            width: 300px;
+            margin: 0 auto;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .filter-form select,
+        .filter-form input[type="submit"] {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        table {
+            width: 60%;
             margin: auto;
-            display: block;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #aaa;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-<h2>Category Income Report</h2>
 
-<form action="/transactions/categoryIncomeReport" method="get">
-    <label for="month">Month:</label>
-    <input type="number" id="month" name="month" min="1" max="12" required>
+<h2 th:text="'Báo cáo theo danh mục - ' + ${reportType == 'income' ? 'Thu nhập' : 'Chi tiêu'}
+            + ' - Tháng ' + ${month} + ' / ' + ${year}">Báo cáo</h2>
 
-    <label for="year">Year:</label>
-    <input type="number" id="year" name="year" min="2000" required>
+<!-- Form chọn tháng và năm -->
+<div class="filter-form">
+    <form th:action="@{/categoryIncomeReport}" method="get">
+        <label>Tháng:</label>
+        <select name="month">
+            <option th:each="m : ${#numbers.sequence(1,12)}"
+                    th:value="${m}"
+                    th:text="${m}"
+                    th:selected="${m == month}"></option>
+        </select>
 
-    <button type="submit">View Report</button>
-</form>
+        <label>Năm:</label>
+        <select name="year">
+            <option th:each="y : ${#numbers.sequence(2020, 2030)}"
+                    th:value="${y}"
+                    th:text="${y}"
+                    th:selected="${y == year}"></option>
+        </select>
 
-<hr>
+        <input type="submit" value="Lọc">
+    </form>
+</div>
 
-<h3>Report for <span th:text="${month}"></span>/<span th:text="${year}"></span></h3>
-
-<table border="1">
+<!-- Bảng dữ liệu -->
+<table>
     <thead>
     <tr>
-        <th>Category</th>
-        <th>Total Income</th>
-        <th>Percentage</th>
+        <th>Danh mục</th>
+        <th th:text="${reportType == 'income' ? 'Tổng thu nhập' : 'Tổng chi tiêu'}"></th>
+        <th>Phần trăm</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="item : ${categoryIncomeReport}">
-        <td th:text="${item.category}"></td>
-        <td th:text="${item.totalIncome}"></td>
-        <td th:text="${item.incomePercentage + '%'}"></td>
+    <tr th:each="row : ${report}">
+        <td th:text="${row.category}">Category</td>
+        <td th:text="${reportType == 'income' ? row.totalIncome : row.totalExpense} + ' VND'">Amount</td>
+        <td th:text="${#numbers.formatDecimal(reportType == 'income' ? row.incomePercentage : row.expensePercentage, 1, 2)} + '%'">Percentage</td>
     </tr>
     </tbody>
 </table>
 
-<canvas id="incomeChart"></canvas>
-
-<script th:inline="javascript">
-    var categories = /*[[${categoryIncomeReport != null ? categoryIncomeReport.![category] : []}]]*/ [];
-    var values = /*[[${categoryIncomeReport != null ? categoryIncomeReport.![totalIncome] : []}]]*/ [];
-
-    var ctx = document.getElementById("incomeChart").getContext("2d");
-    new Chart(ctx, {
-        type: "pie",
-        data: {
-            labels: categories,
-            datasets: [{
-                data: values,
-                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#F44336"]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: "top" },
-                title: { display: true, text: "Income by Category" }
-            }
-        }
-    });
-</script>
 </body>
 </html>

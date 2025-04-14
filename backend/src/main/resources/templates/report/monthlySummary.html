@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Monthly Summary Report</title>
+</head>
+<body>
+<h1>Monthly Summary - [[${year}]]</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Month</th>
+        <th>Income</th>
+        <th>Expense</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${summary}">
+        <td th:text="${item.month}">January</td>
+        <td th:text="${item.income}">0</td>
+        <td th:text="${item.expense}">0</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
