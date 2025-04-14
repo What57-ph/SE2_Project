@@ -4,89 +4,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MoneyNote - Add Expense</title>
+    <title>MoneyNote - Expense Tracker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/fdd309eb2f.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" th:href="@{/css/expense.css}">
-    <script th:src="@{/js/expense.js}" type="module"></script>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --danger-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .expense-body-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem !important;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        h1:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--success-color);
+        }
+
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            border: none;
+            padding: 1rem;
+        }
+
+        .table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .income {
+            color: #2ecc71;
+            font-weight: 500;
+        }
+
+        .expense {
+            color: var(--danger-color);
+            font-weight: 500;
+        }
+
+        .btn-add {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .btn-add i {
+            margin-right: 0.5rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .update-btn {
+            color: var(--primary-color);
+        }
+
+        .delete-btn {
+            color: var(--danger-color);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .pagination .page-link {
+            color: var(--primary-color);
+            border-radius: var(--border-radius);
+            margin: 0 0.25rem;
+            border: 1px solid #dee2e6;
+        }
+
+        .modal-content {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .modal-title {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .form-control, .form-select {
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1rem;
+            border: 1px solid #ced4da;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        }
+
+        .btn-modal {
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-modal-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-modal-secondary:hover {
+            background-color: #5a6268;
+            color: white;
+        }
+
+        .btn-modal-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-modal-primary:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-modal-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-modal-danger:hover {
+            background-color: #e5177a;
+            color: white;
+        }
+
+        .sort-link {
+            color: white;
+            text-decoration: none;
+            margin: 0 0.25rem;
+        }
+
+        .sort-link:hover {
+            text-decoration: underline;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @media (max-width: 768px) {
+            .table thead {
+                display: none;
+            }
+
+            .table tbody tr {
+                display: block;
+                margin-bottom: 1rem;
+                border-radius: var(--border-radius);
+                box-shadow: var(--box-shadow);
+            }
+
+            .table tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #e9ecef;
+            }
+
+            .table tbody td::before {
+                content: attr(data-label);
+                font-weight: 500;
+                margin-right: 1rem;
+                color: var(--primary-color);
+            }
+
+            .action-buttons {
+                display: flex;
+                justify-content: flex-end;
+                gap: 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body class="sb-nav-fixed">
 <main layout:fragment="content">
-    <div class="expense-body-content p-5">
-        <h1 class="h1 text-center">Expenses in March 2025</h1>
-        <table class="table text-center mt-5">
-            <thead>
-            <tr>
+    <div class="expense-body-content p-4">
+        <h1 class="text-center mb-4">Expenses in March 2025</h1>
 
-                <th scope="col">Type of category</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Date</th>
-                <th scope="col">Update</th>
-                <th scope="col">Delete</th>
-            </tr>
-            </thead>
-            <tbody >
-            <tr th:each="transaction : ${transactions}">
-                <th class="align-middle" scope="row" th:text="${transaction.categoryName}"></th>  <!-- Hiển thị categoryName -->
-                <td class="align-middle" th:text="${transaction.amount}"></td>
-                <td class="align-middle" th:text="${transaction.transactionDate}"></td>
-                <td class="align-middle">
-                    <button type="button" class="btn btn-link p-0 m-0 align-middle update-btn fs-3"
-                            data-bs-toggle="modal" data-bs-target="#updateModal"
-                            th:data-id="${transaction.id}"
-                            th:data-category-id="${transaction.category.id}"
-                            th:data-amount="${transaction.amount}"
-                            th:data-date="${transaction.transactionDate}">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                </td>
-                <td class="align-middle">
-                    <form th:action="@{/transactions/delete/{id}(id=${transaction.id})}" method="post">
-                        <button type="submit" class="btn btn-link p-0 m-0 text-danger align-middle fs-3">
-                            <i class="fa-solid fa-trash"></i>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>
+                        <a href="#" th:href="@{/user/transactions(sort='amount,asc', page=${currentPage})}" class="sort-link">Amount ↑</a> |
+                        <a href="#" th:href="@{/user/transactions(sort='amount,desc', page=${currentPage})}" class="sort-link">↓</a>
+                    </th>
+                    <th>
+                        <a href="#" th:href="@{/user/transactions(sort='transactionDate,asc', page=${currentPage})}" class="sort-link">Date ↑</a> |
+                        <a href="#" th:href="@{/user/transactions(sort='transactionDate,desc', page=${currentPage})}" class="sort-link">↓</a>
+                    </th>
+                    <th>Type</th>
+                    <th colspan="2">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="transaction : ${transactionPage.content}">
+                    <td data-label="Category" th:text="${transaction.categoryName}"></td>
+                    <td data-label="Amount" th:text="${#numbers.formatDecimal(transaction.amount, 1, 2, 'COMMA')}"></td>
+                    <td data-label="Date" th:text="${#temporals.format(transaction.transactionDate, 'yyyy-MM-dd')}"></td>
+                    <td data-label="Type">
+                            <span th:class="${transaction.type == 'INCOME' ? 'income' : 'expense'}"
+                                  th:text="${transaction.type}"></span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-link p-0 action-btn update-btn"
+                                data-bs-toggle="modal" data-bs-target="#updateModal"
+                                th:data-id="${transaction.id}"
+                                th:data-category-id="${transaction.category.id}"
+                                th:data-amount="${transaction.amount}"
+                                th:data-date="${transaction.transactionDate}">
+                            <i class="fa-solid fa-pen-to-square"></i>
                         </button>
-                    </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/transactions/delete/{id}(id=${transaction.id})}" method="post">
+                            <button type="submit" class="btn btn-link p-0 action-btn delete-btn">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-                    <!-- Modal for delete confirmation -->
-                </td>
-            </tr>
+        <!-- Add Transaction Button -->
+        <div class="d-flex justify-content-center mt-4">
+            <a href="/transactions/addNew" class="btn btn-add text-white">
+                <i class="fa-solid fa-plus"></i>
+                Add New Transaction
+            </a>
+        </div>
 
-            </tbody>
-        </table>
-        <nav aria-label="Page navigation example" class="row justify-content-center">
-            <ul class="pagination p-3 rounded-5">
-                <li class="page-item "><a></a></li>
-                <li class="page-item"><a></a></li>
+        <!-- Pagination -->
+        <div class="mt-4 d-flex justify-content-center">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link" th:href="@{/user/transactions(page=${currentPage - 1}, sort=${sort})}">Previous</a>
+                    </li>
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{/user/transactions(page=${i}, sort=${sort})}"
+                           th:text="${i + 1}">
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{/user/transactions(page=${currentPage + 1}, sort=${sort})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
 
-            </ul>
-        </nav>
-        <a href="/transactions/addNew">
-            <button class="add-button btn fs-4 px-4 mt-5 position-absolute start-50 d-flex align=align-items-center">
-                <span><i class="fa-solid fa-plus "></i></span>
-                <span class="ps-3 fs-4">Add new Transaction</span>
-            </button>
-        </a>
-
-        <!-- Button trigger modal -->
-
-
-        <!-- Modal -->
-        <!-- update modal -->
-        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content ">
+        <!-- Update Modal -->
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-1 px-5" >Update</h1>
+                        <h5 class="modal-title">Update Transaction</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body px-5 ">
+                    <div class="modal-body">
                         <form id="updateForm" method="post" th:action="@{/transactions/update}" th:object="${transaction}">
                             <input type="hidden" name="id" id="transactionId">
 
-                            <div class="form-group mb-3">
-                                <label class="fs-4">Type of category</label>
-                                <select class="form-control fs-4 mt-1" id="categoryId" name="categoryId">
+                            <div class="mb-3">
+                                <label for="categoryId" class="form-label">Category</label>
+                                <select class="form-select" id="categoryId" name="categoryId" required>
                                     <option th:each="category : ${categories}"
                                             th:value="${category.id}"
                                             th:text="${category.name}">
@@ -94,58 +370,52 @@
                                 </select>
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label class="fs-4">Amount</label>
-                                <input type="text" class="form-control fs-4 mt-1" id="amount" name="amount">
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="fs-4">Date</label>
-                                <input type="date" class="form-control fs-4 mt-1" id="createdDate" name="createdDate">
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">Amount</label>
+                                <input type="number" class="form-control" id="amount" name="amount" required>
                             </div>
 
-                            <div class="modal-footer mt-5 px-0 d-flex justify-content-between border-top-0">
-                                <button type="button" class="btn btn-secondary fs-4 p-3" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-danger fs-4 p-3">Update</button>
+                            <div class="mb-3">
+                                <label for="createdDate" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="createdDate" name="createdDate" required>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-modal btn-modal-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-modal btn-modal-primary">Update</button>
                             </div>
                         </form>
-
                     </div>
-
                 </div>
             </div>
         </div>
-        <!-- delete modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content bg-white border-5 border-success rounded-4 p-3">
-                    <div class="modal-header border-bottom-0">
-                        <h1 class="modal-title fs-2 px-4 fw-medium" >Delete Confirmation</h1>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirm Deletion</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body px-5 ">
-                        <form>
-                            <p class="fs-3 text-secondary">Are you sure want to delete this item?</p>
-                            <div class="modal-footer mt-5 px-0 d-flex justify-content-evenly border-top-0">
-                                <button type="submit" class="btn btn-secondary fs-4 p-3 rounded-5" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-danger fs-4 p-3 rounded-5">Delete</button>
-                            </div>
-                        </form>
-
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this transaction? This action cannot be undone.</p>
                     </div>
-
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-modal btn-modal-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-modal btn-modal-danger">Delete</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <script th:inline="javascript">
-        console.log("run js")
-        document.addEventListener("DOMContentLoaded", function () {
 
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            // Update modal form population
             document.querySelectorAll(".update-btn").forEach(button => {
                 button.addEventListener("click", function () {
-                    //                    const id = this.getAttribute("data-id");
                     const id = this.getAttribute("data-id");
-                    console.log("ID:",id)
                     const categoryId = this.getAttribute("data-category-id");
                     const amount = this.getAttribute("data-amount");
                     const createdDate = this.getAttribute("data-date");
@@ -156,12 +426,24 @@
                     document.querySelector("#createdDate").value = createdDate;
                 });
             });
-        });
 
+            // Responsive table adjustments
+            function adjustTableForMobile() {
+                if (window.innerWidth < 768) {
+                    const headers = document.querySelectorAll('thead th');
+                    const headerTexts = Array.from(headers).map(header => header.textContent);
+
+                    document.querySelectorAll('tbody td').forEach((cell, index) => {
+                        const headerIndex = index % headerTexts.length;
+                        cell.setAttribute('data-label', headerTexts[headerIndex]);
+                    });
+                }
+            }
+
+            window.addEventListener('resize', adjustTableForMobile);
+            adjustTableForMobile();
+        });
     </script>
 </main>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-
 </body>
 </html>

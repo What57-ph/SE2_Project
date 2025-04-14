@@ -55,6 +55,6 @@ public class CategoryController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/category/add";
         }
-        return "redirect:/category/all";
+        return "redirect:/transactions/addNew";
     }
 }

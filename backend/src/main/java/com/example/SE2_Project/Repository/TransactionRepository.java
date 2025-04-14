@@ -1,6 +1,8 @@
 package com.example.SE2_Project.Repository;
 
 import com.example.SE2_Project.Entity.TransactionEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
+    Page<TransactionEntity> findByUser_Username(String username, Pageable pageable);
     List<TransactionEntity> findByUserUsername(String username);
 
     @Query("SELECT t FROM TransactionEntity t WHERE " +

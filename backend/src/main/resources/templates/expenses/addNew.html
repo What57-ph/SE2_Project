@@ -9,14 +9,23 @@
     <script src="https://kit.fontawesome.com/fdd309eb2f.js" crossorigin="anonymous"></script>
 
     <style>
-        #add-category-btn:hover,
-        #add-category-btn:focus {
-            /* Overrides btn-outline-secondary hover colors */
-            /* Use your preferred colors */
-            background-color: #5a6268;
-            color: #fff; /* White text on hover */
-            border-color: #5a6268;
-            box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.5); /* Optional: Adjust focus shadow */
+        .custom-add-btn {
+            background-color: #17a2b8;
+            margin-top: 20px;
+            color: white;
+            font-weight: 500;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 16px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .custom-add-btn:hover {
+            background-color: #138496;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -60,8 +69,8 @@
                     <option value="">-- Select Category --</option>
                     <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
                 </select>
-                <a id="add-category-btn" href="http://localhost:8080/category/add" class="btn btn-outline-secondary" type="button" title="Add New Category">
-                    <i class="fa-solid fa-plus me-1"></i> Add
+                <a  id="add-category-btn" href="http://localhost:8080/category/add" class="btn custom-add-btn" type="button" title="Add New Category">
+                    <i class="fa-solid fa-plus me-1"></i> Add Category
                 </a>
             </div>
             <div>

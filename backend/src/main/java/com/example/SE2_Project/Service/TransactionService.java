@@ -11,6 +11,10 @@ import com.example.SE2_Project.Repository.TransactionRepository;
 import com.example.SE2_Project.Repository.UserRepository;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +79,12 @@ public class TransactionService {
 
         transactionRepository.save(transaction);
     }
+
+    public Page<TransactionEntity> getTransactionsForUserPaginated(String username, Pageable pageable) {
+        return transactionRepository.findByUser_Username(username, pageable);
+    }
+
+
 
     public TransactionEntity updateIncome(long id, IncomeTransactionDto transactionEntity) {
         Optional<TransactionEntity> transactionSearch = transactionRepository.findById(id);
