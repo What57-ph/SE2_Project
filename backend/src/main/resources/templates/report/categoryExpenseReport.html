@@ -2,10 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="./layout/clientLayout">
 <head>
-    <title>Expense Analytics Dashboard</title>
+    <title>Analytics Dashboard</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,34 +22,39 @@
     <div class="container animate__animated animate__fadeIn p-4">
         <div class="text-center mb-5">
             <h1 class="h2 fw-bold text-opacity-75">
-                <i class="fas fa-chart-pie me-2"></i>Expense Analytics Dashboard
+                <i class="fas fa-chart-pie me-2"></i>
+                <span th:text="${reportType == 'income'} ? 'Income' : 'Expense'">Report</span> Analytics Dashboard
             </h1>
-            <p class="lead text-muted">Visualize your spending patterns by category</p>
+            <p class="lead text-muted">Visualize your <span th:text="${reportType}">type</span> patterns by category</p>
         </div>
 
         <!-- Form chọn tháng & năm -->
         <div class="glass-card p-4 mb-5 mx-auto">
-            <form id="reportForm" method="get">
+            <form id="reportForm" method="get" th:action="@{/transactions/categoryExpenseReport}">
+                <input type="hidden" id="reportType" name="reportType" value="expense"/>
+
                 <div class="row g-3">
                     <div class="col-md-5">
                         <label for="month" class="form-label">Month</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white"><i class="fas fa-calendar-alt text-primary"></i></span>
-                            <input type="number" class="form-control" id="month" name="month" min="1" max="12" required placeholder="Select month">
+                            <input type="number" class="form-control" id="month" name="month" min="1" max="12" required placeholder="Select month" th:value="${month}">
                         </div>
                     </div>
                     <div class="col-md-5">
                         <label for="year" class="form-label">Year</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white"><i class="fas fa-calendar text-primary"></i></span>
-                            <input type="number" class="form-control" id="year" name="year" min="2000" required placeholder="Select year">
+                            <input type="number" class="form-control" id="year" name="year" min="2000" required placeholder="Select year" th:value="${year}">
                         </div>
                     </div>
                     <div class="col-md-2 d-flex align-items-end gap-2">
-                        <button type="button" class="btn btn-primary flex-grow-1 report-type-btn active" data-action="/transactions/categoryExpenseReport">
+                        <button type="button" class="btn btn-primary flex-grow-1 report-type-btn active"
+                                data-action="/transactions/categoryExpenseReport">
                             <i class="fas fa-money-bill-wave me-1"></i> Expense
                         </button>
-                        <button type="button" class="btn btn-outline-primary flex-grow-1 report-type-btn" data-action="/transactions/categoryIncomeReport">
+                        <button type="button" class="btn btn-outline-primary flex-grow-1 report-type-btn"
+                                data-action="/transactions/categoryIncomeReport">
                             <i class="fas fa-piggy-bank me-1"></i> Income
                         </button>
                     </div>
@@ -62,18 +66,23 @@
                 </div>
             </form>
         </div>
+
+        <!-- Display Report -->
         <div th:with="hasData=${report != null and !#lists.isEmpty(report)}" th:remove="tag">
             <div th:if="${hasData}" class="animate__animated animate__fadeInUp">
                 <div class="text-center mb-4">
-                    <h3 class="mb-3">Expense Report for <span class="text-primary" th:text="${month} + '/' + ${year}"></span></h3>
+                    <h3 class="mb-3">
+                        <span th:text="${reportType == 'expense' ? 'Expense' : 'Income'} + ' Report for ' + ${month} + '/' + ${year}"></span>
+                    </h3>
                     <hr/>
                 </div>
 
                 <div class="row g-4">
+                    <!-- Table -->
                     <div class="col-lg-6">
                         <div class="glass-card p-0">
                             <div class="table-container">
-                                <table class="table table-hover table-bordered m-0 table-striped align-middle ">
+                                <table class="table table-hover table-bordered m-0 table-striped align-middle">
                                     <thead>
                                     <tr class="table-dark">
                                         <th><i class="fas fa-tags me-2"></i>Category</th>
@@ -84,14 +93,19 @@
                                     <tbody>
                                     <tr th:each="row : ${report}">
                                         <td th:text="${row.category}"></td>
-                                        <td class="text-end" th:text="${'$' + #numbers.formatDecimal(row.totalExpense, 1, 2, 'COMMA')}"></td>
-                                        <td class="text-end"><span class="percentage-badge text-success rounded-pill font-weight-bold border-none" th:text="${row.expensePercentage} + '%'"></span></td>
+                                        <td th:text="${reportType == 'expense' ? '$' + #numbers.formatDecimal(row.totalExpense, 1, 2, 'COMMA') : '$' + #numbers.formatDecimal(row.totalIncome, 1, 2, 'COMMA')}"></td>
+                                        <td class="text-end">
+    <span class="percentage-badge text-success rounded-pill font-weight-bold border-none"
+          th:text="${reportType == 'expense' ? row.expensePercentage + '%' : row.incomePercentage + '%'}"></span>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Chart -->
                     <div class="col-lg-6">
                         <div class="glass-card p-4 h-100">
                             <div class="chart-container">
@@ -99,58 +113,49 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-            <!--        //situation that not have or not found data-->
+
+            <!-- No Data Message -->
             <div th:unless="${hasData}" class="glass-card p-5 text-center animate__animated animate__fadeIn">
                 <div class="no-data-icon mb-3">
                     <i class="fas fa-exclamation-triangle fa-4x text-warning"></i>
                 </div>
                 <h4 class="text-muted mb-3">This period does not have any transactions.</h4>
-                <p class="text-muted">Please select other period to generate the expense report.</p>
+                <p class="text-muted">Please select another period to generate the report.</p>
             </div>
         </div>
 
+        <!-- Chart JS -->
         <script th:inline="javascript">
-
-            document.addEventListener('DOMContentLoaded', function() {
-                // Initialize arrays
-                let categories = [];
-                let expenses = [];
-                let colors = [
+            document.addEventListener('DOMContentLoaded', function () {
+                const categories = [];
+                const amounts = [];
+                const colors = [
                     '#6c5ce7', '#00b894', '#fd79a8', '#fdcb6e', '#0984e3',
                     '#e17055', '#d63031', '#00cec9', '#a29bfe', '#74b9ff',
                     '#ffeaa7', '#fab1a0', '#55efc4', '#81ecec', '#fd79a8'
                 ];
 
-                // Get Thymeleaf data
-                let reportData = /*[[${report}]]*/ [];
+                const reportData = /*[[${report}]]*/ [];
 
-                console.log("Report data from Thymeleaf:", reportData);
-
-                if (reportData && Array.isArray(reportData)) {
-                    reportData.forEach(function(row) {
-                        if (row && row.category && row.totalExpense) {
-                            categories.push(row.category);
-                            expenses.push(row.totalExpense);
-                        }
-                    });
-                }
-
-                console.log("Processed categories:", categories);
-                console.log("Processed expenses:", expenses);
+                reportData.forEach(function (row) {
+                    if (row && row.category) {
+                        categories.push(row.category);
+                        amounts.push(row.totalExpense || row.totalIncome);
+                    }
+                });
 
                 if (categories.length > 0) {
-                    var ctx = document.getElementById("categoryExpenseChart");
+                    const ctx = document.getElementById("categoryExpenseChart");
                     if (ctx) {
                         new Chart(ctx.getContext("2d"), {
                             type: "bar",
                             data: {
                                 labels: categories,
                                 datasets: [{
-                                    label: "Total Expense",
-                                    data: expenses,
+                                    label: "Total",
+                                    data: amounts,
                                     backgroundColor: colors,
                                     borderColor: "white",
                                     borderWidth: 2,
@@ -161,37 +166,34 @@
                                 responsive: true,
                                 maintainAspectRatio: false,
                                 plugins: {
-                                    legend: {
-                                        position: 'right'
+                                    legend: { position: 'right' }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
                                     }
-                                },scales: {
-                                    yAxes: [
-                                        {
-                                            ticks: {
-                                                beginAtZero: true
-                                            }
-                                        }
-                                    ]
                                 }
                             }
                         });
-                    } else {
-                        console.error("Canvas element not found");
                     }
-                } else {
-                    console.warn("No data available for chart");
                 }
             });
 
+            // Switch report type
+            document.querySelectorAll('.report-type-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    document.querySelectorAll('.report-type-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const action = this.getAttribute('data-action');
+                    document.getElementById('reportForm').setAttribute('action', action);
+
+                    const reportType = action.includes("Income") ? "income" : "expense";
+                    document.getElementById("reportType").value = reportType;
+                });
+            });
         </script>
     </div>
 </main>
-
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
 </body>
 </html>
