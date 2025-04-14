@@ -1,6 +1,9 @@
 package com.example.SE2_Project.Controller.admin;
 
+import com.example.SE2_Project.Entity.TransactionEntity;
 import com.example.SE2_Project.Entity.UserEntity;
+import com.example.SE2_Project.Repository.CategoryRepository;
+import com.example.SE2_Project.Repository.TransactionRepository;
 import com.example.SE2_Project.Repository.UserRepository;
 import com.example.SE2_Project.Service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,20 +25,28 @@ import static java.rmi.server.LogStream.log;
 public class DashboardController {
 
     private final UserRepository userRepository;
+    private final TransactionRepository transactionRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
 
-    public DashboardController(UserRepository userRepository) {
+    public DashboardController(UserRepository userRepository, TransactionRepository transactionRepository, CategoryRepository categoryRepository) {
         this.userRepository = userRepository;
+        this.transactionRepository = transactionRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("")
     public String getAdminPage(Model model) {
         long userCount = userRepository.count();
+        long transactionCount = transactionRepository.count();
+        long categoryCount = categoryRepository.count();
         model.addAttribute("userCount", userCount);
+        model.addAttribute("transactionCount", transactionCount);
+        model.addAttribute("categoryCount", categoryCount);
         return "admin/show";
     }
 
@@ -55,7 +66,9 @@ public class DashboardController {
     }
 
     @GetMapping("/transaction")
-    public String getTransactionPage() {
+    public String getTransactionPage(Model model) {
+        List<TransactionEntity> transactions = transactionRepository.findAll();
+        model.addAttribute("transactions", transactions);
         return "admin/transaction/transactionList";
     }
 

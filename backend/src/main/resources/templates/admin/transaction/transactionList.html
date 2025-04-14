@@ -23,12 +23,12 @@
     </ol>
   </nav>
 
-  <div class="container-fluid px-4 d-flex justify-content-between">
-    <h1 class="mt-2 header">Manage Transactions</h1>
-    <button class="btn rounded btn-primary h-75 mt-4">
-      <a href="" class="text-light text-decoration-none">Add New Transaction</a>
-    </button>
-  </div>
+<!--  <div class="container-fluid px-4 d-flex justify-content-between">-->
+<!--    <h1 class="mt-2 header">Manage Transactions</h1>-->
+<!--    <button class="btn rounded btn-primary h-75 mt-4">-->
+<!--      <a href="" class="text-light text-decoration-none">Add New Transaction</a>-->
+<!--    </button>-->
+<!--  </div>-->
 
   <div class="m-4 border rounded border-secondary-subtle shadow-sm">
     <div class="d-flex align-items-center border-2 border-danger bg-dark text-light rounded-top p-3">
@@ -54,62 +54,21 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <th>1</th>
-        <td>Mark</td>
-        <td>Education</td>
-        <td>1000$</td>
-        <td>Expense</td>
-        <td id="transactionTime"></td>
+      <tr th:each="tx : ${transactions}">
+        <th th:text="${tx.id}"></th>
+        <td th:text="${tx.user.name}">Mark</td>
+        <td th:text="${tx.category.name}">Education</td>
+        <td th:text="${tx.amount}">1000$</td>
+        <td th:text="${tx.type}">Expense</td>
+        <td th:text="${tx.transactionDate}"></td>
         <td>
               <span class="d-flex justify-content-center">
-                <a href=""><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
+                <a th:href="'transaction/update/' + ${tx.id}"><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
                 <button class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button>
               </span>
         </td>
       </tr>
-      <tr>
-        <th>1</th>
-        <td>Mark</td>
-        <td>Education</td>
-        <td>1000$</td>
-        <td>Expense</td>
-        <td id="transactionTime"></td>
-        <td>
-              <span class="d-flex justify-content-center">
-                <a href=""><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
-                <button class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button>
-              </span>
-        </td>
-      </tr>
-      <tr>
-        <th>1</th>
-        <td>Mark</td>
-        <td>Education</td>
-        <td>1000$</td>
-        <td>Expense</td>
-        <td id="transactionTime"></td>
-        <td>
-              <span class="d-flex justify-content-center">
-                <a href=""><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
-                <button class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button>
-              </span>
-        </td>
-      </tr>
-      <tr>
-        <th>1</th>
-        <td>Mark</td>
-        <td>Education</td>
-        <td>1000$</td>
-        <td>Expense</td>
-        <td id="transactionTime"></td>
-        <td>
-              <span class="d-flex justify-content-center">
-                <a href=""><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Edit</button></a>
-                <button class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i> Delete</button>
-              </span>
-        </td>
-      </tr>
+
       </tbody>
     </table>
   </div>
