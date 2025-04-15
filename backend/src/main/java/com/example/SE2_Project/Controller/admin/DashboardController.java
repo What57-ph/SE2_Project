@@ -1,11 +1,13 @@
 package com.example.SE2_Project.Controller.admin;
 
+import com.example.SE2_Project.Dto.CategoryDto;
 import com.example.SE2_Project.Entity.CategoryEntity;
 import com.example.SE2_Project.Entity.TransactionEntity;
 import com.example.SE2_Project.Entity.UserEntity;
 import com.example.SE2_Project.Repository.CategoryRepository;
 import com.example.SE2_Project.Repository.TransactionRepository;
 import com.example.SE2_Project.Repository.UserRepository;
+import com.example.SE2_Project.Service.CategoryService;
 import com.example.SE2_Project.Service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,8 @@ public class DashboardController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CategoryService categoryService;
 
     public DashboardController(UserRepository userRepository, TransactionRepository transactionRepository, CategoryRepository categoryRepository) {
         this.userRepository = userRepository;
@@ -50,18 +54,46 @@ public class DashboardController {
     }
 
     @GetMapping("/category")
-    public String getCategoryPage() {
+    public String getCategoryPage(Model model) {
+        List<CategoryEntity> categories = categoryRepository.findAll();
+        model.addAttribute("categories", categories);
         return "admin/category/categoryPage";
     }
 
     @GetMapping("/category/add")
     public String getCategoryAddPage() {
-        return "admin/category/add";
+        return "admin/category/addCategory";
     }
 
     @GetMapping("/category/update/{id}")
-    public String getUpdatePage(@PathVariable("id") Long id) {
+    public String getUpdatePage(@PathVariable("id") Long id, Model model) {
+        CategoryEntity category = categoryService.getCategoryById(id);
+        model.addAttribute("category", category);
         return "admin/category/update";
+    }
+
+    @PostMapping("/category/update/{id}")
+    public String updateCategory(@PathVariable Long id, @ModelAttribute CategoryDto categoryDto) {
+        CategoryEntity category = categoryRepository.findById(id).orElse(null);
+        if (category == null) {
+            // Nếu không tìm thấy, có thể redirect về 404 hoặc danh sách
+            return "redirect:/admin/show/category";
+        }
+        category.setName(categoryDto.getName());
+        category.setType(categoryDto.getType());
+        categoryRepository.save(category);
+        return "redirect:/admin/show/category";
+    }
+
+    @PostMapping("/category/delete/{id}")
+    public String deleteCategory(@PathVariable Long id) {
+        CategoryEntity category = categoryRepository.findById(id).orElse(null);
+        if (category != null){
+            category.getUsers().forEach(user -> user.getCategories().remove(category));
+            category.getUsers().clear(); // Cắt quan hệ ManyToMany trước
+            categoryRepository.delete(category);
+        }
+        return "redirect:/admin/show/category";
     }
 
     @GetMapping("/transaction")

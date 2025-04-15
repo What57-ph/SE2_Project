@@ -18,7 +18,7 @@
 <main layout:fragment="content">
   <div class="container mt-4">
     <h2 class="mb-3">Update Category</h2>
-    <form th:action="@{/category/update/{id}(id=${category.id})}" method="post">
+    <form th:action="@{/admin/show/category/update/{id}(id=${category.id})}" method="post">
       <input type="hidden" th:value="${category.id}" name="id">
       <div class="mb-3">
         <label for="name" class="form-label">Category Name</label>
@@ -39,7 +39,7 @@
         <input type="text" id="createdDate" class="form-control" th:value="${#temporals.format(category.createdDate, 'dd/MM/yyyy')}" disabled>
       </div>
       <button type="submit" class="btn btn-primary">Save Changes</button>
-      <a th:href="@{/category/all}" class="btn btn-secondary">Cancel</a>
+      <a th:href="@{/admin/show/category}" class="btn btn-secondary">Cancel</a>
     </form>
   </div>
 </main>
