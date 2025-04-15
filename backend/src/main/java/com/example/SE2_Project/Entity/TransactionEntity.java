@@ -26,7 +26,6 @@ public class TransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Đây là phương thức tự động tạo giá trị ID (Auto Increment)
     private Long id;
-
     @JsonSerialize(using = MoneySerializer.class)
     private BigDecimal amount;
     private String type;

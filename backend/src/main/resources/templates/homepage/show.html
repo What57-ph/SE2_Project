@@ -4,409 +4,393 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Admin Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-  <link th:href="@{/css/styles.css}" rel="stylesheet" />
-  <link th:href="@{/css/home.css}" rel="stylesheet" />
-  <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="sb-nav-fixed">
-
-
-  <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
     <a class="navbar-brand ps-3" href="/admin">MoneyNote</a>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
-      <i class="fas fa-bars"></i>
+        <i class="fas fa-bars"></i>
     </button>
     <!-- Navbar Search-->
     <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-      <div class="input-group">
-        <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-        <button class="btn btn-primary" id="btnNavbarSearch" type="button">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
-
-
+        <div class="input-group">
+            <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+            <button class="btn btn-primary" id="btnNavbarSearch" type="button">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
     </form>
-
     <!-- Navbar-->
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="fas fa-user fa-fw"></i>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="#!">Settings</a></li>
-          <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-          <li>
-            <hr class="dropdown-divider" />
-          </li>
-          <li>
-            <form method="post" action="/logout">
-              <input type="hidden" value="" />
-              <button type="submit" class="dropdown-item">Log out</button>
-            </form>
-          </li>
-        </ul>
-      </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user fa-fw"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#!">Settings</a></li>
+                <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
+                <li>
+                    <form method="post" action="/logout">
+                        <input type="hidden" value="" />
+                        <button type="submit" class="dropdown-item">Log out</button>
+                    </form>
+                </li>
+            </ul>
+        </li>
     </ul>
-  </nav>
-  <div id="layoutSidenav">
+</nav>
+<div id="layoutSidenav">
     <div id="layoutSidenav_nav">
-      <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-        <div class="sb-sidenav-menu">
-          <div class="nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
 
-              <a class="nav-link fs-5" href="/homepage/show">
-                  <div class="sb-nav-link-icon fs-5">
-                      <i class="fa-solid fa-house"></i>
-                  </div>
-                  Home
-              </a>
-              <a class="nav-link fs-5" href="/user/transactions">
-                  <div class="sb-nav-link-icon fs-5">
-                      <i class="fa-solid fa-money-bill-transfer"></i>
-                  </div>
-                  Transaction
-              </a>
-              <a class="nav-link fs-5" href="/user/transactionType">
-                  <div class="sb-nav-link-icon fs-5">
-                      <i class="fa-solid fa-money-bill-trend-up"></i>
-                  </div>
-                  Income/Expense
-              </a>
-              <a class="nav-link fs-5" href="/user/calendar">
-                  <div class="sb-nav-link-icon fs-5">
-                      <i class="fa-solid fa-calendar-days"></i>
-                  </div>
-                  Calendar
-              </a>
-              <a class="nav-link fs-5" href="/transactions/categoryExpenseReport">
-                  <div class="sb-nav-link-icon fs-5">
-                      <i class="fa-solid fa-chart-pie"></i>
-                  </div>
-                  Report
-              </a>
+                    <a class="nav-link fs-5" href="/homepage/show">
+                        <div class="sb-nav-link-icon fs-5">
+                            <i class="fa-solid fa-house"></i>
+                        </div>
+                        Home
+                    </a>
+                    <a class="nav-link fs-5" href="/user/transactions">
+                        <div class="sb-nav-link-icon fs-5">
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+                        </div>
+                        Transaction
+                    </a>
+                    <a class="nav-link fs-5" href="/user/transactionType">
+                        <div class="sb-nav-link-icon fs-5">
+                            <i class="fa-solid fa-money-bill-trend-up"></i>
+                        </div>
+                        Income/Expense
+                    </a>
+                    <a class="nav-link fs-5" href="/user/calendar">
+                        <div class="sb-nav-link-icon fs-5">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        Calendar
+                    </a>
+                    <a class="nav-link fs-5" href="/transactions/categoryExpenseReport">
+                        <div class="sb-nav-link-icon fs-5">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        Report
+                    </a>
 
-          </div>
-        </div>
-        <div class="sb-sidenav-footer">
-          <div class="small">MoneyNote Dashboard</div>
-        </div>
-      </nav>
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">MoneyNote Dashboard</div>
+            </div>
+        </nav>
     </div>
     <!--    Content here-->
     <div id="layoutSidenav_content">
-      <main>
-        <div class="container-fluid px-5 py-3 homepage-container">
-          <img th:src="@{/img/saving_icon.png}" />
-          <h2 class="mt-4">Personal Finance Tracker</h2>
-          <div class="mb-4 row gap-5">
-            <div class="col-xl-5 col-12">
-              <div class="border-bottom fw-medium shadow-sm p-2 px-4">
-                <i class="fa-solid fa-chart-column"></i> &nbsp; 2025 Balance
-              </div>
-              <div class="saving-chart-container mt-3 d-flex justify-content-center align-items-center">
-                <canvas class="saving-line-chart"></canvas>
-              </div>
+        <main>
+            <div class="container-fluid px-5 py-3 homepage-container">
+                <img th:src="@{/img/saving_icon.png}" />
+                <h2 class="mt-4">Personal Finance Tracker</h2>
+                <div class="mb-4 row gap-5">
+                    <div class="col-xl-5 col-12">
+                        <div class="border-bottom fw-medium shadow-sm p-2 px-4">
+                            <i class="fa-solid fa-chart-column"></i> &nbsp; 2025 Balance
+                        </div>
+                        <div class="saving-chart-container mt-3 d-flex justify-content-center align-items-center">
+                            <canvas class="saving-line-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="px-4 col-xl-3 col-12 mt-xl-0 mt-5">
+                        <div class="border-bottom fw-medium shadow-sm p-2 px-4">
+                            <i class="fa-solid fa-chart-pie"></i> &nbsp; Expense Breakdown
+                        </div>
+                        <div class="donut-chart-container position-relative mt-3 p-3">
+                            <canvas class="expense-donut-chart"></canvas>
+                            <div class="custom-legend-expense mt-3 d-flex flex-wrap justify-content-center gap-3 ms-3"></div>
+
+                            <div class="position-absolute top-50 start-50 translate-middle" style="z-index: -1;">
+                                <h2 class="fs-2 text-center expense-total"></h2>
+                                <p class="text-dark text-opacity-50 text-center">Total Amount</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-4 col-xl-3 col-12 mt-xl-0 mt-5">
+                        <div class="border-bottom fw-medium shadow-sm p-2 px-4">
+                            <i class="fa-solid fa-chart-pie"></i> &nbsp; Income Breakdown
+                        </div>
+                        <div class="donut-chart-container position-relative mt-3 p-3">
+                            <canvas class="income-donut-chart"></canvas>
+                            <div class="custom-legend-income mt-3 d-flex flex-wrap justify-content-center align-items-center ms-3"></div>
+                            <div class="position-absolute top-50 start-50 translate-middle"  style="z-index: -1;">
+                                <h2 class="fs-2 text-center income-total"></h2>
+                                <p class="text-dark text-opacity-50 text-center">Total Amount</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mt-5 total-each-period pt-5 pt-xl-0">
+                    <div>
+                        <h2 class="h2 fw-bold text-opacity-75">
+                            <i class="fa-solid fa-piggy-bank me-4"></i>Total Savings
+                        </h2>
+
+                        <ul class="list-unstyled text-decoration-none d-flex mt-4 border-bottom border-3 shadow-sm filter-options">
+                            <li class="active" onclick="setActive(this)"><i class="fa-solid fa-calendar-days pe-2"></i>All Months</li>
+                            <li onclick="setActive(this)"><i class="fa-solid fa-calendar-day pe-2"></i>Quarter 1</li>
+                            <li onclick="setActive(this)"><i class="fa-solid fa-calendar-day pe-2"></i>Quarter 2</li>
+                            <li onclick="setActive(this)"><i class="fa-solid fa-calendar-day pe-2"></i>Quarter 3</li>
+                            <li onclick="setActive(this)"><i class="fa-solid fa-calendar-day pe-2"></i>Quarter 4</li>
+                        </ul>
+                    </div>
+                    <div class="total-saving-review row gap-3">
+
+                    </div>
+
+                </div>
+                <div class="container mt-5">
+                    <h2 class="h2 fw-bold text-opacity-75">
+                        <i class="fa-solid fa-landmark me-4"></i>
+                        Transaction History
+                    </h2>
+                    <div class="mt-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                <thead class="fw-bold">
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Currency</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="transaction, iterStat : ${transactions}"
+                                    th:if="${iterStat.index} < 7">
+                                    <td th:text="${transaction.category.name}"></td>
+                                    <td th:text="${transaction.transactionDate}"></td>
+                                    <td th:text="${transaction.notes}"></td>
+                                    <td class="amount" th:text="${transaction.amount}"></td>
+                                    <td>VND</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
-
-              <!-- Biểu đồ Expense -->
-              <div class="px-4 col-xl-3 col-12 mt-xl-0 mt-5">
-                  <div class="border-bottom fw-medium shadow-sm p-2 px-4">
-                      <i class="fa-solid fa-chart-pie"></i> &nbsp; Expense Breakdown
-                  </div>
-                  <div class="donut-chart-container position-relative mt-3 p-3">
-                      <canvas class="expense-donut-chart"></canvas>
-                      <div class="custom-legend-expense mt-3 d-flex flex-wrap justify-content-center gap-3 ms-3"></div>
-                      <div class="position-absolute top-50 start-50 translate-middle" style="z-index: -1;">
-                          <h1 class="fs-1 text-center" th:text="'$' + ${totalExpense}">0</h1>
-                          <p class="text-dark text-opacity-50">Total Amount</p>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Biểu đồ Income -->
-              <div class="px-4 col-xl-3 col-12 mt-xl-0 mt-5">
-                  <div class="border-bottom fw-medium shadow-sm p-2 px-4">
-                      <i class="fa-solid fa-chart-pie"></i> &nbsp; Income Breakdown
-                  </div>
-                  <div class="donut-chart-container position-relative mt-3 p-3">
-                      <canvas class="income-donut-chart"></canvas>
-                      <div class="custom-legend-income mt-3 d-flex flex-wrap justify-content-center align-items-center ms-3"></div>
-                      <div class="position-absolute top-50 start-50 translate-middle" style="z-index: -1;">
-                          <h1 class="fs-1 text-center" th:text="'$' + ${totalIncome}">0</h1>
-                          <p class="text-dark text-opacity-50">Total Amount</p>
-                      </div>
-                  </div>
-              </div>
-
-          </div>
-          <div class="container mt-5 total-each-period pt-5 pt-xl-0">
-            <div>
-              <h2 class="h2 fw-bold text-opacity-75">
-                <i class="fa-solid fa-piggy-bank me-4"></i>Total Savings
-              </h2>
-
-              <ul class="list-unstyled text-decoration-none d-flex mt-4 border-bottom border-3 shadow-sm filter-options">
-                <li class="active" onclick="setActive(this)"><i class="fa-solid fa-calendar-days pe-2"></i>All Months</li>
-                <li onclick="setActive(this)"><i class="fa-solid fa-calendar-day pe-2"></i>Quarter 1</li>
-                <li onclick="setActive(this)"><i class="fa-solid fa-calendar-day pe-2"></i>Quarter 2</li>
-                <li onclick="setActive(this)"><i class="fa-solid fa-calendar-day pe-2"></i>Quarter 3</li>
-                <li onclick="setActive(this)"><i class="fa-solid fa-calendar-day pe-2"></i>Quarter 4</li>
-              </ul>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">
+                        Copyright &copy; MoneyNote 2025
+                    </div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
             </div>
-            <div class="total-saving-review row gap-3">
-
-            </div>
-            
-          </div>
-          <div class="container mt-5">
-            <h2 class="h2 fw-bold text-opacity-75">
-              <i class="fa-solid fa-landmark me-4"></i>
-              Transaction History
-            </h2>
-            <div class="mt-4">
-              <div class="card shadow-sm">
-                  <div class="card-body">
-                      <table class="table table-hover">
-                          <thead class="fw-bold">
-                              <tr>
-                                  <th>Category</th>
-                                  <th>Date</th>
-                                  <th>Description</th>
-                                  <th>Amount</th>
-                                  <th>Currency</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                  <td><i class="fas fa-cut text-success"></i> Beauty</td>
-                                  <td>31.12.2025</td>
-                                  <td>Haircut & Skincare Products</td>
-                                  <td class="text-danger">-45.00</td>
-                                  <td>USD</td>
-                              </tr>
-                              <tr>
-                                  <td><i class="fas fa-file-invoice text-info"></i> Bills & Fees</td>
-                                  <td>31.12.2025</td>
-                                  <td>Monthly Internet Subscription</td>
-                                  <td class="text-danger">-60.00</td>
-                                  <td>USD</td>
-                              </tr>
-                              <tr>
-                                  <td><i class="fas fa-car text-primary"></i> Car</td>
-                                  <td>31.12.2025</td>
-                                  <td>Fuel & Car Wash</td>
-                                  <td class="text-danger">-30.50</td>
-                                  <td>USD</td>
-                              </tr>
-                              <tr>
-                                  <td><i class="fas fa-graduation-cap text-warning"></i> Education</td>
-                                  <td>31.12.2025</td>
-                                  <td>Online Course Subscription</td>
-                                  <td class="text-success">+25.00</td>
-                                  <td>USD</td>
-                              </tr>
-                              <tr>
-                                  <td><i class="fas fa-film text-danger"></i> Entertainment</td>
-                                  <td>31.12.2025</td>
-                                  <td>Movie & Streaming Service</td>
-                                  <td class="text-success">+12.99</td>
-                                  <td>USD</td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </div>
-              </div>
-          </div>
-            
-          </div>
-
-        </div>
-      </main>
-      <footer class="py-4 bg-light mt-auto">
-        <div class="container-fluid px-4">
-          <div class="d-flex align-items-center justify-content-between small">
-            <div class="text-muted">
-              Copyright &copy; MoneyNote 2025
-            </div>
-            <div>
-              <a href="#">Privacy Policy</a>
-              &middot;
-              <a href="#">Terms &amp; Conditions</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+        </footer>
     </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <script th:src="@{/js/scripts.js}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 
-  <script th:inline="javascript">
-      const ctx = document.querySelector(".saving-line-chart").getContext("2d");
-      const totalSavingContainer = document.querySelector(".total-saving-review");
+<script th:inline="javascript">
 
-      // ✅ Ép dữ liệu từ Thymeleaf sang JS array hợp lệ
-      const labelsExpense = /*[[${expenseLabels}]]*/ [];
-      const valuesExpense = /*[[${expenseValues}]]*/ [];
-      const labelsIncome = /*[[${incomeLabels}]]*/ [];
-      const valuesIncome = /*[[${incomeValues}]]*/ [];
+    const ctx = document.querySelector(".saving-line-chart").getContext("2d");
+    const income = document.querySelector("income-donut-chart");
+    const expense = document.querySelector(".expense-donut-chart");
+    const totalSavingContainer = document.querySelector(".total-saving-review");
+    const incomeBgColor = ["rgb(255, 99, 132)", "rgb(54, 162, 235)"];
 
-      // 🎨 Tạo màu động cho biểu đồ
-      const generateColors = (length, offset = 0) =>
-          Array.from({ length }, (_, i) => `hsl(${(i * 60 + offset) % 360}, 70%, 60%)`);
+    const expenseBgColor = [
+        "rgb(54, 170, 200)",
+        "rgb(54, 162, 235)",
+        "rgb(54, 162,200)",
+        "rgb(54, 162,150)",
+    ];
+    const reviewCategory = document.querySelectorAll(".filter-options li");
+    const monthlyData = /*[[${summary}]]*/ [];
+    const labelsExpense = /*[[${expenseLabels}]]*/ [];
+    const valuesExpense = /*[[${expenseValues}]]*/ [];
+    const labelsIncome = /*[[${incomeLabels}]]*/ [];
+    const valuesIncome = /*[[${incomeValues}]]*/ [];
 
-      const expenseColors = generateColors(labelsExpense.length);
-      const incomeColors = generateColors(labelsIncome.length, 30);
 
-      // 📊 Vẽ biểu đồ Expense
-      new Chart(document.querySelector(".expense-donut-chart"), {
-          type: "doughnut",
-          data: {
-              labels: labelsExpense,
-              datasets: [{
-                  data: valuesExpense,
-                  backgroundColor: expenseColors,
-                  hoverOffset: 4,
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              cutout: "85%",
-              plugins: { legend: { display: false } }
-          }
-      });
+    document.querySelector(".expense-total").textContent = [[${totalExpense}]] + " VND";
+    document.querySelector(".income-total").textContent = [[${totalIncome}]] + " VND";
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, "rgba(75, 192, 192, 0.5)");
+    gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+    let balanceChartData=[];
+    balanceChartData.push(0);
+    monthlyData.map((data,index)=>{
+        balanceChartData.push(data.income-data.expense);
+    })
 
-      // 📊 Vẽ biểu đồ Income
-      new Chart(document.querySelector(".income-donut-chart"), {
-          type: "doughnut",
-          data: {
-              labels: labelsIncome,
-              datasets: [{
-                  data: valuesIncome,
-                  backgroundColor: incomeColors,
-                  hoverOffset: 4,
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              cutout: "85%",
-              plugins: { legend: { display: false } }
-          }
-      });
+    const labelsSaving = ["","Jan","Feb", "Mar","Apr","May", "Jun","July","Aug", "Sep","Oct","Nov", "Dec"];
+    function setActive(element) {
+        reviewCategory.forEach(item => {
+            item.classList.remove("active");
 
-      // 🧾 Custom Legend - Expense
-      const expenseLegend = document.querySelector(".custom-legend-expense");
-      expenseLegend.innerHTML = labelsExpense.map((label, i) => `
-      <span class="legend-item">
-        <span class="legend-color" style="background-color:${expenseColors[i]}"></span> ${label}
-      </span>
-    `).join("");
 
-      // 🧾 Custom Legend - Income
-      const incomeLegend = document.querySelector(".custom-legend-income");
-      incomeLegend.innerHTML = labelsIncome.map((label, i) => `
-      <span class="legend-item">
-        <span class="legend-color" style="background-color:${incomeColors[i]}"></span> ${label}
-      </span>
-    `).join("");
+        });
+        totalSavingContainer.innerHTML="";
+        element.classList.add("active");
+        totalSavingInfo(element.textContent);
+    }
+    let totalSavingInfo= (categoryName)=>{
+        for (let i = 0; i < monthlyData.length; i++) {
+            let index=0;
+            let circleColor = 0 <= i && i <= 2 ? "blue" : 3 <= i && i <= 5 ? "green" : 6 <= i && i <= 8 ? "orange" : "red"
+            totalSavingContainer.innerHTML += `
+          <div class="monthly-saving-box rounded shadow-sm bg-opacity-100 p-3 col-xl-2 col-3">
+            <h5 class="h5 fw-semibold mb-3">
+              <i class="fa-solid fa-circle-dot" style="color:${circleColor}"></i>
+              &nbsp;&nbsp;${monthlyData[i].month}
+            </h5>
+            <p>Income:&nbsp;${monthlyData[i].income}</p>
+            <p>Expense:&nbsp;${monthlyData[i].expense}</p>
+          </div>`;
+            if (categoryName==="Quarter 1"){
+                if (i===2){
+                    return;
+                }
+            } else if (categoryName==="Quarter 2"){
+                if (i<3) totalSavingContainer.innerHTML="";
+                if (i===5) return;
+            } else if (categoryName==="Quarter 3"){
+                if (i<6) totalSavingContainer.innerHTML="";
+                if (i===8) return;
+            } else if (categoryName==="Quarter 4"){
+                if (i<9) totalSavingContainer.innerHTML="";
+            }
+        }
+    }
+    totalSavingInfo();
 
-      // 💰 Saving Line Chart
-      const labelsSaving = ["", "Mar", "Jun", "Sep", "Dec"];
-      const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-      gradient.addColorStop(0, "rgba(75, 192, 192, 0.5)");
-      gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+    let expenseLegend = document.querySelector(".custom-legend-expense");
 
-      new Chart(ctx, {
-          type: "line",
-          data: {
-              labels: labelsSaving,
-              datasets: [{
-                  label: "Balance",
-                  data: [0, 7.2, 15, 5, 6],
-                  borderWidth: 2,
-                  borderColor: "rgb(75, 192, 192)",
-                  backgroundColor: gradient,
-                  tension: 0.4,
-              }]
-          },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-          }
-      });
+    for (var i = 0; i < labelsExpense.length; i++) {
+        expenseLegend.innerHTML += `<span class="legend-item">
+                        <span class="legend-color" style="background-color:${expenseBgColor[i]}"></span> ${labelsExpense[i]}
+                    </span>`;
+    }
+    let incomeLegend = document.querySelector(".custom-legend-income");
 
-      // 💹 Filter Quarterly Savings
-      const reviewCategory = document.querySelectorAll(".filter-options li");
+    for (var i = 0; i < labelsIncome.length; i++) {
+        incomeLegend.innerHTML += `<span class="legend-item">
+                        <span class="legend-color" style="background-color:${incomeBgColor[i]}"></span> ${labelsIncome[i]}
+                    </span>`;
 
-      let totalSavingData = [
-          { month: "January", income: "$6500", expense: "$3655" },
-          { month: "February", income: "$6500", expense: "$3655" },
-          { month: "March", income: "$6500", expense: "$3655" },
-          { month: "April", income: "$6500", expense: "$3655" },
-          { month: "May", income: "$6500", expense: "$3655" },
-          { month: "June", income: "$6500", expense: "$3655" },
-          { month: "July", income: "$6500", expense: "$3655" },
-          { month: "August", income: "$6500", expense: "$3655" },
-          { month: "September", income: "$6500", expense: "$3655" },
-          { month: "October", income: "$6500", expense: "$3655" },
-          { month: "November", income: "$6500", expense: "$3655" },
-          { month: "December", income: "$6500", expense: "$3655" }
-      ];
+    }
 
-      function setActive(element) {
-          reviewCategory.forEach(item => item.classList.remove("active"));
-          element.classList.add("active");
-          totalSavingContainer.innerHTML = "";
-          totalSavingInfo(element.textContent);
-      }
+    console.log(balanceChartData);
 
-      function totalSavingInfo(categoryName) {
-          for (let i = 0; i < totalSavingData.length; i++) {
-              let color =
-                  i <= 2 ? "blue" :
-                      i <= 5 ? "green" :
-                          i <= 8 ? "orange" : "red";
+    //Saving chart
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labelsSaving,
+            datasets: [{
+                label: "Balance",
+                data: balanceChartData,
+                borderWidth: 2,
+                borderColor: "rgb(75, 192, 192)",
+                backgroundColor: gradient,
+                tension: 0.4,
+            }, ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        },
+    });
+    //Income chart
+    new Chart(document.querySelector(".income-donut-chart"), {
+        type: "doughnut",
+        data: {
+            labels: labelsIncome,
+            datasets: [{
+                data: valuesIncome,
+                backgroundColor: incomeBgColor,
+                hoverOffset: 4,
+                borderWidth: 1,
+                weight: 5,
+            }, ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutoutPercentage: 85,
 
-              if (
-                  (categoryName === "Quarter 1" && i > 2) ||
-                  (categoryName === "Quarter 2" && (i < 3 || i > 5)) ||
-                  (categoryName === "Quarter 3" && (i < 6 || i > 8)) ||
-                  (categoryName === "Quarter 4" && i < 9)
-              ) continue;
-
-              totalSavingContainer.innerHTML += `
-                <div class="monthly-saving-box rounded shadow-sm bg-opacity-100 p-3 col-xl-2 col-3">
-                    <h5 class="h5 fw-semibold mb-3">
-                        <i class="fa-solid fa-circle-dot" style="color:${color}"></i>
-                        &nbsp;&nbsp;${totalSavingData[i].month}
-                    </h5>
-                    <p>Income: ${totalSavingData[i].income}</p>
-                    <p>Expense: ${totalSavingData[i].expense}</p>
-                </div>`;
-          }
-      }
-
-      totalSavingInfo("All Months");
-  </script>
-
+            legend: {
+                display: false,
+            },
+        },
+    });
+    //Expense chart
+    new Chart(document.querySelector(".expense-donut-chart"), {
+        type: "doughnut",
+        data: {
+            labels: labelsExpense,
+            datasets: [{
+                data: valuesExpense,
+                backgroundColor: expenseBgColor,
+                hoverOffset: 4,
+                borderWidth: 1,
+                weight: 5,
+            }, ],
+        },
+        options: {
+            legend: {
+                display: false,
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            cutoutPercentage: 85,
+        },
+    });
+    let transactions=/*[[${transactions}]]*/ [];
+    let amountCols=document.querySelectorAll(".amount");
+    console.log(transactions);
+    amountCols.forEach((col,index)=>{
+        if (transactions[index].type==="INCOME"){
+            col.className +=" text-success";
+            col.textContent ="+" +col.textContent;
+        }
+        if (transactions[index].type==="EXPENSE"){
+            col.className += " text-danger";
+            console.log(col.className);
+            col.textContent ="-" +col.textContent;
+        }
+    })
+</script>
 </body>
 
 </html>

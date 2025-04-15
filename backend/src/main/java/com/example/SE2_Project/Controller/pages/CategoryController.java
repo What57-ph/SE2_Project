@@ -22,13 +22,13 @@ public class CategoryController {
     public String getAllCategories(Model model) {
         Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
         model.addAttribute("categories", categories);
-        return "admin/category/categoryPage";
+        return "userCategory/categoryPage";
     }
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         CategoryEntity category = categoryService.getCategoryById(id);
         model.addAttribute("category", category);
-        return "admin/category/update";
+        return "userCategory/update";
     }
     @PostMapping("/update/{id}")
     public String updateCategory(@PathVariable Long id, @ModelAttribute CategoryDto categoryDto) {
@@ -43,7 +43,7 @@ public class CategoryController {
     @GetMapping("/add")
     public String showAddCategoryForm(Model model) {
         model.addAttribute("category", new CategoryDto());
-        return "admin/category/addCategory";
+        return "userCategory/addCategory";
     }
 
     @PostMapping("/add")
@@ -53,7 +53,7 @@ public class CategoryController {
             redirectAttributes.addFlashAttribute("successMessage", "Category added successfully!");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/category/add";
+            return "redirect:/transactions/addNew";
         }
         return "redirect:/transactions/addNew";
     }

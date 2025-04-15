@@ -38,8 +38,9 @@
         <div class="row mx-5 px-5 mt-4">
             <div class="col">
                 <label>User name</label>
-                <input type="text" class="form-control mt-2" placeholder="User name" th:field="*{username}">
+                <input type="text" class="form-control mt-2" placeholder="User name" th:field="*{username}" disabled>
             </div>
+            <input type="hidden" name="username" th:value="${user.username}" />
             <div class="col">
                 <label>New password</label>
                 <input type="password" class="form-control mt-2" placeholder="Email" name="newPassword">
@@ -59,10 +60,11 @@
         <div class="row mx-5 px-5 mt-4">
             <div class="col">
                 <label>Role</label>
-                <select class="form-control mt-2" id="exampleFormControlSelect1" name="role" th:field="*{role}">
+                <select class="form-control mt-2" id="exampleFormControlSelect1" name="role" th:field="*{role}" disabled>
                     <option value="ROLE_ADMIN" th:selected="${user.role == 'ROLE_ADMIN' }">ADMIN</option>
                     <option value="USER" th:selected="${user.role == 'USER' }">USER</option>
                 </select>
+                <input type="hidden" name="role" th:value="${user.role}" />
             </div>
             <div class="col">
                 <label>Status</label>
