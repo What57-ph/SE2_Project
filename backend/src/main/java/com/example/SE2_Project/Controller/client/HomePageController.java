@@ -52,7 +52,8 @@ public class HomePageController {
         Pageable pageable = PageRequest.of(page, size, sortObj);
 
         Page<TransactionEntity> transactionPage = transactionService.getTransactionsForUserPaginated(username, pageable);
-
+        Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
+        model.addAttribute("categories", categories);
         model.addAttribute("transactionPage", transactionPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", transactionPage.getTotalPages());

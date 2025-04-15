@@ -1,6 +1,8 @@
 package com.example.SE2_Project.Controller.pages;
 
 import com.example.SE2_Project.Dto.CategoryExpenseDTO;
+import com.example.SE2_Project.Dto.MonthlySummaryDTO;
+import com.example.SE2_Project.Entity.TransactionEntity;
 import com.example.SE2_Project.Security.SecurityUtils;
 import com.example.SE2_Project.Service.LoginService;
 import com.example.SE2_Project.Service.TransactionService;
@@ -14,8 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("")
@@ -46,6 +51,18 @@ public class LoginPageController {
 
     @GetMapping("/homepage/show")
     public String getHomePage(Model model){
+        Integer year = LocalDate.now().getYear();
+        List<MonthlySummaryDTO> monthlySummary = transactionService.getMonthlySummary(year);
+        List<TransactionEntity> transactions = transactionService.getTransactionsForCurrentUser()
+                .stream()
+                .sorted(Comparator.comparing(TransactionEntity::getTransactionDate).reversed())
+                .limit(7)
+                .collect(Collectors.toList());
+
+        model.addAttribute("transactions", transactions);
+
+        model.addAttribute("summary", monthlySummary);
+        model.addAttribute("year", year);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 

@@ -269,7 +269,10 @@
 <main layout:fragment="content">
     <div class="expense-body-content p-4">
         <h1 class="text-center mb-4">Current Financial Activity Overview</h1>
-
+        <p th:text="${success}" class="text-center mb-4 text-success"></p>
+        <p th:text="${updateMessage}" class="text-center mb-4 text-success"></p>
+        <p th:text="${successMessage}" class="text-center mb-4 text-success"></p>
+        <p th:text="${errorMessage}" class="text-center mb-4 text-success"></p>
         <div class="table-responsive">
             <table class="table">
                 <thead>

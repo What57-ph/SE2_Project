@@ -56,7 +56,9 @@ public class Transaction {
     public String addExpenseTransaction(@RequestParam("amount") BigDecimal amount,
                                         @RequestParam("transactionDate") LocalDate transactionDate,
                                         @RequestParam("categoryId") Long categoryId,
-                                        @RequestParam("notes") String notes) {
+                                        @RequestParam("notes") String notes,
+                                        RedirectAttributes redirectAttributes
+                                        ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
@@ -65,6 +67,9 @@ public class Transaction {
         }
 
         transactionService.addExpense(amount, transactionDate, categoryId, notes, username);
+        redirectAttributes.addFlashAttribute("success", "Create new transaction successfully.");
+
+
         return "redirect:/user/transactions";
     }
 
@@ -106,7 +111,8 @@ public class Transaction {
     public String updateTransaction(@RequestParam Long id,
                                     @RequestParam Long categoryId,
                                     @RequestParam BigDecimal amount,
-                                    @RequestParam String createdDate) {
+                                    @RequestParam String createdDate,
+                                    RedirectAttributes redirectAttributes) {
         TransactionEntity existingTransaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
 
@@ -118,6 +124,7 @@ public class Transaction {
         existingTransaction.setCreatedDate(LocalDate.parse(createdDate));
 
         transactionRepository.save(existingTransaction);
+        redirectAttributes.addFlashAttribute("updateMessage","Update transaction successfully");
         return "redirect:/user/transactions";
     }
 
