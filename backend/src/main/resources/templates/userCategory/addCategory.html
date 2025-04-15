@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="./layout/template">
+      layout:decorate="./layout/clientLayout">
 
 <head>
   <meta charset="UTF-8">
@@ -23,11 +23,11 @@
         <input type="text" class="form-control mt-2" placeholder="Category name" name="name" required>
         <div class="invalid-feedback">Category name is required.</div>
       </div>
-      <div class="col">
-        <label>Description</label>
-        <input type="text" class="form-control mt-2" name="createDate"
+<!--      <div class="col">-->
+<!--        <label>Description</label>-->
+        <input type="hidden" class="form-control mt-2" name="createDate"
                th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" readonly>
-      </div>
+<!--      </div>-->
     </div>
 
     <div class="row mx-5 px-5 mt-4">
