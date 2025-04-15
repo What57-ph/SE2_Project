@@ -49,11 +49,15 @@ public class UserService {
 
     @Transactional
     public UserEntity createUser(UserEntity user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Username đã tồn tại!");
+        }
         user.setRole("USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(false);
         user.setTransactions(Collections.emptyList());
         user.setCreatedDate(LocalDate.now());
+
         List<CategoryEntity> defaultCategories = categoryRepository.findAllByIdBetween(1L, 12L);
         // Chuyển defaultCategory từ List thành Set
         Set<CategoryEntity> defaultCategorySet = new HashSet<>(defaultCategories);
