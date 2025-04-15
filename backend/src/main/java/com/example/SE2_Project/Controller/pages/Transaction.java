@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/transactions")
@@ -46,9 +47,17 @@ public class Transaction {
         TransactionEntity transaction = new TransactionEntity();
         Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser(); // Retrieve all categories
 
+        List<CategoryEntity> expenseCategories = categories.stream()
+                .filter(c -> c.getType().equals("EXPENSE"))
+                .collect(Collectors.toList());
+
+        List<CategoryEntity> incomeCategories = categories.stream()
+                .filter(c -> c.getType().equals("INCOME"))
+                .collect(Collectors.toList());
         // Set the transaction and categories to the model
         model.addAttribute("transaction", transaction);
-        model.addAttribute("categories", categories);
+        model.addAttribute("expenseCategories", expenseCategories);
+        model.addAttribute("incomeCategories", incomeCategories);
 
         return "expenses/addNew";
     }

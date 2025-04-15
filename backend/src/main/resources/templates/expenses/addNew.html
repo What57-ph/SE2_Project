@@ -67,9 +67,17 @@
             <!-- Category -->
             <div class="mb-4">
                 <label class="form-label">Category</label>
-                <select name="categoryId" class="form-select" required>
+                <select name="categoryId" id="categorySelect" class="form-select" required>
                     <option value="">-- Select Category --</option>
-                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                    <option th:each="category : ${expenseCategories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}"
+                            data-type="EXPENSE"></option>
+                    <option th:each="category : ${incomeCategories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}"
+                            data-type="INCOME"
+                            style="display:none;"></option>
                 </select>
                 <a  id="add-category-btn" href="http://localhost:8080/category/add" class="btn custom-add-btn" type="button" title="Add New Category">
                     <i class="fa-solid fa-plus me-1"></i> Add Category
@@ -158,6 +166,24 @@
             // Default date: today
             const today = new Date().toISOString().split("T")[0];
             document.getElementById("transactionDate").value = today;
+
+
+            //display category theo type
+            const categorySelect = document.getElementById("categorySelect");
+
+            typeButtons.forEach(btn => {
+                btn.addEventListener("click", function () {
+                    const selected = this.getAttribute("data-type");
+                    // Hiện category tương ứng
+                    const options = categorySelect.querySelectorAll("option[data-type]");
+                    options.forEach(opt => {
+                        opt.style.display = (opt.getAttribute("data-type") === selected) ? "block" : "none";
+                });
+
+                // Reset lại lựa chọn
+                categorySelect.value = "";
+                });
+            });
         });
 
 
