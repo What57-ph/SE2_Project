@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="./layout/clientLayout">
 <head>
-    <title>Analytics Dashboard</title>
+    <title>MoneyNote - Analytics Dashboard</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -99,10 +99,10 @@
                                     <tbody>
                                     <tr th:each="row : ${report}">
                                         <td th:text="${row.category}"></td>
-                                        <td th:text="${reportType == 'expense' ? '$' + #numbers.formatDecimal(row.totalExpense, 1, 2, 'COMMA') : '$' + #numbers.formatDecimal(row.totalIncome, 1, 2, 'COMMA')}"></td>
+                                        <td th:text="${reportType == 'expense' ? '$' + #numbers.formatDecimal(row.totalExpense, 1, 2, 'COMMA') : #numbers.formatDecimal(row.totalIncome, 1, 2, 'COMMA') +'VND'}"></td>
                                         <td class="text-end">
-    <span class="percentage-badge text-success rounded-pill font-weight-bold border-none"
-          th:text="${reportType == 'expense' ? row.expensePercentage + '%' : row.incomePercentage + '%'}"></span>
+                                        <span class="percentage-badge text-success rounded-pill font-weight-bold border-none"
+                                              th:text="${reportType == 'expense' ? row.expensePercentage + '%' : row.incomePercentage + '%'}"></span>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -146,7 +146,6 @@
                 ];
 
                 const reportData = /*[[${report}]]*/ [];
-
                 reportData.forEach(function (row) {
                     if (row && row.category) {
                         categories.push(row.category);
@@ -174,14 +173,17 @@
                                 responsive: true,
                                 maintainAspectRatio: false,
                                 plugins: {
-                                    legend: { position: 'right' }
+                                    legend: { position: 'top' }
                                 },
                                 scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
                                 }
                             }
+
                         });
 
                     } else {
