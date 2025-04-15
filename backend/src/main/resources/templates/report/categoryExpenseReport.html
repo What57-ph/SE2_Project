@@ -30,7 +30,7 @@
 
         <!-- Form chọn tháng & năm -->
         <div class="glass-card p-4 mb-5 mx-auto">
-            <form id="reportForm" method="get" th:action="@{/transactions/categoryExpenseReport}">
+            <form id="reportForm" method="get" th:action="@{/transactions/categoryExpenseReport}" class="needs-validation" novalidate>
                 <input type="hidden" id="reportType" name="reportType" value="expense"/>
 
                 <div class="row g-3">
@@ -39,15 +39,21 @@
                         <div class="input-group">
                             <span class="input-group-text bg-white"><i class="fas fa-calendar-alt text-primary"></i></span>
                             <input type="number" class="form-control" id="month" name="month" min="1" max="12" required placeholder="Select month" th:value="${month}">
+                            <div class="invalid-feedback">Month cannot be empty or 0.</div>
                         </div>
+
                     </div>
+
                     <div class="col-md-5">
                         <label for="year" class="form-label">Year</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white"><i class="fas fa-calendar text-primary"></i></span>
                             <input type="number" class="form-control" id="year" name="year" min="2000" required placeholder="Select year" th:value="${year}">
+                            <div class="invalid-feedback">Year cannot be empty or 0.</div>
                         </div>
+
                     </div>
+
                     <div class="col-md-2 d-flex align-items-end gap-2">
                         <button type="button" class="btn btn-primary flex-grow-1 report-type-btn active"
                                 data-action="/transactions/categoryExpenseReport">
@@ -128,6 +134,8 @@
 
         <!-- Chart JS -->
         <script th:inline="javascript">
+
+
             document.addEventListener('DOMContentLoaded', function () {
                 const categories = [];
                 const amounts = [];
@@ -175,9 +183,17 @@
                                 }
                             }
                         });
+
+                    } else {
+                        console.log("Canvas element not found");
                     }
+                } else {
+                    console.log("No data available for chart");
+
+                    }
+
                 }
-            });
+            );
 
             // Switch report type
             document.querySelectorAll('.report-type-btn').forEach(button => {
@@ -192,6 +208,24 @@
                     document.getElementById("reportType").value = reportType;
                 });
             });
+        </script>
+        <script>
+            (() => {
+                'use strict'
+                const forms = document.querySelectorAll('.needs-validation')
+
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            })()
+
         </script>
     </div>
 </main>

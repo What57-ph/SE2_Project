@@ -39,7 +39,7 @@
         }
 
         h1 {
-            color: var(--dark-color);
+            color: var(--primary-color);
             font-weight: 700;
             margin-bottom: 1rem;
             position: relative;
@@ -181,14 +181,14 @@
             font-size: 1.5rem;
         }
 
-        .form-control, .form-select {
+        .expense-form, .form-select {
             border-radius: var(--border-radius);
             padding: 0.75rem 1rem;
             border: 1px solid #d1d5db;
             transition: var(--transition);
         }
 
-        .form-control:focus, .form-select:focus {
+        .expense-form:focus, .form-select:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.25);
         }
@@ -270,7 +270,7 @@
 <main layout:fragment="content">
     <div class="expense-body-content p-4">
         <div class="d-flex flex-column align-items-center mb-5">
-            <h1 class="text-center">Transactions in March 2025</h1>
+            <h1 class="text-center">Detail View of Current Financial Activity</h1>
             <div class="transaction-toggle">
                 <button type="button" class="btn transaction-type-btn active" id="expenseBtn">
                     <i class="fa-solid fa-money-bill-wave"></i>
@@ -385,12 +385,12 @@
 
                             <div class="mb-4">
                                 <label for="amount" class="form-label">Amount</label>
-                                <input type="number" class="form-control" id="amount" name="amount" required>
+                                <input type="number" class="form-control expense-form" id="amount" name="amount" required>
                             </div>
 
                             <div class="mb-4">
                                 <label for="createdDate" class="form-label">Date</label>
-                                <input type="date" class="form-control" id="createdDate" name="createdDate" required>
+                                <input type="date" class="form-control expense-form" id="createdDate" name="createdDate" required>
                             </div>
 
                             <div class="modal-footer">

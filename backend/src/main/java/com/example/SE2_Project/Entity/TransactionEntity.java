@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ public class TransactionEntity {
     private BigDecimal amount;
     private String type;
     private LocalDate createdDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate transactionDate;
     private boolean status;
     private String notes;

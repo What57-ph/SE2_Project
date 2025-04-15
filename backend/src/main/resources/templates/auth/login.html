@@ -45,6 +45,8 @@
                     <!-- Login Form -->
                     <form action="/process-login" method="post" class="login" id="loginForm">
                         <pre></pre>
+                        <p th:if="${param.error}">Invalid credentials!</p>
+
                         <div class="field">
                             <input type="text" placeholder="Email Address" name="username" id="loginUsername">
                             <div id="login-username-error" class="error-msg"></div>
