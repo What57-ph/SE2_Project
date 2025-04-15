@@ -314,6 +314,7 @@
                                 th:data-id="${transaction.id}"
                                 th:data-category-id="${transaction.category.id}"
                                 th:data-amount="${transaction.amount}"
+                                th:data-note="${transaction.notes}"
                                 th:data-date="${transaction.transactionDate}"
                                 th:data-type="${transaction.type}">
                             <i class="fa-solid fa-pen-to-square"></i>
@@ -398,6 +399,11 @@
                             </div>
 
                             <div class="mb-3">
+                                <label for="note" class="form-label">Note</label>
+                                <textarea id="note" name="note" class="form-control"></textarea>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="createdDate" class="form-label">Date</label>
                                 <input type="date" class="form-control expense-form" id="createdDate" name="createdDate" required>
                             </div>
@@ -463,11 +469,13 @@
                     const id = this.getAttribute("data-id");
                     const categoryId = this.getAttribute("data-category-id");
                     const amount = this.getAttribute("data-amount");
+                    const note = this.getAttribute("data-note");
                     const createdDate = this.getAttribute("data-date");
 
                     document.querySelector("#transactionId").value = id;
                     document.querySelector("#categoryId").value = categoryId;
                     document.querySelector("#amount").value = amount;
+                    document.querySelector("#note").value = note;
                     document.querySelector("#createdDate").value = createdDate;
                 });
             });

@@ -121,6 +121,7 @@ public class Transaction {
                                     @RequestParam Long categoryId,
                                     @RequestParam BigDecimal amount,
                                     @RequestParam String createdDate,
+                                    @RequestParam String note,
                                     RedirectAttributes redirectAttributes) {
         TransactionEntity existingTransaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
@@ -131,6 +132,7 @@ public class Transaction {
         existingTransaction.setCategory(category);
         existingTransaction.setAmount(amount);
         existingTransaction.setCreatedDate(LocalDate.parse(createdDate));
+        existingTransaction.setNotes(note);
 
         transactionRepository.save(existingTransaction);
         redirectAttributes.addFlashAttribute("updateMessage","Update transaction successfully");

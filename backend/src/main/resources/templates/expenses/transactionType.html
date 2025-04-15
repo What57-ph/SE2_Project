@@ -315,6 +315,7 @@
                                 th:data-id="${expense.id}"
                                 th:data-category-id="${expense.category.id}"
                                 th:data-amount="${expense.amount}"
+                                th:data-note="${expense.notes}"
                                 th:data-date="${expense.transactionDate}"
                                 th:data-type="${expense.type}">
                             <i class="fa-solid fa-pen-to-square"></i>
@@ -357,6 +358,7 @@
                                 th:data-id="${income.id}"
                                 th:data-category-id="${income.category.id}"
                                 th:data-amount="${income.amount}"
+                                th:data-note="${income.notes}"
                                 th:data-date="${income.transactionDate}"
                                 th:data-type="${income.type}">
                             <i class="fa-solid fa-pen-to-square"></i>
@@ -408,6 +410,11 @@
                             <div class="mb-4">
                                 <label for="amount" class="form-label">Amount</label>
                                 <input type="number" class="form-control expense-form" id="amount" name="amount" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="note" class="form-label">Note</label>
+                                <textarea id="note" name="note" class="form-control"></textarea>
                             </div>
 
                             <div class="mb-4">
@@ -487,11 +494,13 @@
                     const id = this.getAttribute("data-id");
                     const categoryId = this.getAttribute("data-category-id");
                     const amount = this.getAttribute("data-amount");
+                    const note = this.getAttribute("data-note");
                     const createdDate = this.getAttribute("data-date");
 
                     document.querySelector("#transactionId").value = id;
                     document.querySelector("#categoryId").value = categoryId;
                     document.querySelector("#amount").value = amount;
+                    document.querySelector("#note").value = note;
                     document.querySelector("#createdDate").value = createdDate;
                 });
             });
