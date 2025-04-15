@@ -221,6 +221,13 @@
             color: white;
         }
 
+        .truncate-note {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         @media (max-width: 768px) {
             .expense-body-content {
                 padding: 1rem !important;
@@ -291,6 +298,7 @@
                     <th>Category</th>
                     <th>Amount</th>
                     <th>Date</th>
+                    <th>Note</th>
                     <th>Update</th>
                     <th>Delete</th>
                 </tr>
@@ -300,13 +308,15 @@
                     <td data-label="Category" th:text="${expense.categoryName}"></td>
                     <td data-label="Amount" class="amount-expense" th:text="${'$' + #numbers.formatDecimal(expense.amount, 1, 2, 'COMMA')}"></td>
                     <td data-label="Date" th:text="${expense.transactionDate}"></td>
+                    <td data-label="Note" class="truncate-note" th:text="${expense.notes}"></td>
                     <td>
                         <button type="button" class="action-btn update-btn"
                                 data-bs-toggle="modal" data-bs-target="#updateModal"
                                 th:data-id="${expense.id}"
                                 th:data-category-id="${expense.category.id}"
                                 th:data-amount="${expense.amount}"
-                                th:data-date="${expense.transactionDate}">
+                                th:data-date="${expense.transactionDate}"
+                                th:data-type="${expense.type}">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                     </td>
@@ -330,6 +340,7 @@
                     <th>Category</th>
                     <th>Amount</th>
                     <th>Date</th>
+                    <th>Note</th>
                     <th>Update</th>
                     <th>Delete</th>
                 </tr>
@@ -339,13 +350,15 @@
                     <td data-label="Category" th:text="${income.categoryName}"></td>
                     <td data-label="Amount" class="amount-income" th:text="${'$' + #numbers.formatDecimal(income.amount, 1, 2, 'COMMA')}"></td>
                     <td data-label="Date" th:text="${income.transactionDate}"></td>
+                    <td data-label="Note" class="truncate-note" th:text="${income.notes}"></td>
                     <td>
                         <button type="button" class="action-btn update-btn"
                                 data-bs-toggle="modal" data-bs-target="#updateModal"
                                 th:data-id="${income.id}"
                                 th:data-category-id="${income.category.id}"
                                 th:data-amount="${income.amount}"
-                                th:data-date="${income.transactionDate}">
+                                th:data-date="${income.transactionDate}"
+                                th:data-type="${income.type}">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                     </td>
@@ -374,12 +387,21 @@
                             <input type="hidden" name="id" id="transactionId">
 
                             <div class="mb-4">
+                                <input id="transactionType" type="hidden" value="${transaction.type}">
                                 <label for="categoryId" class="form-label">Category</label>
                                 <select class="form-select" id="categoryId" name="categoryId" required>
-                                    <option th:each="category : ${categories}"
-                                            th:value="${category.id}"
-                                            th:text="${category.name}">
-                                    </option>
+                                    <optgroup label="Expense" id="expenseGroup">
+                                        <option th:each="category : ${expenseCategories}"
+                                                th:value="${category.id}"
+                                                th:text="${category.name}">
+                                        </option>
+                                    </optgroup>
+                                    <optgroup label="Income" id="incomeGroup">
+                                        <option th:each="category : ${incomeCategories}"
+                                                th:value="${category.id}"
+                                                th:text="${category.name}">
+                                        </option>
+                                    </optgroup>
                                 </select>
                             </div>
 
@@ -450,6 +472,18 @@
             // Update modal form population
             document.querySelectorAll(".update-btn").forEach(button => {
                 button.addEventListener("click", function () {
+                    const transactionType = this.getAttribute('data-type'); // Lấy type từ data attribute
+                    const expenseGroup = document.getElementById('expenseGroup');
+                    const incomeGroup = document.getElementById('incomeGroup');
+
+                     if (transactionType === 'INCOME') {
+                        expenseGroup.style.display = 'none'; // Ẩn nhóm expense
+                        incomeGroup.style.display = 'block'; // Hiển thị nhóm income
+                    } else if (transactionType === 'EXPENSE') {
+                        expenseGroup.style.display = 'block'; // Hiển thị nhóm expense
+                        incomeGroup.style.display = 'none'; // Ẩn nhóm income
+                    }
+
                     const id = this.getAttribute("data-id");
                     const categoryId = this.getAttribute("data-category-id");
                     const amount = this.getAttribute("data-amount");

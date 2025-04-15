@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -50,10 +51,20 @@ public class HomePageController {
                 : Sort.by(sortField).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sortObj);
-
         Page<TransactionEntity> transactionPage = transactionService.getTransactionsForUserPaginated(username, pageable);
+
         Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
+        // Tách thành 2 danh sách theo type
+        List<CategoryEntity> expenseCategories = categories.stream()
+                .filter(c -> c.getType().equalsIgnoreCase("EXPENSE"))
+                .collect(Collectors.toList());
+
+        List<CategoryEntity> incomeCategories = categories.stream()
+                .filter(c -> c.getType().equalsIgnoreCase("INCOME"))
+                .collect(Collectors.toList());
         model.addAttribute("categories", categories);
+        model.addAttribute("expenseCategories", expenseCategories);
+        model.addAttribute("incomeCategories", incomeCategories);
         model.addAttribute("transactionPage", transactionPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", transactionPage.getTotalPages());
@@ -70,6 +81,14 @@ public class HomePageController {
         model.addAttribute("incomes",incomeList);
         Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
         model.addAttribute("categories", categories);
+        List<CategoryEntity> expenseCategories = categories.stream()
+                .filter(c -> c.getType().equalsIgnoreCase("EXPENSE"))
+                .collect(Collectors.toList());
+        List<CategoryEntity> incomeCategories = categories.stream()
+                .filter(c -> c.getType().equalsIgnoreCase("INCOME"))
+                .collect(Collectors.toList());
+        model.addAttribute("expenseCategories", expenseCategories);
+        model.addAttribute("incomeCategories", incomeCategories);
         return "expenses/transactionType";
     }
     @GetMapping("/calendar")
