@@ -1,7 +1,9 @@
 package com.example.SE2_Project.Entity;
 
 import com.example.SE2_Project.Repository.CategoryRepository;
+import com.example.SE2_Project.utils.MoneySerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +27,7 @@ public class TransactionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Đây là phương thức tự động tạo giá trị ID (Auto Increment)
     private Long id;
 
+    @JsonSerialize(using = MoneySerializer.class)
     private BigDecimal amount;
     private String type;
     private LocalDate createdDate;

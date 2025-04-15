@@ -44,7 +44,7 @@ public class Transaction {
     @GetMapping("/addNew")
     public String addNewTransaction(Model model) {
         TransactionEntity transaction = new TransactionEntity();
-        Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser(); // Retrieve all categories
+        Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser();
 
         // Set the transaction and categories to the model
         model.addAttribute("transaction", transaction);
@@ -252,6 +252,6 @@ public class Transaction {
         model.addAttribute("categories", categories);
         model.addAttribute("amounts", amounts);
 
-        return "report/currentMonthIncomePie";  // trỏ tới view HTML
+        return "report/currentMonthIncomePie";
     }
 }

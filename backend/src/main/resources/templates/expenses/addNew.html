@@ -122,29 +122,6 @@
             const form = e.target;
             const formData = new FormData(form);
 
-            // Chuyển FormData thành object
-            const transactionData = {};
-            formData.forEach((value, key) => {
-                transactionData[key] = value;
-            });
-
-            fetch(form.action, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(transactionData)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    console.log("✅ Transaction created:", data);
-                    alert("Transaction added successfully!");
-                    // Hoặc redirect nếu muốn
-                     window.location.href = "/user/transactions";
-                })
-                .catch(err => {
-                    console.error("❌ Error adding transaction:", err);
-                });
         });
     </script>
 </main>
