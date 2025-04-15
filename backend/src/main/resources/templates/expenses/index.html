@@ -167,14 +167,14 @@
             font-weight: 600;
         }
 
-        .form-control, .form-select {
+        .expense-form, .form-select {
             border-radius: var(--border-radius);
             padding: 0.75rem 1rem;
             border: 1px solid #ced4da;
             transition: all 0.2s ease;
         }
 
-        .form-control:focus, .form-select:focus {
+        .expense-form:focus, .form-select:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
         }
@@ -268,7 +268,7 @@
 <body class="sb-nav-fixed">
 <main layout:fragment="content">
     <div class="expense-body-content p-4">
-        <h1 class="text-center mb-4">Expenses in March 2025</h1>
+        <h1 class="text-center mb-4">Current Financial Activity Overview</h1>
 
         <div class="table-responsive">
             <table class="table">
@@ -372,12 +372,12 @@
 
                             <div class="mb-3">
                                 <label for="amount" class="form-label">Amount</label>
-                                <input type="number" class="form-control" id="amount" name="amount" required>
+                                <input type="number" class="form-control expense-form" id="amount" name="amount" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="createdDate" class="form-label">Date</label>
-                                <input type="date" class="form-control" id="createdDate" name="createdDate" required>
+                                <input type="date" class="form-control expense-form" id="createdDate" name="createdDate" required>
                             </div>
 
                             <div class="modal-footer">

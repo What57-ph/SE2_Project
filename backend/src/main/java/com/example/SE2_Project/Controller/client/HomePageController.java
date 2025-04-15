@@ -1,5 +1,6 @@
 package com.example.SE2_Project.Controller.client;
 
+import com.example.SE2_Project.Dto.MonthlySummaryDTO;
 import com.example.SE2_Project.Entity.CategoryEntity;
 import com.example.SE2_Project.Entity.TransactionEntity;
 import com.example.SE2_Project.Service.CategoryService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -54,7 +56,9 @@ public class HomePageController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", transactionPage.getTotalPages());
         model.addAttribute("sort", sort); // để Thymeleaf dùng lại
+        Set<CategoryEntity> categories = categoryService.getCategoriesForCurrentUser(); // Retrieve all categories
 
+        model.addAttribute("categories", categories);
         return "expenses/index";
     }
 
@@ -80,6 +84,10 @@ public class HomePageController {
         model.addAttribute("categories", categories);
         return "income/index";
     }
-
+//    @GetMapping("/homepage")
+//    public String getMonthlySummary(Model model) {
+//
+//
+//    }
 
 }

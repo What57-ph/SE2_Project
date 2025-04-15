@@ -16,46 +16,42 @@
 
       <main class="p-5" layout:fragment="content">
         <h1 class="text-center">Update Transaction</h1>
-        <form class="container-fluid mx-5 px-5 mt-5">
+        <form th:action="@{/admin/show/transaction/update}" th:object="${transaction}" method="post" class="container-fluid mx-5 px-5 mt-5" >
+          <input type="hidden" th:field="*{id}" />
           <div class="row mx-5 px-5">
             <div class="col">
               <label>User name</label>
-              <input type="text" class="form-control mt-2" placeholder="User name">
+              <input type="text" class="form-control mt-2" th:value="*{user.name}" disabled >
             </div>
             <div class="col">
-
-              <label for="exampleFormControlSelect1">Category</label>
-              <select class="form-control mt-2" id="exampleFormControlSelect1">
-                <option>Education</option>
-                <option>Food</option>
-                <option>Drink</option>
-                <option>Transport</option>
-                <option>Entertainment</option>
+              <label >Category</label>
+              <select class="form-control mt-2" th:field="*{category.id}">
+                <option th:each="cate : ${categories}" th:value="${cate.id}"
+                        th:text="${cate.name}"
+                        th:selected="${cate.id == transaction.category.id}"></option>
               </select>
-
             </div>
-            
-
           </div>
           <div class="row mx-5 px-5 mt-4">
             <div class="col">
               <label>Type</label>
-              <select class="form-control mt-2" id="exampleFormControlSelect1">
-                <option>Income</option>
-                <option>Expense</option>
-              </select>
+              <input type="text" class="form-control mt-2" th:value="*{type}" disabled />
             </div>
             <div class="col">
               <label>Amount</label>
-              <input placeholder="Transaction amount" class="form-control mt-2">
+              <input th:field="*{amount}" placeholder="Transaction amount" class="form-control mt-2">
             </div>
           </div>
-          <div class="container mt-4 row justify-content-center">
-            <div class="mx-5 px-5 col-6">
-                <label>Transaction Date</label>
-                <input class="form-control mt-2" value="3/24/2025" type="date">
-              </div>
-              
+
+          <div class="row mx-5 px-5 mt-4">
+            <div class="col">
+              <label>Note of transaction</label>
+              <textarea th:field="*{notes}" class="form-control mt-2"></textarea>
+            </div>
+            <div class="col">
+              <label>Transaction Date</label>
+              <input type="date" class="form-control mt-2" th:field="*{transactionDate}">
+            </div>
           </div>
           <div class="mt-5 mx-5 px-5 d-flex justify-content-center">
             <a href="/admin/transaction"><button class="btn btn-primary" style="width: 150px; height: 50px;" type="submit">Update</button></a>           
