@@ -51,10 +51,8 @@ public class CategoryService {
                     new CategoryEntity("Gifts & Bonuses", "INCOME", LocalDateTime.now())
             );
             if (categoryRepository.count() == 0) {
-//            UserEntity admin = userRepository.findById(1L).orElseThrow();
-//            Set<CategoryEntity> adminCat = admin.getCategories();
+
                 for (CategoryEntity category : defaultName) {
-//                adminCat.add(category);
                     categoryRepository.save(category);
                 }
 //            userRepository.save(admin);
@@ -102,9 +100,7 @@ public class CategoryService {
     }
 
     public Set<CategoryEntity> getCategoriesForCurrentUser() {
-        // Lấy tên người dùng hiện tại từ Spring Security
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        // Tìm danh mục của người dùng theo username
         UserEntity currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         return currentUser.getCategories();

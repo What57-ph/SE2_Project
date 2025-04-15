@@ -148,40 +148,6 @@ public class Transaction {
         return transactionService.getCategoryExpenseReport(month, year);
     }
 
-
-    //Tạo chart xem income expense chiếm bao nhiêu % theo tháng
-    @GetMapping("/incomeExpenseReport")
-    public String getIncomeExpenseReport(@RequestParam(value = "month", required = false, defaultValue = "3") int month,
-                                         @RequestParam(value = "year", required = false, defaultValue = "2025") int year,
-                                         Model model) {
-        Map<String, BigDecimal> reportData = transactionService.getIncomeAndExpenseReport(month, year);
-
-        // Thêm dữ liệu vào model để hiển thị trên Thymeleaf
-        model.addAttribute("month", month);
-        model.addAttribute("year", year);
-        model.addAttribute("totalIncome", reportData.get("totalIncome"));
-        model.addAttribute("totalExpense", reportData.get("totalExpense"));
-        model.addAttribute("incomePercentage", reportData.get("incomePercentage"));
-        model.addAttribute("expensePercentage", reportData.get("expensePercentage"));
-
-        return "incomeExpenseReport";
-    }
-
-    @GetMapping("/incomeExpensePercentage")
-    public String getIncomeAndExpensePercentage(@RequestParam(value = "month", required = false, defaultValue = "3") int month,
-                                                @RequestParam(value = "year", required = false, defaultValue = "2025") int year,
-                                                Model model) {
-
-        List<Map<String, Object>> report = transactionService.getCategoryIncomeReport(month, year);
-        model.addAttribute("report", report);
-        model.addAttribute("month" , month);
-        model.addAttribute("year" , year);
-
-
-        return "incomeExpensePercentage";
-    }
-
-
     @GetMapping("/categoryExpenseReport")
     public String getCategoryExpenseReport(@RequestParam(value = "month", required = false, defaultValue = "3") int month,
                                            @RequestParam(value = "year", required = false, defaultValue = "2025") int year,
@@ -238,36 +204,5 @@ public class Transaction {
         return "report/monthlySummary";
     }
 
-    @GetMapping("/currentMonthExpensePie")
-    public String viewCurrentMonthExpensePieChart(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
 
-        List<CategoryExpenseDTO> data = transactionService.getCurrentMonthExpenseCategoryTotals(username);
-
-        // Tách dữ liệu ra để gán vào model (labels + values)
-        List<String> categories = data.stream().map(CategoryExpenseDTO::getCategory).toList();
-        List<BigDecimal> amounts = data.stream().map(CategoryExpenseDTO::getTotalAmount).toList();
-
-        model.addAttribute("categories", categories);
-        model.addAttribute("amounts", amounts);
-
-        return "report/currentMonthExpensePie"; // trỏ đến file HTML Thymeleaf
-    }
-
-    @GetMapping("/currentMonthIncomePie")
-    public String viewCurrentMonthIncomePieChart(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        List<CategoryExpenseDTO> data = transactionService.getCurrentMonthIncomeCategoryTotals(username);
-
-        List<String> categories = data.stream().map(CategoryExpenseDTO::getCategory).toList();
-        List<BigDecimal> amounts = data.stream().map(CategoryExpenseDTO::getTotalAmount).toList();
-
-        model.addAttribute("categories", categories);
-        model.addAttribute("amounts", amounts);
-
-        return "report/currentMonthIncomePie";
-    }
 }
