@@ -24,6 +24,9 @@ public class LoginService {
         @Autowired
         private PasswordEncoder passwordEncoder;
 
+        @Autowired
+        private UserService userService;
+
 
      @Transactional
          public UserEntity registerUser(UserDto userDTO) {
@@ -34,13 +37,10 @@ public class LoginService {
 
             UserEntity user = new UserEntity();
             user.setUsername(userDTO.getUsername());
-            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            user.setStatus(false);
-            user.setRole("USER");
+            user.setPassword(userDTO.getPassword());
             user.setName(userDTO.getName());
-            user.setCreatedDate(LocalDate.now());
 
-        UserEntity savedUser = userRepository.save(user);
+        UserEntity savedUser = userService.createUser(user);
         System.out.println("User saved: " + savedUser.getUsername());
          userRepository.flush();
          return savedUser;
