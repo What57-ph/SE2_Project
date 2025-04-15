@@ -101,6 +101,13 @@ public class DashboardController {
         return "redirect:/admin/show/transaction";
     }
 
+    @PostMapping(value = "/transaction/delete/{id}")
+    public String deleteTransaction(@PathVariable Long id) {
+        transactionRepository.deleteById(id);
+        return "redirect:/admin/show/transaction";
+    }
+
+
 
     @GetMapping("/user")
     public String getUserPage(Model model,
