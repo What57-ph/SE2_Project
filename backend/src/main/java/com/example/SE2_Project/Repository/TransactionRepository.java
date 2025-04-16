@@ -95,8 +95,9 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
 
     @Query("SELECT FUNCTION('MONTH', t.transactionDate) AS month, t.type, SUM(t.amount) " +
             "FROM TransactionEntity t " +
-            "WHERE FUNCTION('YEAR', t.transactionDate) = :year AND t.status = true " +
+            "WHERE FUNCTION('YEAR', t.transactionDate) = :year AND t.status = true AND t.user.id = :userId " +
             "GROUP BY FUNCTION('MONTH', t.transactionDate), t.type")
-    List<Object[]> getMonthlyIncomeAndExpense(@Param("year") int year);
+    List<Object[]> getMonthlyIncomeAndExpense(@Param("year") int year, Long userId);
+
 
 }

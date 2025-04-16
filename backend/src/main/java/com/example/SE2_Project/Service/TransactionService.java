@@ -282,7 +282,9 @@ public class TransactionService {
     }
 
     public List<MonthlySummaryDTO> getMonthlySummary(int year) {
-        List<Object[]> rawData = transactionRepository.getMonthlyIncomeAndExpense(year);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity user = userRepository.findByUsername(username).orElseThrow();
+        List<Object[]> rawData = transactionRepository.getMonthlyIncomeAndExpense(year, user.getId());
 
         // Khởi tạo dữ liệu mặc định 12 tháng
         Map<Integer, MonthlySummaryDTO> map = new HashMap<>();
