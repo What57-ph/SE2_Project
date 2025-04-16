@@ -31,11 +31,30 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(auth -> auth
-                        // Các URL cho phép truy cập mà không cần đăng nhập
-                        .requestMatchers("/process-login","/categories/**", "/users/**", "/process-after-login", "/report", "/homepage", "/api/auth/register","/guest/register").permitAll()
-                        .requestMatchers("/auth/**", "/calender/**", "/report/**", "/expenses/**", "/css/**", "/img/**", "/js/**","/img/**", "/transactions/**").permitAll()
-                        .requestMatchers("/login", "/guest/login").permitAll()
-                        // Tất cả các request còn lại đều phải xác thực
+                        .requestMatchers(
+                                "/process-login",
+                                "/process-after-login",
+                                "/login",
+                                "/guest/login",
+                                "/guest/register",
+                                "/api/auth/register",
+                                "/homepage",
+                                "/css/**",
+                                "/js/**",
+                                "/img/**"
+                        ).permitAll()
+
+                        // Các API dành cho người dùng thường (USER)
+                        .requestMatchers(
+                                "/category/**",
+                                "/transactions/**",
+                                "/report/**"
+                        ).hasRole("USER")
+
+                        // Các API dành cho admin
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // Các request khác yêu cầu xác thực
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

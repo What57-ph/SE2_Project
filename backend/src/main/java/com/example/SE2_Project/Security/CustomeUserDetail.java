@@ -40,11 +40,13 @@ public class CustomeUserDetail implements  UserDetailsService {
 
         // Create authorities list from user roles
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority( userEntity.getRole().toUpperCase()));
+        String role = userEntity.getRole().toUpperCase();
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role));
 
+        if (role.equals("ADMIN")) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
         // Return UserDetails with username, password, and authorities
         return new User(userEntity.getUsername(), userEntity.getPassword(), grantedAuthorities);
     }
 }
-
-

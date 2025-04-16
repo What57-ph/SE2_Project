@@ -18,40 +18,40 @@ import java.util.Set;
 @Slf4j
 public class LoginService {
 
-        @Autowired
-        private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-        @Autowired
-        private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        @Autowired
-        private UserService userService;
+    @Autowired
+    private UserService userService;
 
 
-     @Transactional
-         public UserEntity registerUser(UserDto userDTO) {
+    @Transactional
+    public UserEntity registerUser(UserDto userDTO) {
 
-            if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
-                throw new RuntimeException("Username đã tồn tại!");
-            }
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+            throw new RuntimeException("Username đã tồn tại!");
+        }
 
-            UserEntity user = new UserEntity();
-            user.setUsername(userDTO.getUsername());
-            user.setPassword(userDTO.getPassword());
-            user.setName(userDTO.getName());
+        UserEntity user = new UserEntity();
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        user.setName(userDTO.getName());
 
         UserEntity savedUser = userService.createUser(user);
         System.out.println("User saved: " + savedUser.getUsername());
-         userRepository.flush();
-         return savedUser;
+        userRepository.flush();
+        return savedUser;
 
-        }
+    }
 
-        public UserEntity findByUsername(String username) {
-            return userRepository.findByUsername(username).orElseThrow(
-                    () -> new RuntimeException("Không tìm thấy người dùng!")
-            );
-        }
+    public UserEntity findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new RuntimeException("Không tìm thấy người dùng!")
+        );
+    }
 
     public String processAfterLogin() {
         Set<String> roleCode = SecurityUtils.getRolesCurrentUser();
