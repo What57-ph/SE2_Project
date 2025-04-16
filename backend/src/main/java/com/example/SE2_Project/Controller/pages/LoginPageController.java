@@ -55,7 +55,7 @@ public class LoginPageController {
         List<MonthlySummaryDTO> monthlySummary = transactionService.getMonthlySummary(year);
         List<TransactionEntity> transactions = transactionService.getTransactionsForCurrentUser()
                 .stream()
-                .sorted(Comparator.comparing(TransactionEntity::getTransactionDate).reversed())
+                .sorted(Comparator.comparing(TransactionEntity::getId).reversed())
                 .limit(7)
                 .collect(Collectors.toList());
 
