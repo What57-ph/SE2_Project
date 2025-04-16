@@ -27,18 +27,25 @@
                 <input type="text" class="form-control mt-2" placeholder="Name" th:field="*{name}" required>
                 <div class="invalid-feedback">Name is required.</div>
             </div>
-        </div>
-
-        <div class="row mx-5 px-5">
             <div class="col">
                 <label>Username</label>
                 <input type="text" class="form-control mt-2" placeholder="User name" th:field="*{username}" required>
                 <div class="invalid-feedback">Username is required.</div>
             </div>
+        </div>
+
+        <div class="row mx-5 px-5">
             <div class="col">
                 <label>Password</label>
                 <input type="password" id="passwordInput" class="form-control mt-2" placeholder="Password" th:field="*{password}" required>
                 <div class="invalid-feedback" id="passwordFeedback">Password is required and must be at least 6 characters.</div>
+            </div>
+        </div>
+        <div class="row mx-5 px-5">
+            <div class="col">
+                <label>Confirm Password</label>
+                <input type="password" id="confirmPasswordInput" class="form-control mt-2" placeholder="Confirm Password" required>
+                <div class="invalid-feedback" id="confirmPasswordFeedback">Passwords do not match.</div>
             </div>
         </div>
 
@@ -64,15 +71,26 @@
             Array.from(forms).forEach(form => {
                 form.addEventListener('submit', event => {
                     const passwordInput = form.querySelector('#passwordInput');
+                    const confirmPasswordInput = form.querySelector('#confirmPasswordInput');
                     const passwordFeedback = document.getElementById('passwordFeedback');
+                    const confirmPasswordFeedback = document.getElementById('confirmPasswordFeedback');
 
                     let valid = form.checkValidity();
+
                     if (passwordInput.value.length < 6) {
                         passwordInput.classList.add('is-invalid');
                         passwordFeedback.textContent = 'Password must be at least 6 characters.';
                         valid = false;
                     } else {
                         passwordInput.classList.remove('is-invalid');
+                    }
+
+                    if (passwordInput.value !== confirmPasswordInput.value) {
+                        confirmPasswordInput.classList.add('is-invalid');
+                        confirmPasswordFeedback.textContent = 'Passwords do not match.';
+                        valid = false;
+                    } else {
+                        confirmPasswordInput.classList.remove('is-invalid');
                     }
 
                     if (!valid) {
@@ -85,6 +103,7 @@
             });
         })();
     </script>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
