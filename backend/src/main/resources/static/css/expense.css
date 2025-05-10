@@ -1,0 +1,163 @@
+/* Định dạng chung */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Header */
+.expense-header {
+    background-color: white;
+    padding: 15px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+.expense-header-left img {
+    width: 50px;
+    border-radius: 50%;
+}
+
+.expense-header-left span {
+    font-size: 24px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.expense-header-right {
+    gap: 20px;
+}
+
+.expense-header-right form {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.expense-header-right input {
+    padding: 10px 40px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.expense-header-right i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+}
+
+.expense-header-right img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #28a745;
+}
+
+/* Sidebar */
+.expense-sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background-color: #2c3e50;
+    padding: 20px;
+    color: white;
+}
+
+.expense-sidebar button {
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.expense-sidebar p {
+    font-size: 18px;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.expense-sidebar p:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding-left: 15px;
+    border-radius: 5px;
+}
+
+/* Nội dung chính */
+.expense-body-content {
+    flex: 1;
+    padding: 40px;
+}
+
+.expense-body-content h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Bảng danh sách giao dịch */
+.table {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table th {
+    background-color: #28a745;
+    color: white;
+    font-size: 18px;
+    padding: 15px;
+}
+
+.table td {
+    font-size: 16px;
+    padding: 10px;
+    vertical-align: middle;
+}
+
+/* Nút chỉnh sửa và xóa */
+.update-btn i {
+    color: #333;
+    transition: 0.3s;
+}
+
+.update-btn i:hover {
+    color: #28a745;
+}
+
+.text-danger i:hover {
+    color: red;
+}
+
+/* Nút thêm giao dịch */
+.add-button {
+    background-color: #ffc107;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.add-button:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 15px;
+}
+
+.modal-footer button {
+    border-radius: 8px;
+}

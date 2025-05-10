@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Income & Expense Percentage</title>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h2>Income & Expense Percentage</h2>
+
+<p>Total Income: <span th:text="${totalIncome}"></span></p>
+<p>Total Expense: <span th:text="${totalExpense}"></span></p>
+
+<canvas id="incomeExpenseChart" width="300" height="300"></canvas>
+
+<script th:inline="javascript">
+    var incomePercentage = /*[[${incomePercentage}]]*/ 0;
+    var expensePercentage = /*[[${expensePercentage}]]*/ 0;
+
+    var ctx = document.getElementById("incomeExpenseChart").getContext("2d");
+    new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: ["Income", "Expense"],
+            datasets: [{
+                data: [incomePercentage, expensePercentage],
+                backgroundColor: ["#4CAF50", "#F44336"]
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: {
+                legend: { position: "top" },
+                title: { display: true, text: "Income vs Expense (%)" }
+            }
+        }
+    });
+</script>
+</body>
+</html>
