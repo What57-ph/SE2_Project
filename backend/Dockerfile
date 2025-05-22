@@ -1,14 +1,20 @@
-# Sử dụng image Java chính thức
-FROM openjdk:21-jdk-slim
+# Stage 1: Build với Maven
+FROM maven:3.9.4-eclipse-temurin-21 AS build
 
-# Tạo thư mục chứa ứng dụng trong container
 WORKDIR /app
 
-# Copy file .jar vào container (sửa tên file đúng với thực tế)
-COPY target/SE2_Project-0.0.1-SNAPSHOT.jar app.jar
+COPY pom.xml .
+COPY src ./src
 
-# Mở port 8080 nếu cần expose khi run standalone
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run bằng JDK slim
+FROM openjdk:21-jdk-slim
+
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Lệnh để chạy app
 ENTRYPOINT ["java", "-jar", "app.jar"]
